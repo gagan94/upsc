@@ -26,7 +26,7 @@ describe('health and error envelope', () => {
 
   it('GET /api/v1/health returns ok', async () => {
     const res = await request(app.getHttpServer()).get('/api/v1/health').expect(200);
-    expect(res.body).toEqual({ status: 'ok' });
+    expect(res.body).toEqual({ status: 'ok', db: 'up' });
   });
 
   it('unknown route renders not_found envelope', async () => {

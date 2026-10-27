@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793126679834,
+      "tag": "0000_next_tarantula",
+      "breakpoints": true
+    }
+  ]
+}

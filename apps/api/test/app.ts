@@ -3,12 +3,14 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { configureApp } from '../src/app.setup';
 import { AppConfig, loadConfig } from '../src/common/config';
+import type { Db } from '../src/db/db.module';
+import { createTestDb } from './db';
 
-type Db = unknown; // TODO: replaced by real Db type in Task 3
 
 export async function createTestApp(
   overrides: { config?: Partial<AppConfig>; controllers?: Function[] } = {},
 ): Promise<{ app: INestApplication; db: Db; close(): Promise<void> }> {
+  const { db, close: closeDb } = await createTestDb();
   const config: AppConfig = {
     ...loadConfig({ DATABASE_URL: 'postgres://test', SUPABASE_URL: 'https://test.supabase.co' }),
     ...overrides.config,
@@ -16,12 +18,12 @@ export async function createTestApp(
   @Module({ controllers: overrides.controllers as never[] })
   class ExtraModule {}
   const builder = Test.createTestingModule({
-    imports: [AppModule.forRoot(config), ...(overrides.controllers ? [ExtraModule] : [])],
+    imports: [AppModule.forRoot(config, db), ...(overrides.controllers ? [ExtraModule] : [])],
   });
   const moduleRef = await builder.compile();
   const app = moduleRef.createNestApplication();
   app.useLogger(false);
   configureApp(app);
   await app.init();
-  return { app, db: undefined, close: () => app.close() };
+  return { app, db, close: async () => { await app.close(); await closeDb(); } };
 }
