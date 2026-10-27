@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "prelims",
+    "parent": null,
+    "title": "Preliminary Examination",
+    "examStage": "prelims",
+    "paper": "Prelims",
+    "level": 1,
+    "order": 1
+  },
+  {
+    "slug": "prelims-gs-1",
+    "parent": "prelims",
+    "title": "General Studies Paper I",
+    "examStage": "prelims",
+    "paper": "GS Paper I",
+    "level": 2,
+    "order": 2
+  },
+  {
+    "slug": "prelims-csat",
+    "parent": "prelims",
+    "title": "CSAT (General Studies Paper II)",
+    "examStage": "prelims",
+    "paper": "CSAT Paper II",
+    "level": 2,
+    "order": 3
+  },
+  {
+    "slug": "mains",
+    "parent": null,
+    "title": "Main Examination",
+    "examStage": "mains",
+    "paper": "Mains",
+    "level": 1,
+    "order": 4
+  },
+  {
+    "slug": "mains-gs-1",
+    "parent": "mains",
+    "title": "GS Paper I",
+    "examStage": "mains",
+    "paper": "GS I",
+    "level": 2,
+    "order": 5
+  },
+  {
+    "slug": "mains-gs-2",
+    "parent": "mains",
+    "title": "GS Paper II",
+    "examStage": "mains",
+    "paper": "GS II",
+    "level": 2,
+    "order": 6
+  },
+  {
+    "slug": "mains-gs-3",
+    "parent": "mains",
+    "title": "GS Paper III",
+    "examStage": "mains",
+    "paper": "GS III",
+    "level": 2,
+    "order": 7
+  },
+  {
+    "slug": "mains-gs-4",
+    "parent": "mains",
+    "title": "GS Paper IV",
+    "examStage": "mains",
+    "paper": "GS IV",
+    "level": 2,
+    "order": 8
+  }
+]
