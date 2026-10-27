@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import request from 'supertest';
 import { createTestApp } from '../../test/app';
 import { signTestToken, TEST_JWT_SECRET, TEST_SUPABASE_URL } from '../../test/tokens';
@@ -82,6 +82,37 @@ describe('admin API', () => {
       expect(seen).toEqual(all.map((u: { id: string }) => u.id));
       expect(new Set(seen).size).toBe(seen.length);
       expect(seen.length).toBeGreaterThanOrEqual(3); // two seeded + provisioned students from the 403 tests
+    });
+
+    it('keyset tie-break: users sharing an identical createdAt page without repeat or skip', async () => {
+      const tiedIds = [
+        'cccccccc-0000-4000-8000-000000000003',
+        'cccccccc-0000-4000-8000-000000000001',
+        'cccccccc-0000-4000-8000-000000000002',
+      ];
+      const shared = sql`'2031-05-06T07:08:09.123456Z'::timestamptz`;
+      for (const id of tiedIds) {
+        await db.insert(users).values({
+          id, authSubject: `tie-${id}`, email: `tie-${id.slice(-1)}@tie.test`, name: 'Tie', createdAt: shared,
+        });
+      }
+      const seen: { id: string; createdAt: string }[] = [];
+      let cursor: string | null = null;
+      let pages = 0;
+      do {
+        const res: request.Response = await get(`/admin/users?limit=1${cursor ? `&cursor=${cursor}` : ''}`, adminToken).expect(200);
+        seen.push(res.body.users[0]);
+        cursor = res.body.nextCursor;
+        pages++;
+      } while (cursor && pages < 50);
+      expect(cursor).toBeNull();
+      const total = (await db.select({ id: users.id }).from(users)).length;
+      expect(seen).toHaveLength(total);
+      expect(new Set(seen.map((u) => u.id)).size).toBe(total);
+      const tied = seen.filter((u) => u.id.startsWith('cccccccc-'));
+      expect(tied.map((u) => u.id)).toEqual([...tiedIds].sort());
+      // tied rows are contiguous and last (their createdAt is the latest), in ascending id order
+      expect(seen.slice(-3).map((u) => u.id)).toEqual([...tiedIds].sort());
     });
 
     it('orders by (createdAt, id) ascending', async () => {
