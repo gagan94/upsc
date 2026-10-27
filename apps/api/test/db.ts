@@ -17,6 +17,8 @@ export async function createTestDb(): Promise<{ db: Db; close(): Promise<void> }
     const pool = createPool(url);
     const db = drizzle(pool);
     await db.execute(sql`DROP SCHEMA IF EXISTS identity CASCADE`);
+    await db.execute(sql`DROP SCHEMA IF EXISTS billing CASCADE`);
+    await db.execute(sql`DROP SCHEMA IF EXISTS catalog CASCADE`);
     await db.execute(sql`DROP SCHEMA IF EXISTS drizzle CASCADE`);
     await migrate(db, { migrationsFolder });
     return { db: db as unknown as Db, close: () => pool.end() };

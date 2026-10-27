@@ -10,6 +10,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule.forRoot(config));
   configureApp(app);
   app.set('trust proxy', 1);
+  app.enableShutdownHooks();
   await app.listen(config.port);
 }
 
