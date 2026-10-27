@@ -6,3 +6,12 @@ export interface UserView {
   timezone: string;
   locale: string;
 }
+
+export interface SubjectSummary {
+  id: string;
+  slug: string;
+  title: string;
+  gsPaper: string;
+  moduleCount: number;
+  lessonCount: number;
+}
