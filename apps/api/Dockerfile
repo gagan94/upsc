@@ -17,7 +17,9 @@ COPY tsconfig.base.json ./
 COPY apps/api apps/api
 RUN pnpm --filter @upsc/api build \
  && pnpm --filter @upsc/api deploy --prod /out \
- && cd /out && rm -rf src test seed-data drizzle drizzle.config.ts jest.config.ts tsconfig.json tsconfig.build.json
+ && cd /out && rm -rf src test seed-data drizzle drizzle.config.ts jest.config.ts tsconfig.json tsconfig.build.json \
+ && find /out -name '.env*' ! -name '.env.example' -delete \
+ && find /out \( -name '*.pem' -o -name '*.key' \) -delete
 
 FROM node:22-slim AS runtime
 ENV NODE_ENV=production
