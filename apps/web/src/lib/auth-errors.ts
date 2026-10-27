@@ -13,6 +13,8 @@ export function authErrorMessage(code: string | undefined | null): string {
       return "Too many attempts. Please wait a minute and try again.";
     case "oauth_failed":
       return "Google sign-in did not complete. Please try again.";
+    case "session_rejected":
+      return "We couldn't verify your session. Please sign in again.";
     default:
       return GENERIC;
   }

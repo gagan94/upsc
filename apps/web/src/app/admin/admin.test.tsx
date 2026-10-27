@@ -5,9 +5,11 @@ const REDIRECT = "NEXT_REDIRECT_SENTINEL";
 const redirect = vi.fn((url: string) => {
   throw new Error(`${REDIRECT}:${url}`);
 });
+const refresh = vi.fn();
 vi.mock("next/navigation", () => ({
   redirect: (u: string) => redirect(u),
   usePathname: () => "/admin/users",
+  useRouter: () => ({ refresh, replace: vi.fn(), push: vi.fn() }),
 }));
 const serverApi = vi.fn();
 vi.mock("@/lib/server-api", () => ({ serverApi: (p: string) => serverApi(p) }));
@@ -48,6 +50,7 @@ beforeEach(() => {
   serverApi.mockReset();
   apiFetch.mockReset();
   redirect.mockClear();
+  refresh.mockClear();
 });
 
 describe("admin layout", () => {
@@ -58,16 +61,26 @@ describe("admin layout", () => {
     expect(serverApi.mock.calls.map((c) => c[0])).toEqual(["/me"]);
   });
 
-  it("redirects signed-out visitors to login", async () => {
+  it("signs out (no login loop) when the API rejects the session", async () => {
     serverApi.mockRejectedValue(new ApiError(401, "unauthenticated", "no"));
-    await expect(AdminLayout({ children: <p>x</p> })).rejects.toThrow(`${REDIRECT}:/login?return_to=%2Fadmin`);
+    await expect(AdminLayout({ children: <p>x</p> })).rejects.toThrow(`${REDIRECT}:/auth/signout`);
+    expect(redirect).toHaveBeenCalledWith("/auth/signout");
   });
 
-  it("shows an error panel on other API errors", async () => {
+  it("shows an error panel with retry and log out on other API errors", async () => {
     serverApi.mockRejectedValue(new ApiError(500, "internal", "boom"));
     render(await AdminLayout({ children: <p>x</p> }));
     expect(screen.getByRole("alert")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Try again" })).toHaveAttribute("href", "/admin");
+    expect(screen.getByRole("link", { name: "Log out" })).toHaveAttribute("href", "/auth/signout");
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    expect(refresh).toHaveBeenCalled();
+    expect(redirect).not.toHaveBeenCalled();
+  });
+
+  it("shows the error panel with log out on 409 email_conflict", async () => {
+    serverApi.mockRejectedValue(new ApiError(409, "email_conflict", "conflict"));
+    render(await AdminLayout({ children: <p>x</p> }));
+    expect(screen.getByRole("link", { name: "Log out" })).toHaveAttribute("href", "/auth/signout");
   });
 
   it("renders chrome and nav with exactly two live links for admins", async () => {

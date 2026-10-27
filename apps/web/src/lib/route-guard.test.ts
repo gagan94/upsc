@@ -20,4 +20,8 @@ describe("decideRedirect", () => {
     expect(decideRedirect({ pathname: "/learn", search: "", signedIn: true })).toBeNull();
     expect(decideRedirect({ pathname: "/auth/callback", search: "", signedIn: true })).toBeNull();
   });
+  it("never redirects /auth/signout, signed in or out (avoids a login loop)", () => {
+    expect(decideRedirect({ pathname: "/auth/signout", search: "", signedIn: true })).toBeNull();
+    expect(decideRedirect({ pathname: "/auth/signout", search: "", signedIn: false })).toBeNull();
+  });
 });

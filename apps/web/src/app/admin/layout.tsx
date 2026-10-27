@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { AdminNav } from "@/components/AdminNav";
+import { ErrorPanel } from "@/components/ErrorPanel";
 import { ApiError } from "@/lib/api";
 import { serverApi } from "@/lib/server-api";
 import type { UserView } from "@/lib/types";
@@ -23,20 +24,9 @@ async function loadUser(): Promise<Outcome> {
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const outcome = await loadUser();
   // redirect() throws; it is deliberately called outside any try/catch.
-  if (outcome.kind === "unauth") redirect("/login?return_to=%2Fadmin");
-  if (outcome.kind === "error") {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-bg p-4">
-        <div role="alert" className="max-w-md rounded-card border border-border bg-surface p-8 text-center">
-          <h1 className="text-xl font-bold text-text">We couldn&apos;t load the admin console</h1>
-          <p className="mt-2 text-sm text-muted">Something went wrong reaching the server. Please try again.</p>
-          <Link href="/admin" className="mt-4 inline-block rounded-control bg-primary px-4 py-2 font-semibold text-primary-text">
-            Try again
-          </Link>
-        </div>
-      </main>
-    );
-  }
+  // Unauthenticated here means the API rejected a session the middleware accepted: sign out, no loop.
+  if (outcome.kind === "unauth") redirect("/auth/signout");
+  if (outcome.kind === "error") return <ErrorPanel title={"We couldn't load the admin console"} />;
   const { user } = outcome;
   if (!user.roles.includes("admin")) redirect("/home");
 

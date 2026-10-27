@@ -76,6 +76,12 @@ describe("LoginPage", () => {
     expect(screen.getByRole("alert")).toHaveTextContent("Google sign-in did not complete. Please try again.");
   });
 
+  it("explains a rejected session from the query string", () => {
+    params = new URLSearchParams("error=session_rejected");
+    render(<LoginPage />);
+    expect(screen.getByRole("alert")).toHaveTextContent("We couldn't verify your session. Please sign in again.");
+  });
+
   it("hides Google button unless enabled", () => {
     render(<LoginPage />);
     expect(screen.queryByRole("button", { name: "Continue with Google" })).toBeNull();
