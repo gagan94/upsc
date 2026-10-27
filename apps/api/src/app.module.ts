@@ -1,9 +1,10 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { AppConfig } from './common/config';
+import { APP_CONFIG, AppConfig } from './common/config';
 import { Db, DbModule } from './db/db.module';
+import { IdentityModule } from './identity/identity.module';
 import { HealthController } from './health/health.controller';
 
-export const APP_CONFIG = 'APP_CONFIG';
+export { APP_CONFIG };
 
 @Module({})
 export class AppModule {
@@ -11,7 +12,7 @@ export class AppModule {
   static forRoot(config: AppConfig, db?: Db): DynamicModule {
     return {
       module: AppModule,
-      imports: [DbModule.forRoot(config, db)],
+      imports: [DbModule.forRoot(config, db), IdentityModule.forRoot(config)],
       controllers: [HealthController],
       providers: [{ provide: APP_CONFIG, useValue: config }],
       exports: [APP_CONFIG],
