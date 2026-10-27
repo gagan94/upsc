@@ -4,6 +4,7 @@ import { Db, DbModule } from './db/db.module';
 import { IdentityModule } from './identity/identity.module';
 import { HealthController } from './health/health.controller';
 import { BillingModule } from './billing/billing.module';
+import { CatalogModule } from './catalog/catalog.module';
 
 export { APP_CONFIG };
 
@@ -13,7 +14,7 @@ export class AppModule {
   static forRoot(config: AppConfig, db?: Db): DynamicModule {
     return {
       module: AppModule,
-      imports: [DbModule.forRoot(config, db), IdentityModule.forRoot(config), BillingModule],
+      imports: [DbModule.forRoot(config, db), IdentityModule.forRoot(config), BillingModule, CatalogModule],
       controllers: [HealthController],
       providers: [{ provide: APP_CONFIG, useValue: config }],
       exports: [APP_CONFIG],
