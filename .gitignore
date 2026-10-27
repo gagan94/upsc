@@ -7,3 +7,8 @@ dist
 *.log
 .vercel
 .superpowers
+
+# misc
+.DS_Store
+coverage
+*.tsbuildinfo
