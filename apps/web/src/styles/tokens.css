@@ -1,0 +1,35 @@
+/* Design tokens from Figma variables (docs/specs/figma/TOKENS.md). */
+@theme {
+  --color-text: #172033;
+  --color-muted: #718096;
+  --color-surface: #ffffff;
+  --color-border: #dce3ec;
+  --color-primary: #0f766e;
+  --color-primary-text: #ffffff;
+  --color-sidebar: #142536;
+  --color-sidebar-text: #d6e1ed;
+  --color-sidebar-active-text: #7ce2d1;
+  --color-sidebar-active: #174a48;
+  /* derived from screenshots */
+  --color-bg: #f6f8fb;
+  --color-danger: #b91c1c;
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #e0a0a0;
+  --radius-card: 10px;
+  --radius-control: 8px;
+  --spacing-gap: 16px;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+:root {
+  --radius: 10px;
+  --radius-sm: 8px;
+  --gap: 16px;
+  --space-2: 8px;
+  --space-3: 12px;
+
+  --text-section: 700 18px/1.45 var(--font-inter), system-ui, sans-serif;
+  --text-label: 600 13px/1.45 var(--font-inter), system-ui, sans-serif;
+  --text-small: 400 11px/1.45 var(--font-inter), system-ui, sans-serif;
+  --text-body: 400 16px/1.45 var(--font-inter), system-ui, sans-serif;
+}
