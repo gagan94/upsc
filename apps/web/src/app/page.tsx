@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function Page() {
-  return <main className="p-4">AI UPSC</main>;
+  redirect("/home");
 }
