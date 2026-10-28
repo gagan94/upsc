@@ -90,6 +90,14 @@ describe('GET /me', () => {
     expect(res.body.user.email).toBe('new@example.com');
   });
 
+  it('409 email_conflict when a different subject presents an email another user already has', async () => {
+    await me(await signTestToken({ sub: 'owner-1', email: 'taken@example.com' })).expect(200);
+    const res = await me(await signTestToken({ sub: 'other-2', email: 'Taken@Example.com' })).expect(409);
+    expect(res.body.error.code).toBe('email_conflict');
+    const rows = await db.select().from(users).where(eq(users.authSubject, 'other-2'));
+    expect(rows).toHaveLength(0);
+  });
+
   it('@Roles("admin"): 403 for student, 200 once DB roles include admin', async () => {
     const token = await signTestToken({ sub: 'role-1', email: 'role@example.com' });
     const get = () =>
