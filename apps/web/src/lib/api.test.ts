@@ -51,7 +51,7 @@ describe("apiFetch", () => {
     fetchMock.mockResolvedValue(
       json({ error: { code: "unauthenticated", message: "x" } }, 401),
     );
-    const err = await apiFetch("/me").catch((e: unknown) => e as ApiError);
+    const err = (await apiFetch("/me").catch((e: unknown) => e)) as ApiError;
     expect(err).toBeInstanceOf(ApiError);
     expect(err.status).toBe(401);
     expect(err.code).toBe("unauthenticated");
@@ -59,7 +59,7 @@ describe("apiFetch", () => {
 
   it("throws network_error for a non-JSON error body", async () => {
     fetchMock.mockResolvedValue(new Response("<html>bad gateway</html>", { status: 502 }));
-    const err = await apiFetch("/me").catch((e: unknown) => e as ApiError);
+    const err = (await apiFetch("/me").catch((e: unknown) => e)) as ApiError;
     expect(err).toBeInstanceOf(ApiError);
     expect(err.code).toBe("network_error");
     expect(err.status).toBe(502);
