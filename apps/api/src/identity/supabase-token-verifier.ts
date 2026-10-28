@@ -24,7 +24,7 @@ export class SupabaseTokenVerifier implements TokenVerifier {
 
   async verify(token: string): Promise<AuthClaims> {
     try {
-      const options = { issuer: this.issuer, audience: 'authenticated' };
+      const options = { issuer: this.issuer, audience: 'authenticated', requiredClaims: ['exp', 'sub'] };
       const { payload } = this.secret
         ? await jwtVerify(token, this.secret, { ...options, algorithms: ['HS256'] })
         : await jwtVerify(token, this.jwks as JWTVerifyGetKey, {
@@ -39,7 +39,6 @@ export class SupabaseTokenVerifier implements TokenVerifier {
         sub: payload.sub,
         email: payload.email,
         name: typeof rawName === 'string' && rawName.trim() ? rawName.trim() : undefined,
-        emailVerified: meta.email_verified === true,
       };
     } catch (e) {
       if (e instanceof AppError) throw e;

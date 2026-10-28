@@ -22,13 +22,24 @@ describe('SupabaseTokenVerifier', () => {
       sub: 'abc',
       email: 'A@Example.com',
       name: 'Asha K',
-      emailVerified: false,
     });
   });
 
-  it('reports emailVerified from user_metadata', async () => {
+  it('does not expose user_metadata.email_verified (user-editable) as a claim', async () => {
     const token = await signTestToken({ sub: 'abc', user_metadata: { email_verified: true } });
-    expect((await hs().verify(token)).emailVerified).toBe(true);
+    expect(await hs().verify(token)).not.toHaveProperty('emailVerified');
+  });
+
+  it('rejects a correctly signed token without exp', async () => {
+    const { SignJWT } = await import('jose');
+    const noExp = await new SignJWT({ email: 'user@example.com' })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setSubject('x')
+      .setIssuer(`${TEST_SUPABASE_URL}/auth/v1`)
+      .setAudience('authenticated')
+      .setIssuedAt()
+      .sign(new TextEncoder().encode(TEST_JWT_SECRET));
+    await expectUnauthenticated(hs().verify(noExp));
   });
 
   it('rejects an expired token', async () => {
