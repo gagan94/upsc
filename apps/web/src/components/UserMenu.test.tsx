@@ -13,6 +13,7 @@ const base = { id: "u1", email: "a@b.co", name: "Asha Rao", roles: ["learner"], 
 
 beforeEach(() => {
   push.mockReset();
+  refresh.mockReset();
   signOut.mockReset();
 });
 
@@ -53,5 +54,15 @@ describe("UserMenu", () => {
     await waitFor(() => expect(push).toHaveBeenCalledWith("/login"));
     expect(signOut).toHaveBeenCalled();
     expect(signOut.mock.invocationCallOrder[0]).toBeLessThan(push.mock.invocationCallOrder[0]);
+    expect(refresh).toHaveBeenCalled();
+  });
+
+  it("Log out still navigates to /login when signOut throws", async () => {
+    signOut.mockRejectedValue(new Error("network"));
+    render(<UserMenu user={base} />);
+    fireEvent.click(screen.getByRole("button", { name: /Asha Rao/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Log out" }));
+    await waitFor(() => expect(push).toHaveBeenCalledWith("/login"));
+    expect(refresh).toHaveBeenCalled();
   });
 });

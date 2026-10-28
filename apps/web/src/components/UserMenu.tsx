@@ -63,8 +63,13 @@ export function UserMenu({ user }: { user: UserView }) {
 
   async function logOut() {
     setOpen(false);
-    await createBrowserSupabase().auth.signOut();
-    router.push("/login");
+    try {
+      await createBrowserSupabase().auth.signOut();
+    } catch {
+      // Still leave: the login page is the right place even if the network call failed.
+    }
+    router.replace("/login");
+    router.refresh();
   }
 
   return (
