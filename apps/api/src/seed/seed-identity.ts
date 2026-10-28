@@ -10,8 +10,13 @@ export const DEMO_USERS = [
 ] as const;
 
 export async function seedIdentity(db: Db, ctx: SeedContext): Promise<void> {
+  // Resolve every auth account first: if any is refused (e.g. not created by the seed), nothing is written.
+  const subjects: string[] = [];
   for (const u of DEMO_USERS) {
-    const { subject } = await ctx.authAdmin.ensureUser({ email: u.email, password: ctx.demoPassword, name: u.name });
+    subjects.push((await ctx.authAdmin.ensureUser({ email: u.email, password: ctx.demoPassword, name: u.name })).subject);
+  }
+  for (const [n, u] of DEMO_USERS.entries()) {
+    const subject = subjects[n];
     // A row may already exist (e.g. provisioned at first login) under a different id: update it in place.
     const [existing] = await db
       .select({ id: users.id })

@@ -11,6 +11,9 @@ async function main(): Promise<void> {
   if (process.env.NODE_ENV === 'production' && process.env.SEED_ALLOW_PRODUCTION !== 'true') {
     throw new Error('Refusing to seed with NODE_ENV=production (set SEED_ALLOW_PRODUCTION=true to override)');
   }
+  if (process.env.SEED_ALLOW_PRODUCTION === 'true') {
+    console.warn('WARNING: SEED_ALLOW_PRODUCTION=true: creating demo users with a known password (DEMO_PASSWORD).');
+  }
   const pool = createPool(process.env.DATABASE_URL as string);
   try {
     const authAdmin = new SupabaseAuthAdmin({

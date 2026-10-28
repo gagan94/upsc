@@ -34,19 +34,35 @@ export class SupabaseAuthAdmin implements AuthAdmin {
       password: i.password,
       email_confirm: true,
       user_metadata: { full_name: i.name },
+      // Marks accounts this seed owns; an existing account without it is never adopted.
+      app_metadata: { seeded: true },
     });
     if (!error && data.user) return { subject: data.user.id };
-    if (error && isAlreadyRegistered(error)) return { subject: await this.findUserId(i.email) };
+    if (error && isAlreadyRegistered(error)) return { subject: await this.adoptSeededUser(i.email, i.password) };
     throw new Error(`Supabase createUser failed for ${i.email}: ${error?.message ?? 'no user returned'}`);
   }
 
-  private async findUserId(email: string): Promise<string> {
+  /** Re-uses an existing account only if the seed created it, and resets its password to the current one. */
+  private async adoptSeededUser(email: string, password: string): Promise<string> {
+    const user = await this.findUser(email);
+    if (user.app_metadata?.seeded !== true) {
+      throw new Error(
+        `Supabase user ${email} already exists. This Supabase user was not created by the seed. ` +
+          'Delete it in the Supabase dashboard (Authentication → Users) and re-run the seed.',
+      );
+    }
+    const { error } = await (await this.admin()).updateUserById(user.id, { password, email_confirm: true });
+    if (error) throw new Error(`Supabase updateUserById failed for ${email}: ${error.message}`);
+    return user.id;
+  }
+
+  private async findUser(email: string): Promise<{ id: string; app_metadata?: Record<string, unknown> }> {
     const wanted = email.toLowerCase();
     for (let page = 1; ; page++) {
       const { data, error } = await (await this.admin()).listUsers({ page, perPage: PAGE_SIZE });
       if (error) throw new Error(`Supabase listUsers failed: ${error.message}`);
       const hit = data.users.find((u) => u.email?.toLowerCase() === wanted);
-      if (hit) return hit.id;
+      if (hit) return hit;
       if (data.users.length < PAGE_SIZE) throw new Error(`Supabase reports ${email} exists but it was not found`);
     }
   }

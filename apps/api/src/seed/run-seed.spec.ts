@@ -3,7 +3,7 @@ import { createTestDb } from '../../test/db';
 import type { Db } from '../db/db.module';
 import { featureCatalog, planEntitlements, plans, users } from '../db/schema';
 import { FEATURE_KEYS } from '../billing/feature-keys';
-import { FakeAuthAdmin } from './auth-admin';
+import { FakeAuthAdmin, type AuthAdmin } from './auth-admin';
 import { runSeed } from './run-seed';
 
 jest.setTimeout(30000);
@@ -82,5 +82,25 @@ describe('runSeed', () => {
     const i = { email: 'x@example.com', password: 'p', name: 'X' };
     expect((await a.ensureUser(i)).subject).toBe((await a.ensureUser(i)).subject);
     expect(a.calls).toHaveLength(2);
+  });
+});
+
+describe('runSeed when the auth admin refuses a user', () => {
+  it('aborts before any user or role is written', async () => {
+    const { db, close } = await createTestDb();
+    try {
+      const fake = new FakeAuthAdmin();
+      const authAdmin: AuthAdmin = {
+        ensureUser: async (i) => {
+          if (i.email === 'admin@example.com') throw new Error('admin@example.com: not created by the seed');
+          return fake.ensureUser(i);
+        },
+      };
+      await expect(runSeed(db, { demoPassword: 'test-password-1', authAdmin })).rejects.toThrow(/not created by the seed/);
+      const rows = await db.select().from(users);
+      expect(rows).toEqual([]);
+    } finally {
+      await close();
+    }
   });
 });
