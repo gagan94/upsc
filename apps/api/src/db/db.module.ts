@@ -1,4 +1,4 @@
-import { DynamicModule, Inject, Module, OnApplicationShutdown } from '@nestjs/common';
+import { DynamicModule, Inject, Logger, Module, OnApplicationShutdown } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import type { PgDatabase } from 'drizzle-orm/pg-core';
 import { Pool } from 'pg';
@@ -10,9 +10,19 @@ export type Db = PgDatabase<any, any, any>;
 export const DB = Symbol('DB');
 const POOL = Symbol('POOL');
 
-export function createPool(databaseUrl: string): Pool {
+type WarnLogger = Pick<Logger, 'warn'>;
+
+/** Idle-client errors (e.g. Neon closing a connection) are emitted on the pool; unhandled they crash Node. */
+export function onPoolError(logger: WarnLogger): (err: Error) => void {
+  // Name and message only: never the connection string or a stack.
+  return (err) => logger.warn(`Postgres pool error (idle client discarded): ${err.name}: ${err.message}`.replace(/\s+/g, ' '));
+}
+
+export function createPool(databaseUrl: string, logger: WarnLogger = new Logger('Database')): Pool {
   const ssl = databaseUrl.includes('neon.tech') || databaseUrl.includes('sslmode=require');
-  return new Pool({ connectionString: databaseUrl, ssl: ssl ? { rejectUnauthorized: false } : undefined });
+  const pool = new Pool({ connectionString: databaseUrl, ssl: ssl ? { rejectUnauthorized: false } : undefined });
+  pool.on('error', onPoolError(logger));
+  return pool;
 }
 
 @Module({})
