@@ -33,3 +33,47 @@
   --text-small: 400 11px/1.45 var(--font-inter), system-ui, sans-serif;
   --text-body: 400 16px/1.45 var(--font-inter), system-ui, sans-serif;
 }
+
+/* ---- Appearance (browser-local; set on <html> by AppearanceApplier) ---- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #0e1621;
+  --color-surface: #162231;
+  --color-text: #e6edf5;
+  --color-muted: #9db0c5;
+  --color-border: #2c3b50;
+  --color-primary: #2bb3a3;
+  --color-primary-text: #04201d;
+  --color-danger: #fca5a5;
+  --color-danger-bg: #3a1c1f;
+  --color-danger-border: #7f3b40;
+}
+
+:root[data-contrast="high"] {
+  --color-text: #000000;
+  --color-muted: #2f3a4a;
+  --color-border: #4a5568;
+  --color-primary: #0b5a54;
+}
+:root[data-theme="dark"][data-contrast="high"] {
+  --color-text: #ffffff;
+  --color-muted: #d3deea;
+  --color-border: #8da2b9;
+  --color-primary: #5eead4;
+}
+
+:root[data-text-size="112"] {
+  font-size: 112%;
+}
+:root[data-text-size="125"] {
+  font-size: 125%;
+}
+
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}

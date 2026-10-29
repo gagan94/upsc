@@ -200,6 +200,26 @@ export interface OnboardingView {
   answers: OnboardingAnswers;
 }
 
+/** PUT /me/onboarding body */
+export interface OnboardingSaveBody {
+  step: number;
+  answers: OnboardingAnswers;
+  status?: "in_progress" | "skipped";
+}
+/** POST /me/onboarding/plan-preview */
+export interface PlanPreview {
+  tasks: NewTask[];
+}
+/** POST /me/onboarding/complete */
+export interface OnboardingCompleteResult {
+  createdTasks: number;
+}
+
+/** PATCH /me response wrapper */
+export interface MeResponse {
+  user: UserView;
+}
+
 /* ---- Question bank (admin) ---- */
 export type QuestionFormat = "single" | "statements";
 export type Difficulty = "easy" | "medium" | "hard";
