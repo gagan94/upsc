@@ -36,6 +36,13 @@
       "when": 1793303013829,
       "tag": "0004_minor_callisto",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793303480564,
+      "tag": "0005_dusty_boomer",
+      "breakpoints": true
     }
   ]
 }

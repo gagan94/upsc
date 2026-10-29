@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { index, integer, jsonb, pgSchema, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { index, integer, jsonb, pgSchema, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 import { syllabusNodes } from './catalog';
 import { users } from './identity';
 
@@ -55,5 +55,39 @@ export const tasks = planner.table(
     index('tasks_user_backlog_idx')
       .on(t.userId)
       .where(sql`scheduled_start is null and deleted_at is null`),
+  ],
+);
+
+export const STUDY_SESSION_STATUSES = ['running', 'paused', 'ended', 'discarded'] as const;
+export const STUDY_SESSION_END_REASONS = ['user', 'target_reached', 'recovered', 'discarded'] as const;
+
+export const studySessions = planner.table(
+  'study_sessions',
+  {
+    id: uuid('id').primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    taskId: uuid('task_id').references(() => tasks.id),
+    subjectNodeId: uuid('subject_node_id').references(() => syllabusNodes.id),
+    plannedMin: integer('planned_min').notNull(),
+    startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    lastHeartbeatAt: timestamp('last_heartbeat_at', { withTimezone: true }).notNull().defaultNow(),
+    endedAt: timestamp('ended_at', { withTimezone: true }),
+    activeSeconds: integer('active_seconds').notNull().default(0),
+    pausedSeconds: integer('paused_seconds').notNull().default(0),
+    idleSeconds: integer('idle_seconds').notNull().default(0),
+    status: text('status', { enum: STUDY_SESSION_STATUSES }).notNull().default('running'),
+    endReason: text('end_reason', { enum: STUDY_SESSION_END_REASONS }),
+    focusRating: integer('focus_rating'),
+    notes: text('notes'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    // At most one running-or-paused session per user; enforced by the database, not by a prior SELECT.
+    uniqueIndex('study_sessions_one_active_idx')
+      .on(t.userId)
+      .where(sql`status in ('running', 'paused')`),
+    index('study_sessions_user_started_idx').on(t.userId, t.startedAt),
   ],
 );
