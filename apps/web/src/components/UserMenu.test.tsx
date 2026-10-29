@@ -27,12 +27,24 @@ describe("UserMenu", () => {
   it("shows Admin only for admins", () => {
     const { unmount } = render(<UserMenu user={base} />);
     fireEvent.click(screen.getByRole("button", { name: /Asha Rao/ }));
-    expect(screen.getByRole("menuitem", { name: "My profile" })).toHaveAttribute("href", "/settings?section=my-profile");
+    expect(screen.getByRole("menuitem", { name: "My profile" })).toHaveAttribute("href", "/settings/profile");
     expect(screen.queryByRole("menuitem", { name: "Admin" })).toBeNull();
     unmount();
     render(<UserMenu user={{ ...base, roles: ["admin"] }} />);
     fireEvent.click(screen.getByRole("button", { name: /Asha Rao/ }));
     expect(screen.getByRole("menuitem", { name: "Admin" })).toHaveAttribute("href", "/admin");
+  });
+
+  it("links each entry to its settings route; unbuilt ones stay on the stub", () => {
+    render(<UserMenu user={base} />);
+    fireEvent.click(screen.getByRole("button", { name: /Asha Rao/ }));
+    const href = (name: string) => screen.getByRole("menuitem", { name }).getAttribute("href");
+    expect(href("My profile")).toBe("/settings/profile");
+    expect(href("Preparation profile")).toBe("/settings/preparation");
+    expect(href("Study preferences")).toBe("/settings/study");
+    expect(href("Appearance & accessibility")).toBe("/settings/appearance");
+    expect(href("Account & contact")).toBe("/settings/account");
+    for (const name of ["Notifications", "Connected tools", "Privacy & data"]) expect(href(name)).toBe("/settings");
   });
 
   it("opens with aria state and closes on Escape", () => {

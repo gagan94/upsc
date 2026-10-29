@@ -7,24 +7,17 @@ import { createBrowserSupabase } from "@/lib/supabase-browser";
 import type { UserView } from "@/lib/types";
 import { Icon } from "./Icon";
 
+// Notifications, Connected tools and Privacy & data arrive in a later phase and stay on the /settings stub.
 const ENTRIES = [
-  "My profile",
-  "Preparation profile",
-  "Study preferences",
-  "Notifications",
-  "Connected tools",
-  "Appearance & accessibility",
-  "Privacy & data",
-  "Account & contact",
-].map((label) => ({
-  label,
-  href: `/settings?section=${label
-    .toLowerCase()
-    .replace(/&/g, "")
-    .trim()
-    .split(/\s+/)
-    .join("-")}`,
-}));
+  { label: "My profile", href: "/settings/profile" },
+  { label: "Preparation profile", href: "/settings/preparation" },
+  { label: "Study preferences", href: "/settings/study" },
+  { label: "Notifications", href: "/settings" },
+  { label: "Connected tools", href: "/settings" },
+  { label: "Appearance & accessibility", href: "/settings/appearance" },
+  { label: "Privacy & data", href: "/settings" },
+  { label: "Account & contact", href: "/settings/account" },
+];
 
 export function initialsOf(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -101,7 +94,7 @@ export function UserMenu({ user }: { user: UserView }) {
           className="absolute right-0 z-40 mt-2 w-60 rounded-card border border-border bg-surface p-2 shadow-lg"
         >
           {ENTRIES.map((e) => (
-            <Link key={e.href} role="menuitem" href={e.href} className={itemClass} onClick={() => setOpen(false)}>
+            <Link key={e.label} role="menuitem" href={e.href} className={itemClass} onClick={() => setOpen(false)}>
               {e.label}
             </Link>
           ))}
