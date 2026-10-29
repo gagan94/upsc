@@ -1,10 +1,10 @@
 # Phase 0 demo runbook
 
-> **Status: files written and locally verified; live deployment pending owner setup.**
-> Not yet executed (no cloud accounts exist yet): Supabase/Neon/Render/Vercel setup, the real
-> `db:migrate` and `seed`, the real `./scripts/deploy.sh`, the Docker image build (Docker was not
-> available when this was written), and opening the live site. Treat every command below as
-> untested against live services until this note is removed.
+> **Status: LIVE (2026-10-30).** Web: https://upsc-web-rho.vercel.app · API: https://upsc-api.onrender.com
+> Verified live: migrate + seed against Neon/Supabase, Render Docker build, login (student + admin),
+> `scripts/smoke.sh` = SMOKE OK, and a headless-browser click-through of every page.
+> Not yet verified: first run of `./scripts/deploy.sh` end to end (Render hook + Vercel step ran
+> manually), phone-width layouts, Google sign-in. Needs Node 22 (see `phase-0-setup-guide.md`).
 
 Stack: Neon (Postgres), Supabase (auth), Render free Docker web service (API), Vercel (web).
 
