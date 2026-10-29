@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Suspense, useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AuthCard, FormError, inputClass, primaryButtonClass, secondaryButtonClass } from "@/components/AuthCard";
+import { apiFetch } from "@/lib/api";
+import type { OnboardingView } from "@/lib/types";
 import { authErrorMessage } from "@/lib/auth-errors";
 import { createBrowserSupabase } from "@/lib/supabase-browser";
 import { safeReturnTo } from "@/lib/safe-redirect";
@@ -43,7 +45,14 @@ function SignupForm() {
         setPending(false);
         return;
       }
-      router.replace(safeReturnTo(returnTo));
+      let target = safeReturnTo(returnTo);
+      try {
+        const { status } = await apiFetch<OnboardingView>("/me/onboarding");
+        if (status === "not_started") target = "/onboarding";
+      } catch {
+        // Lookup failed: keep the Phase 0 destination.
+      }
+      router.replace(target);
     } catch {
       setError(authErrorMessage(null));
       setPending(false);

@@ -35,4 +35,11 @@ describe("GET /auth/signout", () => {
     expect(res.status).toBe(303);
     expect(res.headers.get("location")).toBe("http://localhost:3000/login?error=session_rejected");
   });
+
+  it("lands on a clean /login when the user chose to log out (?done=1)", async () => {
+    signOut.mockResolvedValue({ error: null });
+    const res = await GET(new Request("http://localhost:3000/auth/signout?done=1"));
+    expect(signOut).toHaveBeenCalled();
+    expect(res.headers.get("location")).toBe("http://localhost:3000/login");
+  });
 });
