@@ -92,7 +92,16 @@ type Load = { kind: "loading" } | { kind: "error" } | { kind: "ready" };
 export type PreviewState =
   | { kind: "loading" }
   | { kind: "ready"; tasks: NewTask[] }
-  | { kind: "error" };
+  | { kind: "error"; code?: string };
+
+/** Plan failures that retrying cannot fix. */
+export type PlanBlock = "catalog_empty" | "onboarding_incomplete";
+function planBlock(e: unknown): PlanBlock | null {
+  if (!(e instanceof ApiError)) return null;
+  if (e.code === "catalog_empty" && e.status === 409) return "catalog_empty";
+  if (e.code === "onboarding_incomplete" && e.status === 400) return "onboarding_incomplete";
+  return null;
+}
 
 function clampStep(n: number) {
   return Math.min(REVIEW_STEP, Math.max(0, Number.isFinite(n) ? Math.floor(n) : 0));
@@ -115,6 +124,9 @@ export function useOnboarding() {
   const [preview, setPreview] = useState<PreviewState>({ kind: "loading" });
   const lastOp = useRef<(() => Promise<void>) | null>(null);
   const previewRequested = useRef(false);
+  const previewSeq = useRef(0);
+  const [planBlocked, setPlanBlocked] = useState<PlanBlock | null>(null);
+  const [invalidTick, setInvalidTick] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -168,7 +180,10 @@ export function useOnboarding() {
   const next = useCallback(() => {
     if (saving || step >= REVIEW_STEP) return;
     setShowErrors(true);
-    if (Object.keys(validateStep(step, draft)).length > 0) return;
+    if (Object.keys(validateStep(step, draft)).length > 0) {
+      setInvalidTick((t) => t + 1);
+      return;
+    }
     const body: OnboardingSaveBody = { step: step + 1, answers: stepAnswers(step, draft), status: "in_progress" };
     void runOp(async () => {
       await put(body);
@@ -180,6 +195,11 @@ export function useOnboarding() {
   const back = useCallback(() => {
     setShowErrors(false);
     setSaveFailed(false);
+    setPlanBlocked(null);
+    // Answers may change before the user returns to Review: drop the old preview and fetch a fresh one.
+    previewRequested.current = false;
+    previewSeq.current += 1;
+    setPreview({ kind: "loading" });
     setStep((s) => Math.max(0, s - 1));
   }, []);
 
@@ -204,6 +224,7 @@ export function useOnboarding() {
   const complete = useCallback(
     (acceptPlan: boolean) => {
       if (saving) return;
+      setPlanBlocked(null);
       void runOp(async () => {
         try {
           await apiFetch<OnboardingCompleteResult>("/me/onboarding/complete", {
@@ -211,6 +232,11 @@ export function useOnboarding() {
             body: JSON.stringify({ acceptPlan }),
           });
         } catch (e) {
+          const blocked = planBlock(e);
+          if (blocked) {
+            setPlanBlocked(blocked);
+            return;
+          }
           if (!(e instanceof ApiError && e.status === 409 && e.code === "already_completed")) throw e;
         }
         routerRef.current.replace("/home");
@@ -226,12 +252,13 @@ export function useOnboarding() {
 
   // The plan preview is requested once when the review step is first shown.
   const loadPreview = useCallback(async () => {
+    const seq = ++previewSeq.current;
     setPreview({ kind: "loading" });
     try {
       const { tasks } = await apiFetch<PlanPreview>("/me/onboarding/plan-preview", { method: "POST" });
-      setPreview({ kind: "ready", tasks });
-    } catch {
-      setPreview({ kind: "error" });
+      if (seq === previewSeq.current) setPreview({ kind: "ready", tasks });
+    } catch (e) {
+      if (seq === previewSeq.current) setPreview({ kind: "error", code: planBlock(e) ?? undefined });
     }
   }, []);
   useEffect(() => {
@@ -260,5 +287,7 @@ export function useOnboarding() {
     complete,
     preview,
     retryPreview,
+    planBlocked,
+    invalidTick,
   };
 }

@@ -4,7 +4,7 @@ import { formatMinutes } from "@/lib/format";
 import { Chips } from "@/components/ui/Chips";
 import { Field } from "@/components/ui/Field";
 import type { StepProps } from "./types";
-import { StepError } from "./types";
+import { StepError, errorProps, stepErrorId } from "./types";
 
 const PRESETS = [
   { value: "60", label: "1 hour" },
@@ -35,11 +35,13 @@ export function RoutineStep({ draft, setDraft, errors }: StepProps) {
           step={30}
           value={draft.dailyMin}
           aria-valuetext={`${formatMinutes(draft.dailyMin)} a day`}
+          aria-describedby={errors.dailyMin ? stepErrorId("dailyMin") : undefined}
+          aria-invalid={errors.dailyMin ? true : undefined}
           onChange={(e) => setDaily(Number(e.target.value))}
           className="w-full accent-primary"
         />
         <Chips label="Common daily amounts" options={PRESETS} value={preset} onChange={(v) => setDaily(Number(v))} />
-        <StepError message={errors.dailyMin} />
+        <StepError id="dailyMin" message={errors.dailyMin} />
       </div>
       <Field
         label="Weekly goal (minutes)"
@@ -58,9 +60,10 @@ export function RoutineStep({ draft, setDraft, errors }: StepProps) {
           multiple
           options={WINDOW_OPTIONS}
           value={draft.windows}
+          {...errorProps("windows", errors.windows)}
           onChange={(v) => setDraft({ windows: v as StudyWindow[] })}
         />
-        <StepError message={errors.windows} />
+        <StepError id="windows" message={errors.windows} />
       </div>
     </div>
   );

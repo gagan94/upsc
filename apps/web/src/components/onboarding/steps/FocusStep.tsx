@@ -3,14 +3,14 @@ import type { PrepPapers, SubjectSummary } from "@/lib/types";
 import { Banner } from "@/components/ui/Banner";
 import { Chips } from "@/components/ui/Chips";
 import type { StepProps } from "./types";
-import { StepError } from "./types";
+import { StepError, errorProps } from "./types";
 
 export function FocusStep({ draft, setDraft, errors, subjects }: StepProps & { subjects: SubjectSummary[] | null }) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Chips label="Papers" options={PAPER_OPTIONS} value={draft.papers} onChange={(v) => setDraft({ papers: v as PrepPapers })} />
-        <StepError message={errors.papers} />
+        <Chips label="Papers" options={PAPER_OPTIONS} value={draft.papers} {...errorProps("papers", errors.papers)} onChange={(v) => setDraft({ papers: v as PrepPapers })} />
+        <StepError id="papers" message={errors.papers} />
       </div>
       {subjects === null ? (
         <Banner tone="warning">

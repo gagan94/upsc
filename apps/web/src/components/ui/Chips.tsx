@@ -7,7 +7,14 @@ export interface ChipOption {
   label: string;
 }
 
-type Base = { label: string; options: ChipOption[]; className?: string };
+type Base = {
+  label: string;
+  options: ChipOption[];
+  className?: string;
+  /** id(s) of the error/hint text describing this group */
+  describedBy?: string;
+  invalid?: boolean;
+};
 export type ChipsProps =
   | (Base & { multiple?: false; value: string | null; onChange: (value: string) => void })
   | (Base & { multiple: true; value: string[]; onChange: (value: string[]) => void });
@@ -25,7 +32,7 @@ export function Chips(props: ChipsProps) {
   if (props.multiple) {
     const { value, onChange } = props;
     return (
-      <div role="group" aria-label={label} className={`flex flex-wrap gap-2 ${className}`}>
+      <div role="group" aria-label={label} aria-describedby={props.describedBy} data-invalid={props.invalid || undefined} className={`flex flex-wrap gap-2 ${className}`}>
         {options.map((o) => {
           const on = value.includes(o.value);
           return (
@@ -53,7 +60,7 @@ export function Chips(props: ChipsProps) {
     refs.current[next]?.focus();
   }
   return (
-    <div role="radiogroup" aria-label={label} className={`flex flex-wrap gap-2 ${className}`}>
+    <div role="radiogroup" aria-label={label} aria-describedby={props.describedBy} aria-invalid={props.invalid || undefined} data-invalid={props.invalid || undefined} className={`flex flex-wrap gap-2 ${className}`}>
       {options.map((o, i) => {
         const on = i === selectedIdx;
         return (

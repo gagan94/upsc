@@ -105,6 +105,52 @@ describe("Wizard step 1", () => {
   });
 });
 
+describe("Wizard validation accessibility", () => {
+  it("announces missing answers, links them to their groups and focuses the first invalid one", async () => {
+    await load();
+    next();
+    const alerts = screen.getAllByRole("alert");
+    expect(alerts.map((a) => a.textContent)).toEqual(["Choose a target year", "Choose your stage"]);
+    const year = screen.getByRole("radiogroup", { name: "Target year" });
+    const stage = screen.getByRole("radiogroup", { name: "Where are you in your preparation?" });
+    expect(year).toHaveAttribute("aria-describedby", alerts[0].id);
+    expect(year).toHaveAttribute("aria-invalid", "true");
+    expect(stage).toHaveAttribute("aria-describedby", alerts[1].id);
+    expect(screen.getByRole("radio", { name: "2027" })).toHaveFocus();
+  });
+  it("links the focus step's papers error and clears it once answered", async () => {
+    await load();
+    await completeStep1();
+    next();
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveTextContent("Choose which papers you are preparing");
+    expect(screen.getByRole("radiogroup", { name: "Papers" })).toHaveAttribute("aria-describedby", alert.id);
+    expect(screen.getByRole("radio", { name: "Prelims" })).toHaveFocus();
+    fireEvent.click(screen.getByRole("radio", { name: "Prelims" }));
+    expect(screen.getByRole("radiogroup", { name: "Papers" })).not.toHaveAttribute("aria-describedby");
+  });
+  it("routine step: windows error is linked to the group and focus lands on it", async () => {
+    await load();
+    await completeStep1();
+    await completeStep2();
+    next();
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveTextContent("Choose at least one time of day");
+    expect(screen.getByRole("group", { name: "Preferred study windows" })).toHaveAttribute("aria-describedby", alert.id);
+    expect(screen.getByRole("button", { name: "Morning" })).toHaveFocus();
+  });
+  it("routine step: a weekly goal error focuses the weekly field", async () => {
+    await load();
+    await completeStep1();
+    await completeStep2();
+    fireEvent.click(screen.getByRole("button", { name: "Evening" }));
+    fireEvent.change(screen.getByLabelText("Weekly goal (minutes)"), { target: { value: "100" } });
+    next();
+    expect(screen.getByLabelText("Weekly goal (minutes)")).toHaveFocus();
+    expect(screen.getByLabelText("Weekly goal (minutes)")).toHaveAttribute("aria-invalid", "true");
+  });
+});
+
 describe("Wizard steps 2-4", () => {
   it("requires papers on the focus step and sends subject slugs", async () => {
     await load();
@@ -306,9 +352,80 @@ describe("Wizard review", () => {
       p === "/me/onboarding/plan-preview" ? Promise.reject(new ApiError(400, "onboarding_incomplete", "no routine")) : route(p, i),
     );
     await load();
-    expect(await screen.findByText("We couldn't build your plan preview")).toBeInTheDocument();
+    expect(await screen.findByText("Finish the earlier steps first")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Start with an empty planner" })).toBeEnabled();
     expect(screen.queryByRole("button", { name: "Accept plan and start" })).toBeNull();
+    expect(screen.queryByRole("button", { name: /Try again|Retry/ })).toBeNull();
+  });
+  it("shows catalog_empty copy on preview, no retry, and keeps the empty planner usable", async () => {
+    onboarding = { status: "in_progress", step: 4, answers: {} };
+    apiFetch.mockImplementation((p: string, i?: RequestInit) =>
+      p === "/me/onboarding/plan-preview" ? Promise.reject(new ApiError(409, "catalog_empty", "No subjects")) : route(p, i),
+    );
+    await load();
+    expect(await screen.findByText(/No subjects are available to build a plan yet/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Try again|Retry/ })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Start with an empty planner" }));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/home"));
+  });
+  it("shows a generic preview error with Try again for other failures", async () => {
+    onboarding = { status: "in_progress", step: 4, answers: {} };
+    apiFetch.mockImplementation((p: string, i?: RequestInit) =>
+      p === "/me/onboarding/plan-preview" ? Promise.reject(new ApiError(500, "internal", "x")) : route(p, i),
+    );
+    await load();
+    expect(await screen.findByText("We couldn't build your plan preview")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
+  });
+  it.each([
+    [409, "catalog_empty", /No subjects are available to build a plan yet/],
+    [400, "onboarding_incomplete", /Finish the earlier steps first/],
+  ])("Accept failing with %s %s shows specific copy, hides Accept and Retry, keeps empty planner", async (status, code, copy) => {
+    await toReview();
+    apiFetch.mockImplementation((p: string, i?: RequestInit) =>
+      p === "/me/onboarding/complete" ? Promise.reject(new ApiError(status, code, "x")) : route(p, i),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Accept plan and start" }));
+    expect(await screen.findByText(copy)).toBeInTheDocument();
+    expect(screen.queryByText("Could not save your setup")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Retry" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Accept plan and start" })).toBeNull();
+    expect(replace).not.toHaveBeenCalled();
+    apiFetch.mockImplementation(route);
+    fireEvent.click(screen.getByRole("button", { name: "Start with an empty planner" }));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/home"));
+  });
+  it("fetches a fresh preview after Back, an edit and returning to Review", async () => {
+    await toReview();
+    expect(calls("/me/onboarding/plan-preview")).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
+    expect(screen.getByRole("heading", { name: "Support you want" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Mentor guidance" }));
+    apiFetch.mockImplementation((p: string, i?: RequestInit) =>
+      p === "/me/onboarding/plan-preview"
+        ? Promise.resolve({ tasks: [{ title: "Fresh task", activityType: "reading", durationMin: 30, scheduledStart: "2026-11-02T12:30:00.000Z" }] })
+        : route(p, i),
+    );
+    next();
+    await screen.findByRole("heading", { name: "Review your plan" });
+    expect(await screen.findByText("Fresh task")).toBeInTheDocument();
+    expect(screen.queryByText("Read Polity")).toBeNull();
+    expect(calls("/me/onboarding/plan-preview")).toHaveLength(2);
+  });
+  it("does not show the old preview while the new one loads", async () => {
+    await toReview();
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
+    let resolve!: (v: unknown) => void;
+    apiFetch.mockImplementation((p: string, i?: RequestInit) =>
+      p === "/me/onboarding/plan-preview" ? new Promise((r) => (resolve = r)) : route(p, i),
+    );
+    next();
+    await screen.findByRole("heading", { name: "Review your plan" });
+    await waitFor(() => expect(calls("/me/onboarding/plan-preview")).toHaveLength(2));
+    expect(screen.queryByText("Read Polity")).toBeNull();
+    expect(screen.getByLabelText("Building your plan")).toBeInTheDocument();
+    resolve({ tasks: [] });
+    expect(await screen.findByText("We have no starter tasks to suggest yet.")).toBeInTheDocument();
   });
   it("shows an empty-preview message and only offers the empty planner", async () => {
     onboarding = { status: "in_progress", step: 4, answers: { routine: { dailyMin: 60, weeklyMin: 420, windows: ["night"] } } };

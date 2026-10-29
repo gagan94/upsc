@@ -5,7 +5,7 @@ import type { NewTask } from "@/lib/types";
 import { Banner } from "@/components/ui/Banner";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
-import type { PreviewState } from "./useOnboarding";
+import type { PlanBlock, PreviewState } from "./useOnboarding";
 
 interface Group {
   key: string;
@@ -32,6 +32,12 @@ function timeOf(iso: string, tz: string) {
   return new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(iso));
 }
 
+export function blockedMessage(code: string | undefined | null): string | null {
+  if (code === "catalog_empty") return "No subjects are available to build a plan yet \u2014 you can start with an empty planner";
+  if (code === "onboarding_incomplete") return "Finish the earlier steps first";
+  return null;
+}
+
 export function Review({
   preview,
   tz,
@@ -39,6 +45,7 @@ export function Review({
   onAccept,
   onEmpty,
   onRetryPreview,
+  planBlocked,
 }: {
   preview: PreviewState;
   tz: string;
@@ -46,7 +53,10 @@ export function Review({
   onAccept: () => void;
   onEmpty: () => void;
   onRetryPreview: () => void;
+  planBlocked: PlanBlock | null;
 }) {
+  const blockedCopy = blockedMessage(preview.kind === "error" ? preview.code : planBlocked);
+  const cannotAccept = planBlocked !== null;
   const tasks = preview.kind === "ready" ? preview.tasks : [];
   const total = tasks.reduce((n, t) => n + (t.durationMin ?? 0), 0);
   return (
@@ -57,6 +67,8 @@ export function Review({
           <Skeleton className="h-14 w-full" />
           <Skeleton className="h-14 w-full" />
         </div>
+      ) : preview.kind === "error" && blockedCopy ? (
+        <Banner tone="warning">{blockedCopy}</Banner>
       ) : preview.kind === "error" ? (
         <Banner tone="error">
           <p className="font-semibold">We couldn&apos;t build your plan preview</p>
@@ -92,8 +104,9 @@ export function Review({
           </div>
         </>
       )}
+      {preview.kind !== "error" && blockedCopy ? <Banner tone="warning">{blockedCopy}</Banner> : null}
       <div className="flex flex-wrap gap-3">
-        {tasks.length > 0 ? (
+        {tasks.length > 0 && !cannotAccept ? (
           <Button onClick={onAccept} disabled={busy}>
             Accept plan and start
           </Button>

@@ -24,6 +24,17 @@ export function Wizard() {
   const o = useOnboarding();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // After a failed Next, move focus to the first invalid control (its error is linked via aria-describedby).
+  useEffect(() => {
+    if (o.invalidTick === 0) return;
+    const bad = rootRef.current?.querySelector<HTMLElement>('[aria-invalid="true"], [data-invalid="true"]');
+    const target = bad?.matches("input, select, textarea, button")
+      ? bad
+      : bad?.querySelector<HTMLElement>('button:not([tabindex="-1"])');
+    target?.focus();
+  }, [o.invalidTick]);
 
   // Move focus to the new step's heading when the step changes (not on first load).
   useEffect(() => {
@@ -60,7 +71,7 @@ export function Wizard() {
   const onReview = step === REVIEW_STEP;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div ref={rootRef} className="flex flex-col gap-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">
           {onReview ? "Final step" : `Step ${step + 1} of ${STEP_COUNT}`}
@@ -103,6 +114,7 @@ export function Wizard() {
           onAccept={() => o.complete(true)}
           onEmpty={() => o.complete(false)}
           onRetryPreview={o.retryPreview}
+          planBlocked={o.planBlocked}
         />
       ) : null}
 
