@@ -1,0 +1,304 @@
+[
+  {
+    "slug": "indian-polity",
+    "title": "Indian Polity",
+    "gsPaper": "GS II",
+    "syllabusNode": "mains-gs-2",
+    "description": "Constitution, governance and political system of India.",
+    "order": 1,
+    "modules": [
+      {
+        "title": "Constitutional Framework",
+        "summary": "Making of the Constitution and its core features.",
+        "order": 1,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Making of the Constitution",
+            "estMinutes": 20,
+            "order": 1
+          },
+          {
+            "type": "lesson",
+            "title": "Preamble and basic structure",
+            "estMinutes": 25,
+            "order": 2
+          },
+          {
+            "type": "quiz",
+            "title": "Framework checkpoint",
+            "estMinutes": 15,
+            "order": 3
+          }
+        ]
+      },
+      {
+        "title": "Fundamental Rights",
+        "summary": "Part III rights and their remedies.",
+        "order": 2,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Nature of rights",
+            "estMinutes": 20,
+            "order": 1
+          },
+          {
+            "type": "lesson",
+            "title": "Article 19 restrictions",
+            "estMinutes": 25,
+            "order": 2
+          },
+          {
+            "type": "quiz",
+            "title": "Rights checkpoint",
+            "estMinutes": 15,
+            "order": 3
+          },
+          {
+            "type": "pyq_set",
+            "title": "Constitutional remedies",
+            "estMinutes": 30,
+            "order": 4
+          }
+        ]
+      },
+      {
+        "title": "Union Executive and Parliament",
+        "summary": "President, Prime Minister, Council of Ministers and Parliament.",
+        "order": 3,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "President and Council of Ministers",
+            "estMinutes": 25,
+            "order": 1
+          },
+          {
+            "type": "quiz",
+            "title": "Parliamentary procedure quiz",
+            "estMinutes": 15,
+            "order": 2
+          },
+          {
+            "type": "revision",
+            "title": "Parliament quick revision",
+            "estMinutes": 15,
+            "order": 3
+          }
+        ]
+      },
+      {
+        "title": "Judiciary and Federalism",
+        "summary": "Supreme Court, High Courts and Centre-State relations.",
+        "order": 4,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Supreme Court and judicial review",
+            "estMinutes": 25,
+            "order": 1
+          },
+          {
+            "type": "assignment",
+            "title": "Centre-State relations answer writing",
+            "estMinutes": 40,
+            "order": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "history",
+    "title": "History",
+    "gsPaper": "GS I",
+    "syllabusNode": "mains-gs-1",
+    "description": "Ancient, medieval and modern Indian history.",
+    "order": 2,
+    "modules": [
+      {
+        "title": "Ancient India",
+        "summary": "Indus Valley to the Gupta age.",
+        "order": 1,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Indus Valley Civilisation",
+            "estMinutes": 20,
+            "order": 1
+          },
+          {
+            "type": "lesson",
+            "title": "Mauryan administration",
+            "estMinutes": 25,
+            "order": 2
+          },
+          {
+            "type": "quiz",
+            "title": "Ancient India checkpoint",
+            "estMinutes": 15,
+            "order": 3
+          }
+        ]
+      },
+      {
+        "title": "Modern India",
+        "summary": "Colonial rule and the national movement.",
+        "order": 2,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Revolt of 1857",
+            "estMinutes": 25,
+            "order": 1
+          },
+          {
+            "type": "resource",
+            "title": "Freedom struggle timeline",
+            "estMinutes": 10,
+            "order": 2
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "geography",
+    "title": "Geography",
+    "gsPaper": "GS I",
+    "syllabusNode": "mains-gs-1",
+    "description": "Physical, human and Indian geography.",
+    "order": 3,
+    "modules": [
+      {
+        "title": "Physical Geography Basics",
+        "summary": "Monsoon and climate systems.",
+        "order": 1,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Indian monsoon mechanism",
+            "estMinutes": 20,
+            "order": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "economy",
+    "title": "Economy",
+    "gsPaper": "GS III",
+    "syllabusNode": "mains-gs-3",
+    "description": "Indian economy and economic development.",
+    "order": 4,
+    "modules": [
+      {
+        "title": "Money and Banking",
+        "summary": "Inflation and monetary policy.",
+        "order": 1,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Inflation and monetary policy",
+            "estMinutes": 20,
+            "order": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "environment",
+    "title": "Environment",
+    "gsPaper": "GS III",
+    "syllabusNode": "mains-gs-3",
+    "description": "Ecology, biodiversity and climate change.",
+    "order": 5,
+    "modules": [
+      {
+        "title": "Ecology and Biodiversity",
+        "summary": "Ecosystems and conservation.",
+        "order": 1,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Biodiversity hotspots",
+            "estMinutes": 20,
+            "order": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "science-technology",
+    "title": "Science & Technology",
+    "gsPaper": "GS III",
+    "syllabusNode": "mains-gs-3",
+    "description": "Science, technology and their applications.",
+    "order": 6,
+    "modules": [
+      {
+        "title": "Space and Emerging Technology",
+        "summary": "India's space programme.",
+        "order": 1,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "India's space programme",
+            "estMinutes": 20,
+            "order": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "ethics",
+    "title": "Ethics",
+    "gsPaper": "GS IV",
+    "syllabusNode": "mains-gs-4",
+    "description": "Ethics, integrity and aptitude.",
+    "order": 7,
+    "modules": [
+      {
+        "title": "Ethics and Human Interface",
+        "summary": "Foundations of ethics in administration.",
+        "order": 1,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Ethics in public administration",
+            "estMinutes": 20,
+            "order": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "csat",
+    "title": "CSAT",
+    "gsPaper": "Prelims Paper II",
+    "syllabusNode": "prelims-csat",
+    "description": "Comprehension, reasoning and quantitative aptitude.",
+    "order": 8,
+    "modules": [
+      {
+        "title": "Reading Comprehension",
+        "summary": "Strategy for passage-based questions.",
+        "order": 1,
+        "activities": [
+          {
+            "type": "lesson",
+            "title": "Comprehension strategy",
+            "estMinutes": 20,
+            "order": 1
+          }
+        ]
+      }
+    ]
+  }
+]

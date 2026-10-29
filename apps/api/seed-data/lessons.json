@@ -1,0 +1,542 @@
+[
+  {
+    "subject": "indian-polity",
+    "module": 1,
+    "activity": 1,
+    "summary": "The Constituent Assembly framed the Constitution between December 1946 and November 1949.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Making of the Constitution"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Constituent Assembly framed the Constitution between December 1946 and November 1949."
+      },
+      {
+        "type": "paragraph",
+        "text": "Dr B. R. Ambedkar chaired the Drafting Committee, which reviewed and refined drafts prepared on the basis of the Objectives Resolution."
+      },
+      {
+        "type": "paragraph",
+        "text": "The Constitution was adopted on 26 November 1949 and came into force on 26 January 1950."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Constituent Assembly first met on 9 December 1946",
+          "Drafting Committee chaired by Dr B. R. Ambedkar",
+          "Adopted 26 November 1949; enforced 26 January 1950"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "indian-polity",
+    "module": 1,
+    "activity": 2,
+    "summary": "The Preamble states the ideals of the Constitution: justice, liberty, equality and fraternity.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Preamble and basic structure"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Preamble states the ideals of the Constitution: justice, liberty, equality and fraternity."
+      },
+      {
+        "type": "paragraph",
+        "text": "In Kesavananda Bharati (1973) the Supreme Court held that Parliament cannot alter the basic structure of the Constitution."
+      },
+      {
+        "type": "paragraph",
+        "text": "Federalism, secularism, judicial review and the rule of law have all been treated as part of the basic structure."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Preamble declares India a sovereign, socialist, secular, democratic republic",
+          "Kesavananda Bharati case, 1973",
+          "Basic structure doctrine limits the amending power"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "indian-polity",
+    "module": 2,
+    "activity": 1,
+    "summary": "Part III of the Constitution guarantees Fundamental Rights, enforceable against the State.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Nature of rights"
+      },
+      {
+        "type": "paragraph",
+        "text": "Part III of the Constitution guarantees Fundamental Rights, enforceable against the State."
+      },
+      {
+        "type": "paragraph",
+        "text": "They are not absolute; the State may impose reasonable restrictions in the public interest."
+      },
+      {
+        "type": "paragraph",
+        "text": "Rights are grouped as equality, freedom, against exploitation, religion, cultural and educational rights, and constitutional remedies."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Articles 12 to 35 form Part III",
+          "Justiciable and enforceable by courts",
+          "Subject to reasonable restrictions"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "indian-polity",
+    "module": 2,
+    "activity": 2,
+    "summary": "Article 19(1) guarantees six freedoms to citizens, including speech and expression, assembly and movement.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Article 19 restrictions"
+      },
+      {
+        "type": "paragraph",
+        "text": "Article 19(1) guarantees six freedoms to citizens, including speech and expression, assembly and movement."
+      },
+      {
+        "type": "paragraph",
+        "text": "Clauses 19(2) to 19(6) allow reasonable restrictions on grounds such as sovereignty, public order, decency and morality."
+      },
+      {
+        "type": "paragraph",
+        "text": "Courts test whether a restriction is reasonable, proportionate and not arbitrary."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Article 19 is available to citizens only",
+          "Eight grounds for restricting speech under 19(2)",
+          "Reasonableness is subject to judicial review"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "indian-polity",
+    "module": 3,
+    "activity": 1,
+    "summary": "The President is the constitutional head of the Union executive, acting on the aid and advice of the Council of Ministers.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "President and Council of Ministers"
+      },
+      {
+        "type": "paragraph",
+        "text": "The President is the constitutional head of the Union executive, acting on the aid and advice of the Council of Ministers."
+      },
+      {
+        "type": "paragraph",
+        "text": "The Prime Minister heads the Council of Ministers, which is collectively responsible to the Lok Sabha."
+      },
+      {
+        "type": "paragraph",
+        "text": "The President has limited discretion, for example when no party commands a majority."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Article 74 provides for aid and advice",
+          "Collective responsibility under Article 75(3)",
+          "President appoints the Prime Minister"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "indian-polity",
+    "module": 4,
+    "activity": 1,
+    "summary": "The Supreme Court is the apex court with original, appellate and advisory jurisdiction.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Supreme Court and judicial review"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Supreme Court is the apex court with original, appellate and advisory jurisdiction."
+      },
+      {
+        "type": "paragraph",
+        "text": "Judicial review lets courts invalidate laws and executive actions that violate the Constitution."
+      },
+      {
+        "type": "paragraph",
+        "text": "Public interest litigation has widened access to justice."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Article 32 provides constitutional remedies",
+          "Article 137 allows review of its own judgments",
+          "Judicial review is part of the basic structure"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "history",
+    "module": 1,
+    "activity": 1,
+    "summary": "The Indus Valley Civilisation flourished from about 2600 to 1900 BCE across the north-western subcontinent.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Indus Valley Civilisation"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Indus Valley Civilisation flourished from about 2600 to 1900 BCE across the north-western subcontinent."
+      },
+      {
+        "type": "paragraph",
+        "text": "Cities such as Harappa and Mohenjo-daro show planned grids, drainage and standardised weights."
+      },
+      {
+        "type": "paragraph",
+        "text": "The script remains undeciphered, so much of our understanding rests on archaeology."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Major sites: Harappa, Mohenjo-daro, Dholavira, Lothal",
+          "Advanced urban planning and drainage",
+          "Script undeciphered"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "history",
+    "module": 1,
+    "activity": 2,
+    "summary": "The Mauryan empire under Chandragupta and Ashoka was the first large pan-Indian state.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Mauryan administration"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Mauryan empire under Chandragupta and Ashoka was the first large pan-Indian state."
+      },
+      {
+        "type": "paragraph",
+        "text": "The Arthashastra describes a centralised bureaucracy, espionage and revenue administration."
+      },
+      {
+        "type": "paragraph",
+        "text": "Ashoka's dhamma emphasised tolerance and welfare after the Kalinga war."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Capital at Pataliputra",
+          "Arthashastra attributed to Kautilya",
+          "Ashokan edicts record dhamma policy"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "history",
+    "module": 2,
+    "activity": 1,
+    "summary": "The Revolt of 1857 began at Meerut in May 1857 and spread across northern and central India.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Revolt of 1857"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Revolt of 1857 began at Meerut in May 1857 and spread across northern and central India."
+      },
+      {
+        "type": "paragraph",
+        "text": "Causes included political annexation, economic exploitation, and the greased cartridge grievance among sepoys."
+      },
+      {
+        "type": "paragraph",
+        "text": "After the revolt the Government of India Act 1858 transferred control from the Company to the Crown."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Began 10 May 1857 at Meerut",
+          "Doctrine of Lapse as a political cause",
+          "Crown rule from 1858"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "geography",
+    "module": 1,
+    "activity": 1,
+    "summary": "The Indian monsoon is a seasonal reversal of winds driven by differential heating of land and sea.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Indian monsoon mechanism"
+      },
+      {
+        "type": "paragraph",
+        "text": "The Indian monsoon is a seasonal reversal of winds driven by differential heating of land and sea."
+      },
+      {
+        "type": "paragraph",
+        "text": "The shift of the Inter-Tropical Convergence Zone and the Tibetan plateau heating influence its onset."
+      },
+      {
+        "type": "paragraph",
+        "text": "El Nino years are often associated with weaker monsoon rainfall."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Southwest monsoon arrives in Kerala around 1 June",
+          "ITCZ shift draws moist winds inland",
+          "El Nino can suppress rainfall"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "economy",
+    "module": 1,
+    "activity": 1,
+    "summary": "Inflation is a sustained rise in the general price level, tracked in India through the Consumer Price Index.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Inflation and monetary policy"
+      },
+      {
+        "type": "paragraph",
+        "text": "Inflation is a sustained rise in the general price level, tracked in India through the Consumer Price Index."
+      },
+      {
+        "type": "paragraph",
+        "text": "The Reserve Bank of India uses the repo rate and other tools to keep inflation near its target."
+      },
+      {
+        "type": "paragraph",
+        "text": "The Monetary Policy Committee sets the policy rate with a mandate of 4 percent inflation, within a band of 2 to 6 percent."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "CPI is the anchor for inflation targeting",
+          "Repo rate is the key policy tool",
+          "MPC has six members"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "environment",
+    "module": 1,
+    "activity": 1,
+    "summary": "A biodiversity hotspot has high species endemism and has lost a large share of its original habitat.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Biodiversity hotspots"
+      },
+      {
+        "type": "paragraph",
+        "text": "A biodiversity hotspot has high species endemism and has lost a large share of its original habitat."
+      },
+      {
+        "type": "paragraph",
+        "text": "India includes parts of four hotspots: the Himalaya, Indo-Burma, the Western Ghats and Sri Lanka, and Sundaland."
+      },
+      {
+        "type": "paragraph",
+        "text": "Protected areas, community reserves and the Biological Diversity Act 2002 support conservation."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Western Ghats is a global hotspot",
+          "Biological Diversity Act 2002",
+          "Protected areas include national parks and sanctuaries"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "science-technology",
+    "module": 1,
+    "activity": 1,
+    "summary": "ISRO develops launch vehicles and satellites for communication, earth observation and navigation.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "India's space programme"
+      },
+      {
+        "type": "paragraph",
+        "text": "ISRO develops launch vehicles and satellites for communication, earth observation and navigation."
+      },
+      {
+        "type": "paragraph",
+        "text": "Chandrayaan and Mangalyaan demonstrated cost-effective interplanetary missions."
+      },
+      {
+        "type": "paragraph",
+        "text": "Recent reforms opened parts of the space sector to private participation through IN-SPACe."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "PSLV and GSLV are workhorse launch vehicles",
+          "Mangalyaan reached Mars orbit in 2014",
+          "IN-SPACe authorises private activity"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "ethics",
+    "module": 1,
+    "activity": 1,
+    "summary": "Ethics in administration concerns integrity, impartiality, objectivity and accountability.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Ethics in public administration"
+      },
+      {
+        "type": "paragraph",
+        "text": "Ethics in administration concerns integrity, impartiality, objectivity and accountability."
+      },
+      {
+        "type": "paragraph",
+        "text": "Civil servants face dilemmas where law, personal values and public interest may pull in different directions."
+      },
+      {
+        "type": "paragraph",
+        "text": "Codes of conduct and the Seven Principles of Public Life provide guidance."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Integrity and impartiality are core values",
+          "Conflict of interest must be disclosed",
+          "Accountability to citizens and the law"
+        ]
+      }
+    ]
+  },
+  {
+    "subject": "csat",
+    "module": 1,
+    "activity": 1,
+    "summary": "Read the passage once for its central theme before reading the questions.",
+    "verificationStatus": "platform_sample",
+    "bodyBlocks": [
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Comprehension strategy"
+      },
+      {
+        "type": "paragraph",
+        "text": "Read the passage once for its central theme before reading the questions."
+      },
+      {
+        "type": "paragraph",
+        "text": "Eliminate options that are extreme, out of scope or not supported by the text."
+      },
+      {
+        "type": "paragraph",
+        "text": "Practise with timed passages to build speed without losing accuracy."
+      },
+      {
+        "type": "list",
+        "style": "bullet",
+        "title": "Key points",
+        "items": [
+          "Identify the main idea first",
+          "Avoid outside knowledge",
+          "Time-box each passage"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+# Render Blueprint: one free-plan Docker web service for the API.
+# Deploys are triggered once a day by the deploy hook (scripts/deploy.sh).
+services:
+  - type: web
+    name: upsc-api
+    runtime: docker
+    plan: free
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    autoDeploy: false
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: WEB_ORIGIN
+        sync: false

@@ -39,3 +39,4 @@ Phase 0 plan written: `docs/superpowers/plans/2026-10-27-phase-0-demo-shell.md` 
 - 2026-10-27: Owner approved specs as fine and revised delivery plan (Learn last, solo dev, Neon/no Redis, no CI/CD, payments+video deferred). Updated `99-roadmap.md` §2, `DECISIONS.md` D15–D21, `01-architecture.md` §2a. Next: detailed Phase 0 plan (use superpowers:writing-plans).
 - 2026-10-27: Phase 0 implementation plan saved (docs/superpowers/plans/2026-10-27-phase-0-demo-shell.md).
 - 2026-10-27: D22 — auth via Supabase (Neon stays app DB). Phase 0 plan rewritten (14 tasks). Spec 02 and 01 annotated.
+- 2026-10-28: Phase 0 code complete on branch `phase-0-demo-shell` (14 tasks + final-review fix wave, 28 commits). Live deployment pending owner accounts (Neon, Supabase, Render, Vercel) — see `docs/demo/phase-0.md`, `docs/superpowers/phase-0-followups.md`.
