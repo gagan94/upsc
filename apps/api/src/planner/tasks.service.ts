@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, asc, eq, inArray, isNull, gte, lt, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNull, gte, lt, ne, sql } from 'drizzle-orm';
 import { AppError } from '../common/errors';
 import { DB, Db } from '../db/db.module';
 import { newId } from '../db/ids';
@@ -39,6 +39,9 @@ export interface NewTask {
 export type TaskPatch = Partial<NewTask>;
 
 const notDeleted = (userId: string) => and(eq(tasks.userId, userId), isNull(tasks.deletedAt));
+/** The backlog: open tasks with no scheduled start. */
+const backlog = (userId: string) =>
+  and(notDeleted(userId), isNull(tasks.scheduledStart), inArray(tasks.status, ['todo', 'in_progress']));
 
 @Injectable()
 export class TasksService {
@@ -124,7 +127,7 @@ export class TasksService {
 
   async unscheduled(userId: string): Promise<TaskView[]> {
     const rows = await this.select()
-      .where(and(notDeleted(userId), isNull(tasks.scheduledStart)))
+      .where(backlog(userId))
       .orderBy(asc(tasks.createdAt), asc(tasks.id));
     return rows.map((r) => this.view(r));
   }
@@ -133,7 +136,7 @@ export class TasksService {
     const [r] = await this.db
       .select({ n: sql<number>`count(*)::int` })
       .from(tasks)
-      .where(and(notDeleted(userId), isNull(tasks.scheduledStart)));
+      .where(backlog(userId));
     return r?.n ?? 0;
   }
 
@@ -177,10 +180,16 @@ export class TasksService {
     if (!r.length) throw new AppError(404, 'not_found', 'Task not found');
   }
 
-  complete(userId: string, id: string, input: { actualMin?: number } = {}): Promise<TaskView> {
-    const set: Partial<typeof tasks.$inferInsert> = { status: 'completed', completedAt: new Date() };
+  /** Idempotent: an already-completed task is returned unchanged. */
+  async complete(userId: string, id: string, input: { actualMin?: number } = {}): Promise<TaskView> {
+    const now = new Date();
+    const set: Partial<typeof tasks.$inferInsert> = { status: 'completed', completedAt: now, updatedAt: now };
     if (input.actualMin !== undefined) set.actualMin = input.actualMin;
-    return this.mutate(userId, id, set);
+    await this.db
+      .update(tasks)
+      .set(set)
+      .where(and(notDeleted(userId), eq(tasks.id, id), ne(tasks.status, 'completed')));
+    return this.get(userId, id);
   }
 
   skip(userId: string, id: string): Promise<TaskView> {

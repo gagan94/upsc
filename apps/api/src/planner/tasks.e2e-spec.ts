@@ -89,6 +89,25 @@ describe('planner tasks', () => {
     expect(today.body.stats).toEqual({ plannedMin: 60, recordedMin: 0, completed: 1, total: 2 });
   });
 
+  it('completed or skipped unscheduled tasks leave the backlog', async () => {
+    const open = await mk('u-backlog2', { title: 'open' });
+    const done = await mk('u-backlog2', { title: 'done' });
+    const skipped = await mk('u-backlog2', { title: 'skipped' });
+    await call('post', `/planner/tasks/${done.id}/complete`, 'u-backlog2', {});
+    await call('post', `/planner/tasks/${skipped.id}/skip`, 'u-backlog2');
+    expect(ids(await call('get', '/planner/unscheduled', 'u-backlog2'))).toEqual([open.id]);
+    expect((await call('get', '/planner/today?date=2026-10-14', 'u-backlog2')).body.unscheduledCount).toBe(1);
+  });
+
+  it('completing an already-completed task keeps completedAt and actualMin', async () => {
+    const t = await mk('u-idem', { title: 'once', scheduledStart: '2026-10-14T05:00:00Z' });
+    const first = await call('post', `/planner/tasks/${t.id}/complete`, 'u-idem', { actualMin: 30 });
+    expect(first.body.task).toMatchObject({ status: 'completed', actualMin: 30 });
+    const again = await call('post', `/planner/tasks/${t.id}/complete`, 'u-idem', { actualMin: 99 });
+    expect(again.status).toBe(200);
+    expect(again.body.task).toMatchObject({ status: 'completed', actualMin: 30, completedAt: first.body.task.completedAt });
+  });
+
   it('DELETE hides everywhere; second DELETE is 404', async () => {
     const t = await mk('u-del', { title: 'gone', scheduledStart: '2026-10-14T05:00:00Z' });
     const u = await mk('u-del', { title: 'gone2' });
