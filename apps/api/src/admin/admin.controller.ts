@@ -1,31 +1,11 @@
 import { Controller, Get, Inject, Query, UseGuards } from '@nestjs/common';
-import { asc, inArray, sql } from 'drizzle-orm';
-import { AppError } from '../common/errors';
+import { asc, inArray } from 'drizzle-orm';
+import { afterCursor, cursorTs, decodeCursor, encodeCursor, parseLimit } from '../common/cursor';
 import { DB, Db } from '../db/db.module';
 import { planEntitlements, plans, users } from '../db/schema';
 import { AuthGuard } from '../identity/auth.guard';
 import { Roles } from '../identity/decorators';
 import { RolesGuard } from '../identity/roles.guard';
-
-const DEFAULT_LIMIT = 25;
-const MAX_LIMIT = 100;
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-// Microsecond-precision UTC timestamp, as produced by the cursor query below.
-const TS_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z$/;
-
-function parseLimit(raw: string | undefined): number {
-  const n = Number.parseInt(raw ?? '', 10);
-  if (!Number.isFinite(n)) return DEFAULT_LIMIT;
-  return Math.min(Math.max(n, 1), MAX_LIMIT);
-}
-
-function decodeCursor(raw: string): { ts: string; id: string } {
-  const bad = () => new AppError(400, 'invalid_cursor', 'Invalid cursor');
-  if (!/^[A-Za-z0-9_-]+$/.test(raw)) throw bad();
-  const [ts, id, ...rest] = Buffer.from(raw, 'base64url').toString('utf8').split('|');
-  if (rest.length || !ts || !id || !TS_RE.test(ts) || !UUID_RE.test(id)) throw bad();
-  return { ts, id };
-}
 
 @Controller('admin')
 @UseGuards(AuthGuard, RolesGuard)
@@ -47,16 +27,16 @@ export class AdminController {
         status: users.status,
         createdAt: users.createdAt,
         lastLoginAt: users.lastLoginAt,
-        cursorTs: sql<string>`to_char(${users.createdAt} at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"')`,
+        cursorTs: cursorTs(users.createdAt),
       })
       .from(users)
-      .where(cursor ? sql`(${users.createdAt}, ${users.id}) > (${cursor.ts}::timestamptz, ${cursor.id}::uuid)` : undefined)
+      .where(afterCursor(users.createdAt, users.id, cursor))
       .orderBy(asc(users.createdAt), asc(users.id))
       .limit(limit + 1);
     const page = rows.slice(0, limit);
     const last = page[page.length - 1];
     const nextCursor =
-      rows.length > limit && last ? Buffer.from(`${last.cursorTs}|${last.id}`).toString('base64url') : null;
+      rows.length > limit && last ? encodeCursor(last.cursorTs, last.id) : null;
     return {
       users: page.map(({ cursorTs: _ts, ...u }) => u),
       nextCursor,
