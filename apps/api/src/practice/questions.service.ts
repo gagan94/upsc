@@ -51,6 +51,15 @@ export interface ListQuery {
 /** SQL twin of `normalizeStem`. */
 export const normalizedStemSql = sql<string>`lower(regexp_replace(btrim(${questions.stem}), ${sql.raw(String.raw`'\s+'`)}, ' ', 'g'))`;
 
+function assertComplete(r: { explanation?: string | null; optionReasoning?: Row['optionReasoning'] | null }, action: string): void {
+  const missing: string[] = [];
+  if (!r.explanation?.trim()) missing.push('explanation');
+  for (const k of OPTION_KEYS) if (!r.optionReasoning?.[k]?.trim()) missing.push(`optionReasoning.${k}`);
+  if (missing.length) {
+    throw new AppError(400, 'incomplete_question', `Cannot ${action}: missing ${missing.join(', ')}`, { missing });
+  }
+}
+
 const notFound = () => new AppError(404, 'not_found', 'Question not found');
 const toView = (r: Row): QuestionAdminView => ({
   id: r.id,
@@ -127,34 +136,42 @@ export class QuestionsService {
   }
 
   async update(id: string, editorId: string, patch: QuestionPatch): Promise<QuestionAdminView> {
-    const current = await this.load(id);
     const { reason, ...fields } = patch;
     // Merge onto the stored question and validate the whole, so cross-field rules hold after the edit.
-    const merged = parse(newQuestionSchema, {
-      format: current.format,
-      stem: current.stem,
-      statements: current.statements,
-      options: current.options,
-      correctOption: current.correctOption,
-      explanation: current.explanation,
-      optionReasoning: current.optionReasoning,
-      misconception: current.misconception,
-      difficulty: current.difficulty,
-      subjectNodeId: current.subjectNodeId,
-      topic: current.topic,
-      gsPaper: current.gsPaper,
-      sourceType: current.sourceType,
-      pyqYear: current.pyqYear,
-      pyqPaper: current.pyqPaper,
-      ...fields,
-    });
-    if (fields.subjectNodeId && fields.subjectNodeId !== current.subjectNodeId) await this.assertSubjects([fields.subjectNodeId]);
-    if (fields.stem !== undefined && normalizeStem(fields.stem) !== normalizeStem(current.stem)) {
+    const mergeOnto = (current: Row) =>
+      parse(newQuestionSchema, {
+        format: current.format,
+        stem: current.stem,
+        statements: current.statements,
+        options: current.options,
+        correctOption: current.correctOption,
+        explanation: current.explanation,
+        optionReasoning: current.optionReasoning,
+        misconception: current.misconception,
+        difficulty: current.difficulty,
+        subjectNodeId: current.subjectNodeId,
+        topic: current.topic,
+        gsPaper: current.gsPaper,
+        sourceType: current.sourceType,
+        pyqYear: current.pyqYear,
+        pyqPaper: current.pyqPaper,
+        ...fields,
+      });
+    // Pre-checks outside the transaction (they query via the pool); re-validated under the lock below.
+    const pre = await this.load(id);
+    mergeOnto(pre);
+    if (fields.subjectNodeId && fields.subjectNodeId !== pre.subjectNodeId) await this.assertSubjects([fields.subjectNodeId]);
+    if (fields.stem !== undefined && normalizeStem(fields.stem) !== normalizeStem(pre.stem)) {
       await this.assertStemFree(fields.stem, id);
     }
-    const keyChanged = merged.correctOption !== current.correctOption;
-    const version = keyChanged ? current.version + 1 : current.version;
     const row = await this.db.transaction(async (tx) => {
+      // Lock the row so concurrent key changes serialise and cannot collide on the history key.
+      const [locked] = await tx.select().from(questions).where(eq(questions.id, id)).for('update');
+      if (!locked) throw notFound();
+      const merged = mergeOnto(locked);
+      if (locked.status === 'published') assertComplete(merged, 'edit a published question');
+      const keyChanged = merged.correctOption !== locked.correctOption;
+      const version = keyChanged ? locked.version + 1 : locked.version;
       const [r] = await tx
         .update(questions)
         .set({
@@ -214,13 +231,7 @@ export class QuestionsService {
   }
 
   async publish(id: string): Promise<QuestionAdminView> {
-    const r = await this.load(id);
-    const missing: string[] = [];
-    if (!r.explanation.trim()) missing.push('explanation');
-    for (const k of OPTION_KEYS) if (!r.optionReasoning[k]?.trim()) missing.push(`optionReasoning.${k}`);
-    if (missing.length) {
-      throw new AppError(400, 'incomplete_question', `Cannot publish: missing ${missing.join(', ')}`, { missing });
-    }
+    assertComplete(await this.load(id), 'publish');
     return this.setStatus(id, 'published');
   }
 

@@ -155,6 +155,36 @@ describe('question bank admin API', () => {
     expect(got.correctOption).toBe('A');
   });
 
+  it('editing a published question cannot leave it incomplete', async () => {
+    const { id } = await make('pub-edit');
+    await call('post', `/${id}/publish`, editor);
+    let res = await call('patch', `/${id}`, editor, { explanation: '' });
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('incomplete_question');
+    res = await call('patch', `/${id}`, editor, { optionReasoning: { A: 'only' }, topic: 'changed' });
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('incomplete_question');
+    const got = (await call('get', `/${id}`, editor)).body.question;
+    expect(got.topic).toBeNull();
+    expect(got.explanation).toBe('Because.');
+    expect((await call('patch', `/${id}`, editor, { explanation: 'Better.' })).status).toBe(200);
+    // Drafts may still be edited into an incomplete state.
+    const d = await make('draft-edit');
+    expect((await call('patch', `/${d.id}`, editor, { explanation: '' })).status).toBe(200);
+  });
+
+  it('concurrent key changes serialise: distinct versions, no history collision', async () => {
+    const { id } = await make('concurrent');
+    const [a, b] = await Promise.all([
+      call('patch', `/${id}`, editor, { correctOption: 'B' }),
+      call('patch', `/${id}`, editor, { correctOption: 'C' }),
+    ]);
+    expect([a.status, b.status]).toEqual([200, 200]);
+    expect([a.body.question.version, b.body.question.version].sort()).toEqual([2, 3]);
+    const hist = await db.select().from(questionVersions).where(eq(questionVersions.questionId, id));
+    expect(hist.map((h) => h.version).sort()).toEqual([1, 2, 3]);
+  });
+
   it('retire hides a question from the default (published) list', async () => {
     const { id } = await make('retire');
     await call('post', `/${id}/publish`, editor);
@@ -238,6 +268,37 @@ describe('question bank admin API', () => {
       expect(res.body.errors.map((e: { index: number }) => e.index)).toEqual([1, 2]);
       expect(res.body.errors[0].message).toMatch(/duplicate/i);
       expect(res.body.errors[1].message).toMatch(/subject/i);
+    });
+
+    it('imports 500 realistic rows in one request (above the 100 kb Express default)', async () => {
+      const long = 'Consider the following statements regarding the constitutional provisions and judicial pronouncements. '.repeat(3);
+      const items = Array.from({ length: 500 }, (_, i) =>
+        q(`bulk-${i}`, {
+          stem: `${long} Bulk item ${i}?`,
+          explanation: long.repeat(3),
+          optionReasoning: { A: long, B: long, C: long, D: long },
+          options: ['A', 'B', 'C', 'D'].map((key) => ({ key, text: long })),
+        }),
+      );
+      const size = Buffer.byteLength(JSON.stringify({ items }));
+      expect(size).toBeGreaterThan(500_000);
+      const res = await call('post', '/import', editor, { items });
+      expect(res.status).toBe(201);
+      expect(res.body.created).toBe(500);
+      expect(res.body.errors).toEqual([]);
+    });
+
+    it('501 items is still 400 validation_failed', async () => {
+      const res = await call('post', '/import', editor, { items: new Array(501).fill({}) });
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('validation_failed');
+    });
+
+    it('a body over 5 MB is 413 payload_too_large in the standard envelope', async () => {
+      const res = await call('post', '/import', editor, { items: [{ stem: 'x'.repeat(5 * 1024 * 1024 + 10) }] });
+      expect(res.status).toBe(413);
+      expect(res.body.error.code).toBe('payload_too_large');
+      expect(res.body.error.message).toBeTruthy();
     });
 
     it('validates the envelope: 1..500 items', async () => {
