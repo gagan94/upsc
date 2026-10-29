@@ -110,3 +110,9 @@ describe('buildStarterPlan', () => {
     expect(t.title).toContain('Polity');
   });
 });
+
+describe('buildStarterPlan with no subjects', () => {
+  it('returns an empty plan for an empty catalog', () => {
+    expect(buildStarterPlan({ answers: answers(), subjects: [], now: NOW, tz: TZ })).toEqual([]);
+  });
+});

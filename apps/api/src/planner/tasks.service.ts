@@ -47,8 +47,8 @@ const backlog = (userId: string) =>
 export class TasksService {
   constructor(@Inject(DB) private readonly db: Db) {}
 
-  private select() {
-    return this.db
+  private select(ex: Db = this.db) {
+    return ex
       .select({ t: tasks, subjectTitle: syllabusNodes.title })
       .from(tasks)
       .leftJoin(syllabusNodes, eq(syllabusNodes.id, tasks.subjectNodeId));
@@ -74,10 +74,10 @@ export class TasksService {
     };
   }
 
-  private async assertSubject(ids: (string | null | undefined)[]): Promise<void> {
+  private async assertSubject(ids: (string | null | undefined)[], ex: Db = this.db): Promise<void> {
     const wanted = [...new Set(ids.filter((x): x is string => !!x))];
     if (!wanted.length) return;
-    const found = await this.db.select({ id: syllabusNodes.id }).from(syllabusNodes).where(inArray(syllabusNodes.id, wanted));
+    const found = await ex.select({ id: syllabusNodes.id }).from(syllabusNodes).where(inArray(syllabusNodes.id, wanted));
     if (found.length !== wanted.length) throw new AppError(400, 'validation_failed', 'subjectNodeId: unknown syllabus node');
   }
 
@@ -86,11 +86,12 @@ export class TasksService {
     return v;
   }
 
-  async createMany(userId: string, inputs: NewTask[], source: Row['source']): Promise<TaskView[]> {
+  /** `ex` lets a caller run the insert inside its own transaction. */
+  async createMany(userId: string, inputs: NewTask[], source: Row['source'], ex: Db = this.db): Promise<TaskView[]> {
     if (!inputs.length) return [];
-    await this.assertSubject(inputs.map((i) => i.subjectNodeId));
+    await this.assertSubject(inputs.map((i) => i.subjectNodeId), ex);
     const ids = inputs.map(() => newId());
-    await this.db.insert(tasks).values(
+    await ex.insert(tasks).values(
       inputs.map((i, n) => ({
         id: ids[n],
         userId,
@@ -105,7 +106,7 @@ export class TasksService {
         notes: i.notes ?? null,
       })),
     );
-    const rows = await this.select().where(and(notDeleted(userId), inArray(tasks.id, ids)));
+    const rows = await this.select(ex).where(and(notDeleted(userId), inArray(tasks.id, ids)));
     const byId = new Map(rows.map((r) => [r.t.id, this.view(r)]));
     return ids.map((id) => byId.get(id)!);
   }

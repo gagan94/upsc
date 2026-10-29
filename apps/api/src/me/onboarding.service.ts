@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, eq, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { CatalogService } from '../catalog/catalog.service';
 import { AppError } from '../common/errors';
 import { DB, Db } from '../db/db.module';
@@ -16,6 +16,8 @@ export interface OnboardingView {
   step: number;
   answers: StarterAnswers;
 }
+
+const noSubjects = () => new AppError(409, 'catalog_empty', 'No subjects are available to build a plan yet');
 
 @Injectable()
 export class OnboardingService {
@@ -61,7 +63,9 @@ export class OnboardingService {
     if (!answers.routine) {
       throw new AppError(400, 'onboarding_incomplete', 'Tell us about your study routine before previewing a plan');
     }
-    return { tasks: await this.build(answers, tz, now) };
+    const tasks = await this.build(answers, tz, now);
+    if (!tasks.length) throw noSubjects();
+    return { tasks };
   }
 
   async complete(userId: string, tz: string, acceptPlan: boolean, now = new Date()): Promise<{ createdTasks: number }> {
@@ -71,9 +75,8 @@ export class OnboardingService {
       throw new AppError(400, 'onboarding_incomplete', 'Tell us about your study routine before accepting a plan');
     }
     const plan = acceptPlan ? await this.build(answers, tz, now) : [];
+    if (acceptPlan && !plan.length) throw noSubjects();
 
-    // The conditional upsert is the single gate: only the request that flips the
-    // status away from 'completed' proceeds, so a concurrent double submit creates tasks once.
     const profile = {
       ...(answers.targetYear !== undefined ? { targetYear: answers.targetYear } : {}),
       ...(answers.stage !== undefined ? { stage: answers.stage } : {}),
@@ -81,35 +84,29 @@ export class OnboardingService {
       ...(answers.focus !== undefined ? { focus: answers.focus } : {}),
     };
     const values = { ...profile, onboardingStatus: 'completed', updatedAt: new Date() };
-    const won = await this.db
-      .insert(preparationProfiles)
-      .values({ userId, ...values })
-      .onConflictDoUpdate({
-        target: preparationProfiles.userId,
-        set: values,
-        setWhere: sql`${preparationProfiles.onboardingStatus} is distinct from 'completed'`,
-      })
-      .returning({ userId: preparationProfiles.userId });
-    if (!won.length) throw new AppError(409, 'already_completed', 'Onboarding is already completed');
-
-    try {
+    // One transaction: the conditional status gate, preferences and tasks commit or roll back
+    // together. Only the request that flips the status away from 'completed' gets a row back.
+    return this.db.transaction(async (tx) => {
+      const won = await tx
+        .insert(preparationProfiles)
+        .values({ userId, ...values })
+        .onConflictDoUpdate({
+          target: preparationProfiles.userId,
+          set: values,
+          setWhere: sql`${preparationProfiles.onboardingStatus} is distinct from 'completed'`,
+        })
+        .returning({ userId: preparationProfiles.userId });
+      if (!won.length) throw new AppError(409, 'already_completed', 'Onboarding is already completed');
       if (answers.routine) {
-        await this.prep.upsertPreferences(userId, {
-          dailyGoalMin: answers.routine.dailyMin,
-          weeklyGoalMin: answers.routine.weeklyMin,
-          windows: answers.routine.windows,
-        });
+        await this.prep.upsertPreferences(
+          userId,
+          { dailyGoalMin: answers.routine.dailyMin, weeklyGoalMin: answers.routine.weeklyMin, windows: answers.routine.windows },
+          tx,
+        );
       }
-      const created = await this.tasks.createMany(userId, plan, 'starter_plan');
+      const created = await this.tasks.createMany(userId, plan, 'starter_plan', tx);
       return { createdTasks: created.length };
-    } catch (e) {
-      // TasksService has no transaction handle: undo the gate so the user can retry.
-      await this.db
-        .update(preparationProfiles)
-        .set({ onboardingStatus: before, updatedAt: new Date() })
-        .where(and(eq(preparationProfiles.userId, userId), eq(preparationProfiles.onboardingStatus, 'completed')));
-      throw e;
-    }
+    });
   }
 
   private async build(answers: StarterAnswers, tz: string, now: Date): Promise<NewTask[]> {

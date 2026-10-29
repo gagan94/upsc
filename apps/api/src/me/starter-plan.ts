@@ -64,6 +64,7 @@ export function buildStarterPlan({ answers, subjects, now, tz }: StarterPlanInpu
   const chosenWindows = WINDOW_ORDER.filter((w) => answers.routine?.windows?.includes(w));
   const windows = (chosenWindows.length ? chosenWindows : ['evening']).map((w) => WINDOWS[w]);
   const pool = pickSubjects(answers, subjects);
+  if (!pool.length) return [];
 
   const today = localDateOf(now, tz);
   const localHour = Number(

@@ -5,7 +5,8 @@ import { createTestApp } from '../../test/app';
 import { signTestToken, TEST_JWT_SECRET, TEST_SUPABASE_URL } from '../../test/tokens';
 import type { Db } from '../db/db.module';
 import { newId } from '../db/ids';
-import { subjects, syllabusNodes, tasks, users } from '../db/schema';
+import { studyPreferences, subjects, syllabusNodes, tasks, users } from '../db/schema';
+import { TasksService } from '../planner/tasks.service';
 
 jest.setTimeout(30000);
 
@@ -197,5 +198,48 @@ describe('onboarding', () => {
     expect(done.status).toBe(200);
     expect((await call('get', '/me/preparation-profile', 'ob-b')).body.targetYear).toBeNull();
     expect((await call('get', '/me/preparation-profile', 'ob-a')).body.targetYear).toBe(2027);
+  });
+  it('a failure during complete rolls everything back and a retry succeeds', async () => {
+    await call('put', '/me/onboarding', 'ob-fail', { step: 5, answers: { targetYear: 2027, focus: { subjects: ['polity'] }, routine } });
+    const svc = app.get(TasksService);
+    const spy = jest.spyOn(svc, 'createMany').mockRejectedValueOnce(new Error('boom'));
+    const r = await call('post', '/me/onboarding/complete', 'ob-fail', { acceptPlan: true });
+    spy.mockRestore();
+    expect(r.status).toBeGreaterThanOrEqual(500);
+    expect((await call('get', '/me/onboarding', 'ob-fail')).body.status).toBe('in_progress');
+    expect(await taskCount('ob-fail')).toBe(0);
+    expect(await db.select().from(studyPreferences).where(eq(studyPreferences.userId, await uid('ob-fail')))).toHaveLength(0);
+    expect((await call('get', '/me/preparation-profile', 'ob-fail')).body.targetYear).toBeNull();
+    const retry = await call('post', '/me/onboarding/complete', 'ob-fail', { acceptPlan: true });
+    expect(retry.status).toBe(200);
+    expect(await taskCount('ob-fail')).toBe(retry.body.createdTasks);
+    expect(retry.body.createdTasks).toBeGreaterThan(0);
+  });
+
+  describe('empty catalog', () => {
+    beforeAll(async () => {
+      await db.update(subjects).set({ status: 'draft' });
+    });
+    afterAll(async () => {
+      await db.update(subjects).set({ status: 'published' });
+    });
+
+    it('preview and complete(acceptPlan:true) are 409 catalog_empty and leave state unchanged', async () => {
+      await call('put', '/me/onboarding', 'ob-empty', { step: 5, answers: { targetYear: 2027, routine } });
+      for (const [path, body] of [['/me/onboarding/plan-preview', {}], ['/me/onboarding/complete', { acceptPlan: true }]] as const) {
+        const r = await call('post', path, 'ob-empty', body);
+        expect(r.status).toBe(409);
+        expect(r.body.error.code).toBe('catalog_empty');
+      }
+      expect((await call('get', '/me/onboarding', 'ob-empty')).body.status).toBe('in_progress');
+      expect(await taskCount('ob-empty')).toBe(0);
+    });
+
+    it('complete(acceptPlan:false) still works', async () => {
+      await call('put', '/me/onboarding', 'ob-empty2', { step: 5, answers: { routine } });
+      const r = await call('post', '/me/onboarding/complete', 'ob-empty2', { acceptPlan: false });
+      expect(r.status).toBe(200);
+      expect(r.body).toEqual({ createdTasks: 0 });
+    });
   });
 });
