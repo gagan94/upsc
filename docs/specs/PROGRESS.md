@@ -40,3 +40,4 @@ Phase 0 plan written: `docs/superpowers/plans/2026-10-27-phase-0-demo-shell.md` 
 - 2026-10-27: Phase 0 implementation plan saved (docs/superpowers/plans/2026-10-27-phase-0-demo-shell.md).
 - 2026-10-27: D22 — auth via Supabase (Neon stays app DB). Phase 0 plan rewritten (14 tasks). Spec 02 and 01 annotated.
 - 2026-10-28: Phase 0 code complete on branch `phase-0-demo-shell` (14 tasks + final-review fix wave, 28 commits). Live deployment pending owner accounts (Neon, Supabase, Render, Vercel) — see `docs/demo/phase-0.md`, `docs/superpowers/phase-0-followups.md`.
+- 2026-10-30: **Phase 0 live and merged** (PR #1). Web https://upsc-web-rho.vercel.app, API https://upsc-api.onrender.com, Neon `upsc-demo` (Singapore, PG18), Supabase auth. Smoke OK; all 20 pages verified in a headless browser. Home screen is a simplified stand-in vs Figma (real home = Phase 1). Next: Phase 1 plan (Plan & practise).
