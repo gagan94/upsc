@@ -32,7 +32,7 @@ Render builds the API from a GitHub repository, so the code must be on GitHub fi
 
 ## Part 1 — Tools on your laptop
 
-1. Node: run `node -v`. You need 20 or higher (22 preferred). If lower, install Node 22 from nodejs.org.
+1. Node: run `node -v`. You need **22 or higher**: on Node 20 the seed fails with "native WebSocket not found" (the Supabase library needs Node 22). Install Node 22 from nodejs.org, or without touching the system: `mkdir -p ~/.local/node22 && cd ~/.local/node22 && npm init -y && npm install node@22`, then `export PATH=$HOME/.local/node22/node_modules/node/bin:$PATH` in each terminal before the seed and `pnpm dev`.
 2. pnpm: run `pnpm -v`. If missing: `npm install -g pnpm@9`.
 3. In the project folder: `pnpm install`.
 
