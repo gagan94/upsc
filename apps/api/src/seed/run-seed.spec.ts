@@ -75,6 +75,10 @@ describe('runSeed', () => {
     const ask = ents.find((e) => e.featureKey === 'ai.ask.message');
     expect(ask).toMatchObject({ limitValue: 50, period: 'day' });
     expect((await db.select().from(featureCatalog)).length).toBe(FEATURE_KEYS.length);
+    for (const key of ['planner.basic', 'study.session', 'practice.session', 'practice.pyq', 'practice.mistake_notebook']) {
+      const e = ents.find((x) => x.featureKey === key);
+      expect(e).toMatchObject({ enabled: true, limitValue: null, period: 'none' });
+    }
   });
 
   it('FakeAuthAdmin returns the same subject for the same email', async () => {

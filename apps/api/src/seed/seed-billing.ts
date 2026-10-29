@@ -22,6 +22,11 @@ const FEATURES: Record<FeatureKey, Spec> = {
   'messages.send': { name: 'Direct messages' },
   'planner.calendar_sync': { name: 'Planner calendar sync' },
   'revision.basic': { name: 'Basic revision' },
+  'planner.basic': { name: 'Study planner' },
+  'study.session': { name: 'Study sessions' },
+  'practice.session': { name: 'Practice sessions' },
+  'practice.pyq': { name: 'Previous-year question practice' },
+  'practice.mistake_notebook': { name: 'Mistake notebook' },
 };
 
 export const FREE_PLAN_KEY = 'free';
