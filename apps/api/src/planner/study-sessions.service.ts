@@ -139,15 +139,26 @@ export class StudySessionsService {
    * One conditional UPDATE … RETURNING: the row lock taken by UPDATE serialises concurrent calls, and the
    * second one re-reads the row the first wrote, so the same interval is never credited twice.
    */
-  private async transition(userId: string, id: string, from: Status[], set: Patch, extra?: SQL): Promise<SessionView> {
+  private async transition(
+    userId: string,
+    id: string,
+    from: Status[],
+    set: Patch,
+    extra?: SQL,
+    opts: { rejectStale?: boolean } = {},
+  ): Promise<SessionView> {
     const [r] = await this.db
       .update(s)
       .set(set as never)
       .where(and(this.mine(userId, id), inArray(s.status, from), extra))
       .returning(cols);
     if (r) return view(r);
-    const [exists] = await this.db.select({ id: s.id }).from(s).where(this.mine(userId, id)).limit(1);
-    if (!exists) throw notFound();
+    // Classify the miss only; the row was not modified.
+    const [cur] = await this.db.select({ stale: cols.stale }).from(s).where(this.mine(userId, id)).limit(1);
+    if (!cur) throw notFound();
+    if (opts.rejectStale && cur.stale === true) {
+      throw new AppError(409, 'session_stale', 'The study session went stale; recover it before continuing');
+    }
     throw new AppError(409, 'invalid_state', 'The study session cannot do that in its current state');
   }
 
@@ -158,7 +169,8 @@ export class StudySessionsService {
     };
     if (interacted) set.activeSeconds = sql`${s.activeSeconds} + case when ${s.status} = 'running' then ${gap} else 0 end`;
     else set.idleSeconds = sql`${s.idleSeconds} + case when ${s.status} = 'running' then ${gap} else 0 end`;
-    return this.transition(userId, id, ACTIVE, set);
+    // A stale session is never silently revived by a heartbeat: it must go through recover.
+    return this.transition(userId, id, ACTIVE, set, sql`not ${staleSql}`, { rejectStale: true });
   }
 
   /** Pause and resume do not credit the time since the last heartbeat. */
@@ -170,11 +182,14 @@ export class StudySessionsService {
     return this.transition(userId, id, ['paused'], { status: 'running', lastHeartbeatAt: touch });
   }
 
-  /** Time since the last heartbeat is not credited; clients send a final heartbeat before ending. */
+  /**
+   * Time since the last heartbeat is not credited; clients send a final heartbeat before ending.
+   * A stale session ends at its last heartbeat (as recover:end does), a fresh one at now().
+   */
   async end(userId: string, id: string, input: EndInput): Promise<SessionView> {
     const ended = await this.transition(userId, id, ACTIVE, {
       status: 'ended',
-      endedAt: sql`now()`,
+      endedAt: sql`case when ${staleSql} then ${s.lastHeartbeatAt} else now() end`,
       endReason: sql`case when ${s.activeSeconds} >= ${s.plannedMin} * 60 then 'target_reached' else 'user' end`,
       focusRating: input.focusRating ?? null,
       notes: input.notes ?? null,

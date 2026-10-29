@@ -133,12 +133,66 @@ describe('study sessions', () => {
     expect(end.body.session.endReason).toBe('target_reached');
   });
 
-  it('credit per heartbeat is capped (a 10-minute gap credits 60 s)', async () => {
+  it('credit per heartbeat is capped (a 9-minute gap credits 60 s)', async () => {
     const s = await start('u-cap');
-    await backdate(s.id, 600);
+    await backdate(s.id, 9 * 60);
     const after = await beat('u-cap', s.id);
     expect(after.activeSeconds).toBe(HEARTBEAT_MAX_CREDIT_S);
     expect(HEARTBEAT_MAX_CREDIT_S).toBe(60);
+  });
+
+  const rowOf = async (id: string) =>
+    ((await db.execute(sql`select status, active_seconds, idle_seconds, paused_seconds, last_heartbeat_at
+      from planner.study_sessions where id = ${id}::uuid`)).rows as Record<string, unknown>[])[0];
+
+  it('a heartbeat on a stale session is 409 session_stale and changes nothing; recover resume then works', async () => {
+    const s = await start('u-hbstale');
+    await backdate(s.id, 11 * 60);
+    const before = await rowOf(s.id);
+    const r = await call('post', `/study-sessions/${s.id}/heartbeat`, 'u-hbstale', { interacted: true });
+    expect(r.status).toBe(409);
+    expect(r.body.error.code).toBe('session_stale');
+    expect(await rowOf(s.id)).toEqual(before);
+    const active = await call('get', '/study-sessions/active', 'u-hbstale');
+    expect(active.body.session).toMatchObject({ id: s.id, stale: true, activeSeconds: 0 });
+    const rec = await call('post', `/study-sessions/${s.id}/recover`, 'u-hbstale', { action: 'resume' });
+    expect(rec.status).toBe(200);
+    expect(rec.body.session).toMatchObject({ status: 'running', stale: false, activeSeconds: 0 });
+    await backdate(s.id, 30);
+    const after = await beat('u-hbstale', s.id);
+    expect(after.activeSeconds).toBeGreaterThanOrEqual(30);
+    expect(after.activeSeconds).toBeLessThanOrEqual(31);
+  });
+
+  it('a heartbeat on a stale paused session is also 409 session_stale', async () => {
+    const s = await start('u-pstale');
+    await call('post', `/study-sessions/${s.id}/pause`, 'u-pstale');
+    await backdate(s.id, 11 * 60);
+    const before = await rowOf(s.id);
+    const r = await call('post', `/study-sessions/${s.id}/heartbeat`, 'u-pstale', { interacted: false });
+    expect(r.status).toBe(409);
+    expect(r.body.error.code).toBe('session_stale');
+    expect(await rowOf(s.id)).toEqual(before);
+    expect((await call('get', '/study-sessions/active', 'u-pstale')).body.session).toMatchObject({ status: 'paused', stale: true });
+  });
+
+  it('plain end on a stale session ends at the last heartbeat without crediting the gap', async () => {
+    const s = await start('u-endstale');
+    await backdate(s.id, 30);
+    await beat('u-endstale', s.id);
+    await backdate(s.id, 11 * 60);
+    const { last_heartbeat_at: lhb, active_seconds: secs } = await rowOf(s.id);
+    const r = await call('post', `/study-sessions/${s.id}/end`, 'u-endstale', {});
+    expect(r.status).toBe(200);
+    expect(r.body.session).toMatchObject({ status: 'ended', endReason: 'user', activeSeconds: secs, stale: false });
+    expect(r.body.session.endedAt).toBe(new Date(lhb as string).toISOString());
+  });
+
+  it('plain end on a fresh session ends now', async () => {
+    const s = await start('u-endfresh');
+    await backdate(s.id, 30);
+    const r = await call('post', `/study-sessions/${s.id}/end`, 'u-endfresh', {});
+    expect(Math.abs(Date.parse(r.body.session.endedAt) - Date.now())).toBeLessThan(10000);
   });
 
   it('concurrent heartbeats do not double-credit the same interval', async () => {
