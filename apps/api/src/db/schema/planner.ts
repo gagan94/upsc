@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { index, integer, jsonb, pgSchema, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { date, index, integer, jsonb, pgSchema, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 import { syllabusNodes } from './catalog';
 import { users } from './identity';
 
@@ -91,3 +91,31 @@ export const studySessions = planner.table(
     index('study_sessions_user_started_idx').on(t.userId, t.startedAt),
   ],
 );
+
+export interface SubjectTarget {
+  subjectNodeId: string;
+  weeklyMin: number;
+}
+
+export const goals = planner.table('goals', {
+  userId: uuid('user_id')
+    .primaryKey()
+    .references(() => users.id),
+  dailyMin: integer('daily_min').notNull(),
+  weeklyMin: integer('weekly_min').notNull(),
+  monthlyMilestone: text('monthly_milestone'),
+  milestoneDate: date('milestone_date', { mode: 'string' }),
+  subjectTargets: jsonb('subject_targets').$type<SubjectTarget[]>().notNull().default([]),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const EXAM_KINDS = ['prelims', 'mains'] as const;
+export const EXAM_DATE_STATUSES = ['illustrative', 'confirmed'] as const;
+
+export const examDates = planner.table('exam_dates', {
+  id: uuid('id').primaryKey(),
+  exam: text('exam', { enum: EXAM_KINDS }).notNull(),
+  year: integer('year').notNull(),
+  date: date('date', { mode: 'string' }).notNull(),
+  status: text('status', { enum: EXAM_DATE_STATUSES }).notNull().default('illustrative'),
+});

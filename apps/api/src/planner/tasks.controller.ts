@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, Use
 import { z } from 'zod';
 import { dayRange, localDateOf } from '../common/dates';
 import { AppError } from '../common/errors';
-import { parse } from '../common/validation';
+import { dateISO, parse } from '../common/validation';
 import { ACTIVITY_TYPES, PRIORITIES } from '../db/schema/planner';
 import { AuthGuard } from '../identity/auth.guard';
 import { CurrentUser } from '../identity/decorators';
@@ -11,10 +11,6 @@ import { PreparationService } from '../me/preparation.service';
 import { StudySessionsService } from './study-sessions.service';
 import { TasksService } from './tasks.service';
 
-const dateISO = z
-  .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD')
-  .refine((s) => !Number.isNaN(Date.parse(`${s}T00:00:00Z`)) && new Date(`${s}T00:00:00Z`).toISOString().startsWith(s), 'Invalid date');
 const instant = z
   .string()
   .datetime({ offset: true })

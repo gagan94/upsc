@@ -43,6 +43,13 @@
       "when": 1793303480564,
       "tag": "0005_dusty_boomer",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793304028857,
+      "tag": "0006_fearless_inertia",
+      "breakpoints": true
     }
   ]
 }

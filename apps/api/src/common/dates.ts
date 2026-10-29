@@ -75,3 +75,9 @@ export function localDateOf(instant: Date, tz: string): string {
   const pad = (n: number, w = 2) => String(n).padStart(w, '0');
   return `${pad(p.year, 4)}-${pad(p.month)}-${pad(p.day)}`;
 }
+
+/** `dateISO` shifted by `n` civil days (calendar arithmetic, zone-independent). */
+export function addDaysISO(dateISO: string, n: number): string {
+  const [y, m, d] = parseISO(dateISO);
+  return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10);
+}
