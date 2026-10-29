@@ -31,6 +31,7 @@ export function Tabs({
   const prefix = idPrefix ?? uid;
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
 
+  const hasActive = tabs.some((t) => t.id === value);
   function go(idx: number) {
     const n = (idx + tabs.length) % tabs.length;
     onChange(tabs[n].id);
@@ -51,7 +52,7 @@ export function Tabs({
             id={tabId(prefix, t.id)}
             aria-selected={on}
             aria-controls={tabPanelId(prefix, t.id)}
-            tabIndex={on ? 0 : -1}
+            tabIndex={on || (!hasActive && i === 0) ? 0 : -1}
             onClick={() => onChange(t.id)}
             onKeyDown={(e) => {
               if (e.key === "ArrowRight") {

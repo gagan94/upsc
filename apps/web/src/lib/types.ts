@@ -417,7 +417,7 @@ export interface AttemptsPage {
   nextCursor: string | null;
 }
 
-export type ReportType = string;
+export type ReportType = "wrong_key" | "typo" | "ambiguous" | "other";
 export interface QuestionReportInput {
   type: ReportType;
   text?: string;

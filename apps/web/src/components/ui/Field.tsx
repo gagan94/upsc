@@ -16,7 +16,9 @@ export function Field(props: FieldProps) {
   const id = (rest as { id?: string }).id ?? `${uid}-field`;
   const hintId = `${id}-hint`;
   const errId = `${id}-error`;
-  const describedBy = [hint ? hintId : null, error ? errId : null].filter(Boolean).join(" ") || undefined;
+  const callerDescribedBy = (rest as { "aria-describedby"?: string })["aria-describedby"];
+  const describedBy =
+    [callerDescribedBy, hint ? hintId : null, error ? errId : null].filter(Boolean).join(" ") || undefined;
   const common = {
     id,
     "aria-describedby": describedBy,

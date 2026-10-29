@@ -9,12 +9,21 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   error?: string | null;
 }
 
-export function Select({ label, options, hint, error, className = "", id: idProp, ...rest }: SelectProps) {
+export function Select({
+  label,
+  options,
+  hint,
+  error,
+  className = "",
+  id: idProp,
+  "aria-describedby": callerDescribedBy,
+  ...rest
+}: SelectProps) {
   const uid = useId();
   const id = idProp ?? `${uid}-select`;
   const hintId = `${id}-hint`;
   const errId = `${id}-error`;
-  const describedBy = [hint ? hintId : null, error ? errId : null].filter(Boolean).join(" ") || undefined;
+  const describedBy = [callerDescribedBy, hint ? hintId : null, error ? errId : null].filter(Boolean).join(" ") || undefined;
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={id} className="text-sm font-semibold text-text">

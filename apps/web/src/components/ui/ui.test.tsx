@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Banner } from "./Banner";
 import { Button } from "./Button";
@@ -55,6 +55,17 @@ describe("Field", () => {
     const err = screen.getByRole("alert");
     expect(ids).toContain(err.id);
     expect(err).toHaveTextContent("Required");
+  });
+  it("merges a caller aria-describedby with hint and error ids", () => {
+    render(<Field label="Name" hint="h" error="e" aria-describedby="extra" />);
+    const ids = screen.getByLabelText("Name").getAttribute("aria-describedby")!.split(" ");
+    expect(ids).toContain("extra");
+    expect(ids).toHaveLength(3);
+    expect(ids.map((i) => document.getElementById(i)).filter(Boolean)).toHaveLength(2);
+  });
+  it("keeps a caller aria-describedby when there is no hint or error", () => {
+    render(<Field label="Name" aria-describedby="extra" />);
+    expect(screen.getByLabelText("Name")).toHaveAttribute("aria-describedby", "extra");
   });
   it("renders a textarea when multiline", () => {
     render(<Field label="Bio" multiline />);
@@ -149,6 +160,11 @@ describe("Tabs", () => {
     fireEvent.keyDown(screen.getByRole("tab", { name: "Gamma" }), { key: "Home" });
     expect(screen.getByRole("tab", { name: "Alpha" })).toHaveAttribute("aria-selected", "true");
   });
+  it("keeps the first tab keyboard reachable when value matches no tab", () => {
+    render(<Tabs label="View" tabs={[{ id: "a", label: "Alpha" }, { id: "b", label: "Beta" }]} value="zzz" onChange={() => {}} />);
+    expect(screen.getByRole("tab", { name: "Alpha" })).toHaveAttribute("tabindex", "0");
+    expect(screen.getByRole("tab", { name: "Beta" })).toHaveAttribute("tabindex", "-1");
+  });
   it("click selects", () => {
     const onChange = vi.fn();
     render(<Harness onChange={onChange} />);
@@ -212,6 +228,43 @@ describe("Modal", () => {
     expect(close).toHaveFocus();
     fireEvent.keyDown(close, { key: "Tab", shiftKey: true });
     expect(last).toHaveFocus();
+  });
+  it("Shift+Tab on the dialog container wraps to the last element", () => {
+    render(
+      <Modal open onClose={() => {}} title="T">
+        <button>First</button>
+        <button>Last</button>
+      </Modal>,
+    );
+    const dialog = screen.getByRole("dialog");
+    dialog.focus();
+    fireEvent.keyDown(dialog, { key: "Tab", shiftKey: true });
+    expect(screen.getByRole("button", { name: "Last" })).toHaveFocus();
+  });
+  it("focuses the first focusable child by default, not Close", () => {
+    render(
+      <Modal open onClose={() => {}} title="T">
+        <input aria-label="Name" />
+      </Modal>,
+    );
+    expect(screen.getByLabelText("Name")).toHaveFocus();
+  });
+  it("falls back to Close when children have nothing focusable", () => {
+    render(<Modal open onClose={() => {}} title="T">text only</Modal>);
+    expect(screen.getByRole("button", { name: "Close" })).toHaveFocus();
+  });
+  it("honours initialFocusRef", () => {
+    function H() {
+      const ref = useRef<HTMLButtonElement>(null);
+      return (
+        <Modal open onClose={() => {}} title="T" initialFocusRef={ref}>
+          <button>One</button>
+          <button ref={ref}>Two</button>
+        </Modal>
+      );
+    }
+    render(<H />);
+    expect(screen.getByRole("button", { name: "Two" })).toHaveFocus();
   });
   it("restores focus to the opener on close", () => {
     function H() {

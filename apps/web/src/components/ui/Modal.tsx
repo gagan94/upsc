@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode, type RefObject } from "react";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -10,14 +10,21 @@ export function Modal({
   onClose,
   title,
   children,
+  initialFocusRef,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
+  /** Element to focus on open. Default: first focusable inside the children, else the Close button. */
+  initialFocusRef?: RefObject<HTMLElement | null>;
 }) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const initialFocusRefRef = useRef(initialFocusRef);
+  initialFocusRefRef.current = initialFocusRef;
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
 
@@ -25,8 +32,12 @@ export function Modal({
   useEffect(() => {
     if (!open) return;
     const opener = document.activeElement as HTMLElement | null;
-    const first = dialogRef.current?.querySelector<HTMLElement>(FOCUSABLE);
-    (first ?? dialogRef.current)?.focus();
+    const target =
+      initialFocusRefRef.current?.current ??
+      contentRef.current?.querySelector<HTMLElement>(FOCUSABLE) ??
+      closeRef.current ??
+      dialogRef.current;
+    target?.focus();
     return () => opener?.focus?.();
   }, [open]);
 
@@ -47,10 +58,11 @@ export function Modal({
     const first = items[0];
     const last = items[items.length - 1];
     const active = document.activeElement;
-    if (e.shiftKey && (active === first || !dialogRef.current?.contains(active))) {
+    const outside = active === dialogRef.current || !dialogRef.current?.contains(active);
+    if (e.shiftKey && (active === first || outside)) {
       e.preventDefault();
       last.focus();
-    } else if (!e.shiftKey && (active === last || !dialogRef.current?.contains(active))) {
+    } else if (!e.shiftKey && (active === last || outside)) {
       e.preventDefault();
       first.focus();
     }
@@ -78,6 +90,7 @@ export function Modal({
             {title}
           </h2>
           <button
+            ref={closeRef}
             type="button"
             aria-label="Close"
             onClick={onClose}
@@ -86,7 +99,7 @@ export function Modal({
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        {children}
+        <div ref={contentRef}>{children}</div>
       </div>
     </div>
   );
