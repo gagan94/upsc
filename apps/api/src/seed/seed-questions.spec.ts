@@ -42,6 +42,14 @@ describe('seed-data/questions.json', () => {
     expect(d('hard')).toBeLessThanOrEqual(24);
   });
 
+  it('varies the statements answer key so it cannot be pattern-matched', () => {
+    const st = qs.filter((q) => q.format === 'statements');
+    const n = (k: string) => st.filter((q) => q.correctOption === k).length;
+    expect(n('B')).toBeGreaterThanOrEqual(5);
+    expect(n('D')).toBeGreaterThanOrEqual(2);
+    expect((n('A') + n('C')) / st.length).toBeLessThanOrEqual(0.55);
+  });
+
   it('has non-empty explanations, reasoning for A-D and a misconception on a wrong option', () => {
     for (const q of qs) {
       expect(q.explanation.trim().length).toBeGreaterThan(0);

@@ -123,7 +123,7 @@
     "correctOption": "B",
     "explanation": "Article 84 requires a candidate for the Lok Sabha to be at least 25 years old (30 for the Rajya Sabha).",
     "optionReasoning": {
-      "A": "21 is the minimum voting age context in older rules; it is not the age for Lok Sabha candidature.",
+      "A": "21 was the voting age before the 61st Amendment (1989); it is not the age for Lok Sabha candidature.",
       "B": "25 years is the minimum age under Article 84.",
       "C": "30 years is the minimum age for the Rajya Sabha and the Legislative Council.",
       "D": "35 years is the minimum age for the President and Vice-President."
@@ -167,8 +167,8 @@
     "difficulty": "medium",
     "stem": "Consider the following statements regarding the Rajya Sabha and the Lok Sabha. Which of the statements given above is/are correct?",
     "statements": [
-      "The Rajya Sabha is a permanent House and is not subject to dissolution.",
-      "The normal term of the Lok Sabha is six years."
+      "The normal term of the Lok Sabha is six years.",
+      "The Rajya Sabha is a permanent House and is not subject to dissolution."
     ],
     "options": [
       "1 only",
@@ -176,17 +176,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
-    "explanation": "The Rajya Sabha is never dissolved; one-third of its members retire every second year. The Lok Sabha's normal term is five years from its first sitting, not six.",
+    "correctOption": "B",
+    "explanation": "The Lok Sabha's normal term is five years from its first sitting, not six. The Rajya Sabha is never dissolved; one-third of its members retire every second year.",
     "optionReasoning": {
-      "A": "Statement 1 is correct and statement 2 is not.",
-      "B": "Statement 2 is wrong: the Lok Sabha term is five years.",
-      "C": "Statement 2 is wrong, so both cannot be correct.",
-      "D": "Statement 1 is correct, so 'neither' is wrong."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "Six years is the term of a Rajya Sabha member, which is mistakenly transferred to the Lok Sabha."
+      "text": "Six years is the term of a Rajya Sabha member, which is wrongly transferred to the Lok Sabha, so statement 1 is accepted."
     }
   },
   {
@@ -249,7 +249,7 @@
     "difficulty": "medium",
     "stem": "Consider the following statements regarding Money Bills. Which of the statements given above is/are correct?",
     "statements": [
-      "A Money Bill can be introduced only in the Lok Sabha.",
+      "A Money Bill can be introduced in either House of Parliament.",
       "The Rajya Sabha can reject a Money Bill passed by the Lok Sabha."
     ],
     "options": [
@@ -258,17 +258,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
-    "explanation": "Under Article 109 a Money Bill is introduced only in the Lok Sabha. The Rajya Sabha may only make recommendations within 14 days; the Lok Sabha may accept or reject them, so the Rajya Sabha cannot reject a Money Bill.",
+    "correctOption": "D",
+    "explanation": "Under Article 109 a Money Bill can be introduced only in the Lok Sabha. The Rajya Sabha may only make recommendations within 14 days, which the Lok Sabha may accept or reject, so the Rajya Sabha cannot reject a Money Bill.",
     "optionReasoning": {
-      "A": "Statement 1 is correct; statement 2 is not.",
-      "B": "Statement 2 is incorrect, so it cannot be the only correct statement.",
-      "C": "Statement 2 is incorrect, so both cannot be correct.",
-      "D": "Statement 1 is correct, so 'neither' is wrong."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is incorrect and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is incorrect.",
+      "D": "Correct: neither statement is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "Since the Rajya Sabha can reject ordinary bills, it is assumed to have the same power over Money Bills; it has only a recommendatory role."
+      "text": "Money Bills are assumed to behave like ordinary Bills, which can start in either House and be rejected by the Rajya Sabha."
     }
   },
   {
@@ -391,7 +391,7 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding the Comptroller and Auditor General of India. Which of the statements given above is/are correct?",
     "statements": [
-      "The Comptroller and Auditor General of India is appointed by the President.",
+      "The Comptroller and Auditor General of India is appointed by the Prime Minister.",
       "The Comptroller and Auditor General can be removed from office in the same manner and on the same grounds as a judge of the Supreme Court."
     ],
     "options": [
@@ -400,17 +400,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "C",
-    "explanation": "Article 148 provides that the CAG is appointed by the President by warrant and can be removed only in the manner and on the grounds as a Supreme Court judge, which safeguards independence.",
+    "correctOption": "B",
+    "explanation": "Article 148 provides that the CAG is appointed by the President by warrant, not by the Prime Minister. The CAG can be removed only in the manner and on the grounds applicable to a Supreme Court judge, which safeguards independence.",
     "optionReasoning": {
-      "A": "Statement 2 is also correct.",
-      "B": "Statement 1 is also correct.",
-      "C": "Both statements are correct (Article 148).",
-      "D": "Both statements are correct, so 'neither' is wrong."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
-      "option": "A",
-      "text": "Because the CAG is appointed by the executive, it is assumed removal is also at the executive's will; it is not."
+      "option": "C",
+      "text": "The Prime Minister heads the government and is assumed to make senior appointments, but the CAG is appointed by the President."
     }
   },
   {
@@ -473,8 +473,8 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding the basic structure doctrine. Which of the statements given above is/are correct?",
     "statements": [
-      "The doctrine of the basic structure was laid down by the Supreme Court in Kesavananda Bharati v. State of Kerala (1973).",
-      "According to the doctrine, Parliament has no power to amend the Constitution at all."
+      "According to the basic structure doctrine, Parliament has no power to amend the Constitution at all.",
+      "The doctrine of the basic structure was laid down by the Supreme Court in Kesavananda Bharati v. State of Kerala (1973)."
     ],
     "options": [
       "1 only",
@@ -482,17 +482,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
-    "explanation": "In Kesavananda Bharati (1973) the Supreme Court held that Parliament can amend the Constitution but cannot alter its basic structure. Statement 2 overstates the doctrine.",
+    "correctOption": "B",
+    "explanation": "In Kesavananda Bharati (1973) the Supreme Court held that Parliament can amend the Constitution but cannot alter its basic structure. The doctrine limits the amending power; it does not remove it.",
     "optionReasoning": {
-      "A": "Statement 1 is correct; statement 2 is not.",
-      "B": "Statement 2 is incorrect, since amendments are allowed within the basic structure.",
-      "C": "Statement 2 is incorrect, so both cannot be correct.",
-      "D": "Statement 1 is correct, so 'neither' is wrong."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "The doctrine limits amendment power; it does not remove it."
+      "text": "The doctrine is imagined as a ban on amendments, so statement 1 is accepted."
     }
   },
   {
@@ -521,7 +521,7 @@
       "D": "Both statements are correct, so 'neither' is wrong."
     },
     "misconception": {
-      "option": "B",
+      "option": "A",
       "text": "It is assumed that pending Bills in the Rajya Sabha never lapse; a Lok Sabha-passed Bill pending there does lapse."
     }
   },
@@ -883,8 +883,8 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding the Government of India Act, 1935. Which of the statements given above is/are correct?",
     "statements": [
-      "The Government of India Act, 1935 introduced provincial autonomy.",
-      "The All-India Federation envisaged by the Act of 1935 came into operation in 1937."
+      "The All-India Federation envisaged by the Act of 1935 came into operation in 1937.",
+      "The Government of India Act, 1935 introduced provincial autonomy."
     ],
     "options": [
       "1 only",
@@ -892,13 +892,13 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "explanation": "The 1935 Act gave provinces autonomy, and elections were held in 1937 under it. The proposed All-India Federation required the consent of the princely states and never came into being.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
@@ -913,8 +913,8 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding the Mansabdari system. Which of the statements given above is/are correct?",
     "statements": [
-      "Under the Mansabdari system of the Mughals, a mansabdar's rank was expressed by two numbers, zat and sawar.",
-      "The Mansabdari system was introduced by Babur."
+      "The Mansabdari system was introduced by Babur.",
+      "Under the Mansabdari system of the Mughals, a mansabdar's rank was expressed by two numbers, zat and sawar."
     ],
     "options": [
       "1 only",
@@ -922,17 +922,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
-    "explanation": "The Mansabdari system was organised by Akbar; zat showed personal rank and sawar the number of cavalry. Babur founded the Mughal empire but did not introduce it.",
+    "correctOption": "B",
+    "explanation": "The Mansabdari system was organised by Akbar, not Babur. Zat showed personal rank and sawar the number of cavalry a mansabdar had to maintain.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "The founder of the dynasty is often assumed to have started all its institutions."
+      "text": "The founder of the dynasty is often assumed to have started all its institutions, so statement 1 is accepted."
     }
   },
   {
@@ -943,7 +943,7 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding the Poona Pact. Which of the statements given above is/are correct?",
     "statements": [
-      "The Poona Pact of 1932 was an agreement between Mahatma Gandhi and B. R. Ambedkar.",
+      "The Poona Pact of 1932 was reached after Gandhi's fast against the Communal Award, with B. R. Ambedkar as a signatory.",
       "It provided for separate electorates for the Depressed Classes."
     ],
     "options": [
@@ -1057,11 +1057,11 @@
       "Maharashtra"
     ],
     "correctOption": "A",
-    "explanation": "Gujarat has the longest mainland coastline and is followed by Andhra Pradesh and Tamil Nadu.",
+    "explanation": "Gujarat has the longest mainland coastline of any Indian State.",
     "optionReasoning": {
       "A": "Gujarat has the longest coastline.",
       "B": "Tamil Nadu is among the longer ones but is not the longest.",
-      "C": "Andhra Pradesh is second longest.",
+      "C": "Andhra Pradesh has a long east-coast shoreline but not the longest.",
       "D": "Maharashtra has a shorter coast."
     },
     "misconception": {
@@ -1129,8 +1129,8 @@
     "difficulty": "medium",
     "stem": "Consider the following statements regarding the Tropic of Cancer in India. Which of the statements given above is/are correct?",
     "statements": [
-      "The Tropic of Cancer passes through Madhya Pradesh.",
-      "The Tropic of Cancer passes through Odisha."
+      "The Tropic of Cancer passes through Odisha.",
+      "The Tropic of Cancer passes through Madhya Pradesh."
     ],
     "options": [
       "1 only",
@@ -1138,13 +1138,13 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "explanation": "The Tropic of Cancer passes through eight States: Gujarat, Rajasthan, Madhya Pradesh, Chhattisgarh, Jharkhand, West Bengal, Tripura and Mizoram. Odisha lies to the south of it.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
@@ -1297,8 +1297,8 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding ocean currents. Which of the statements given above is/are correct?",
     "statements": [
-      "The Gulf Stream is a warm ocean current of the North Atlantic.",
-      "The Benguela Current off southwestern Africa is a warm current."
+      "The Benguela Current off southwestern Africa is a warm current.",
+      "The Labrador Current is a warm current flowing along the northeast coast of North America."
     ],
     "options": [
       "1 only",
@@ -1306,17 +1306,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
-    "explanation": "The Gulf Stream carries warm water northeast across the Atlantic. The Benguela Current is a cold current flowing north along the southwest coast of Africa.",
+    "correctOption": "D",
+    "explanation": "The Benguela Current flows north along the southwest coast of Africa and is cold. The Labrador Current brings cold water south along the northeast coast of North America.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is incorrect and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is incorrect.",
+      "D": "Correct: neither statement is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "Currents near the tropics are often assumed to be warm, but Benguela is cold."
+      "text": "Warm currents such as the Gulf Stream are better known, so currents are assumed to be warm; both named here are cold."
     }
   },
   {
@@ -1539,8 +1539,8 @@
     "difficulty": "medium",
     "stem": "Consider the following statements regarding the Goods and Services Tax. Which of the statements given above is/are correct?",
     "statements": [
-      "The Goods and Services Tax is a destination-based tax on consumption.",
-      "The Goods and Services Tax replaced the income tax."
+      "The Goods and Services Tax replaced the income tax.",
+      "The Goods and Services Tax is a destination-based tax on consumption."
     ],
     "options": [
       "1 only",
@@ -1548,13 +1548,13 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "explanation": "GST is a destination-based consumption tax levied on the supply of goods and services, subsuming many indirect taxes. Income tax is a direct tax on income and continues alongside it.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
@@ -1625,8 +1625,8 @@
     "difficulty": "medium",
     "stem": "Consider the following statements regarding open market operations. Which of the statements given above is/are correct?",
     "statements": [
-      "Open market operations involve the buying and selling of government securities by the central bank.",
-      "When the RBI sells government securities in the open market, it increases the liquidity in the banking system."
+      "When the RBI sells government securities in the open market, it increases the liquidity in the banking system.",
+      "Open market operations involve the buying and selling of government securities by the central bank."
     ],
     "options": [
       "1 only",
@@ -1634,13 +1634,13 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "explanation": "Open market operations are conducted by buying or selling government securities. A sale of securities by the RBI takes money out of the system, so it reduces liquidity.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
@@ -1681,8 +1681,8 @@
     "difficulty": "medium",
     "stem": "Consider the following statements regarding per capita income and national income. Which of the statements given above is/are correct?",
     "statements": [
-      "Per capita income is obtained by dividing national income by the population.",
-      "National income is always equal to GDP at market prices."
+      "National income is always equal to GDP at market prices.",
+      "Per capita income is obtained by dividing national income by the population."
     ],
     "options": [
       "1 only",
@@ -1690,13 +1690,13 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
-    "explanation": "Per capita income equals national income divided by population. National income is net national product at factor cost, which differs from GDP at market prices by depreciation, net factor income from abroad, and indirect taxes less subsidies.",
+    "correctOption": "B",
+    "explanation": "Per capita income equals national income divided by population. National income is net national product at factor cost, which differs from GDP at market prices by depreciation, net factor income from abroad, and net indirect taxes.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
@@ -1767,8 +1767,8 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding deflation and disinflation. Which of the statements given above is/are correct?",
     "statements": [
-      "Deflation is a fall in the general price level.",
-      "Disinflation means the same thing as deflation."
+      "Disinflation means the same thing as deflation.",
+      "Deflation is a fall in the general price level."
     ],
     "options": [
       "1 only",
@@ -1776,17 +1776,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "explanation": "Deflation is a decline in the general price level. Disinflation is a slowdown in the rate of inflation; prices still rise, only more slowly.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "The prefix 'dis' suggests a decline in prices, but disinflation refers to slower inflation."
+      "text": "The prefix 'dis' suggests a decline in prices, so disinflation is wrongly treated as deflation."
     }
   },
   {
@@ -1953,8 +1953,8 @@
     "difficulty": "medium",
     "stem": "Consider the following statements regarding the Ramsar Convention. Which of the statements given above is/are correct?",
     "statements": [
-      "The Ramsar Convention is concerned with the conservation of wetlands.",
-      "The Ramsar Convention regulates international trade in endangered species."
+      "The Ramsar Convention regulates international trade in endangered species.",
+      "The Ramsar Convention is concerned with the conservation of wetlands."
     ],
     "options": [
       "1 only",
@@ -1962,17 +1962,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "explanation": "The Ramsar Convention (1971) is on wetlands of international importance. International trade in endangered species is regulated by CITES.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "Both are international conventions on nature, so their subjects are mixed up."
+      "text": "Both are international conventions on nature, so Ramsar is credited with CITES's subject as well."
     }
   },
   {
@@ -2109,7 +2109,7 @@
       "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
     },
     "misconception": {
-      "option": "A",
+      "option": "B",
       "text": "Nutrients cycle but energy does not, so the one-way flow is often forgotten."
     }
   },
@@ -2121,8 +2121,8 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding the Wildlife (Protection) Act. Which of the statements given above is/are correct?",
     "statements": [
-      "The Wildlife (Protection) Act provides for the declaration of national parks and wildlife sanctuaries.",
-      "The Wildlife (Protection) Act was enacted in 1986."
+      "The Wildlife (Protection) Act was enacted in 1986.",
+      "The Wildlife (Protection) Act provides for the declaration of national parks and wildlife sanctuaries."
     ],
     "options": [
       "1 only",
@@ -2130,17 +2130,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "explanation": "The Wildlife (Protection) Act was enacted in 1972 and provides for protected areas; the Environment (Protection) Act dates from 1986.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "1986 is the year of the Environment (Protection) Act."
+      "text": "1986 is the year of the Environment (Protection) Act, so the date is accepted."
     }
   },
   {
@@ -2177,8 +2177,8 @@
     "difficulty": "hard",
     "stem": "Consider the following statements regarding Rhizobium. Which of the statements given above is/are correct?",
     "statements": [
-      "Rhizobium bacteria are able to fix atmospheric nitrogen.",
-      "Rhizobium forms root nodules on cereal crops such as wheat."
+      "Rhizobium forms root nodules on cereal crops such as wheat.",
+      "Rhizobium bacteria are able to fix atmospheric nitrogen."
     ],
     "options": [
       "1 only",
@@ -2186,17 +2186,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
+    "correctOption": "B",
     "explanation": "Rhizobium lives in root nodules of leguminous plants such as pulses and fixes atmospheric nitrogen. Cereals like wheat do not form such nodules.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct.",
+      "B": "Correct: statement 1 is incorrect and statement 2 is correct.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is correct."
     },
     "misconception": {
       "option": "C",
-      "text": "Nitrogen fixation is thought to benefit all crops equally."
+      "text": "Nitrogen fixation is thought to benefit all crops equally, so nodules on wheat are accepted."
     }
   },
   {
@@ -2311,7 +2311,7 @@
     "difficulty": "medium",
     "stem": "Consider the following statements regarding sound and light. Which of the statements given above is/are correct?",
     "statements": [
-      "Sound cannot travel through a vacuum.",
+      "Sound can travel through a vacuum.",
       "Light cannot travel through a vacuum."
     ],
     "options": [
@@ -2320,17 +2320,17 @@
       "Both 1 and 2",
       "Neither 1 nor 2"
     ],
-    "correctOption": "A",
-    "explanation": "Sound is a mechanical wave and needs a material medium. Light is an electromagnetic wave and travels through a vacuum, as sunlight reaches the Earth.",
+    "correctOption": "D",
+    "explanation": "Sound is a mechanical wave and needs a material medium, so it cannot travel through a vacuum. Light is an electromagnetic wave and travels through a vacuum, as sunlight reaches the Earth.",
     "optionReasoning": {
-      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
-      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
-      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is incorrect and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is incorrect and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is incorrect and statement 2 is incorrect.",
+      "D": "Correct: neither statement is correct."
     },
     "misconception": {
-      "option": "C",
-      "text": "Both are called waves, so they are assumed to need a medium."
+      "option": "A",
+      "text": "Sound and light are both called waves, so sound is assumed to cross a vacuum like light, and light to need a medium like sound."
     }
   },
   {
@@ -2609,7 +2609,7 @@
     "difficulty": "medium",
     "stem": "What is the simple interest on 5,000 rupees at 8 per cent per annum for 3 years?",
     "options": [
-      "1,000 rupees",
+      "800 rupees",
       "1,200 rupees",
       "1,250 rupees",
       "1,500 rupees"
@@ -2617,14 +2617,14 @@
     "correctOption": "B",
     "explanation": "Simple interest = principal x rate x time / 100 = 5,000 x 8 x 3 / 100 = 1,200 rupees.",
     "optionReasoning": {
-      "A": "1,000 rupees would be the interest for 2.5 years.",
+      "A": "800 rupees is the interest for 2 years, not 3.",
       "B": "5,000 x 8 x 3 / 100 = 1,200.",
       "C": "1,250 rupees does not match the formula.",
       "D": "1,500 rupees would need a rate of 10 per cent."
     },
     "misconception": {
       "option": "A",
-      "text": "1,000 is the interest for 2.5 years, and reading the 3 years as 2.5 is an error."
+      "text": "Computing the interest for 2 years instead of 3 gives 800 rupees."
     }
   },
   {
