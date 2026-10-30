@@ -68,7 +68,11 @@ const heading = (page, name, level = 1) => page.getByRole("heading", { name, lev
 /** The app shows these when a server load fails; none of them may appear on a healthy page. */
 async function noErrorPanel(page) {
   const bad = page.getByText(/We couldn.t load|Something went wrong|Couldn.t load your session/);
-  assert((await bad.count()) === 0, `error panel on ${new URL(page.url()).pathname}: "${(await bad.first().innerText()).slice(0, 80)}"`);
+  if ((await bad.count()) > 0) {
+    // Only read the text when a panel exists (innerText on an empty locator waits for the timeout).
+    const text = (await bad.first().innerText()).slice(0, 80);
+    assert(false, `error panel on ${new URL(page.url()).pathname}: "${text}"`);
+  }
 }
 /** Clicks a toggle chip only when it is not already on (keeps re-runs idempotent). */
 async function ensurePressed(loc) {
