@@ -3,9 +3,7 @@
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { Tabs, tabId, tabPanelId } from "@/components/ui/Tabs";
-
-export const HUB_TABS = ["practice", "pyq", "bookmarks", "mistakes", "attempts"] as const;
-export type HubTabId = (typeof HUB_TABS)[number];
+import type { HubTabId } from "@/lib/hub-tabs";
 
 const TABS = [
   { id: "practice", label: "Practice" },

@@ -5,9 +5,7 @@ import { apiFetch } from "@/lib/api";
 import { Banner } from "@/components/ui/Banner";
 import { Button } from "@/components/ui/Button";
 import type { AttemptSummary, AttemptsPage } from "@/lib/types";
-
-const PAGE = 20;
-export const ATTEMPTS_PAGE_SIZE = PAGE;
+import { ATTEMPTS_PAGE_SIZE as PAGE } from "@/lib/attempts";
 
 export function attemptDate(iso: string, tz: string): string {
   return new Intl.DateTimeFormat("en-GB", { timeZone: tz, day: "numeric", month: "short", year: "numeric" }).format(new Date(iso));

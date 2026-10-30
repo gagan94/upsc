@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-export const SETTINGS_SECTIONS = [
-  { href: "/settings/profile", label: "My profile" },
-  { href: "/settings/preparation", label: "Preparation profile" },
-  { href: "/settings/study", label: "Study preferences" },
-  { href: "/settings/appearance", label: "Appearance & accessibility" },
-  { href: "/settings/account", label: "Account & contact" },
-];
+import { SETTINGS_SECTIONS } from "@/lib/settings-sections";
 
 export function SettingsNav() {
   const pathname = usePathname() ?? "";

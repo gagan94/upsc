@@ -99,3 +99,9 @@ The final whole-branch review found F1–F8. Fixed on `phase-1-build`, each with
 - **F6 fixed** — the 33 statements stems now read "Consider the statements below regarding X. Which of them is/are correct?" (slugs unchanged; re-seed updates in place).
 - **F7 fixed** — password login checks `GET /me/onboarding` like sign-up: `not_started` → `/onboarding`; other statuses or a failed lookup keep the safe `return_to`. All three entry points (sign-up, password login, Google OAuth callback) now apply the same rule.
 - **F8 fixed** — `dateISO` is imported from `common/validation` in the study-sessions controller.
+
+## Live deploy findings (2026-10-30)
+- **Server/client boundary (fixed):** four server pages imported plain values (PLANNER_VIEWS, HUB_TABS, ATTEMPTS_PAGE_SIZE, SETTINGS_SECTIONS) from "use client" modules; in production builds that is a client-reference proxy → `/planner` and `/prelims` returned 500. Vitest cannot see this boundary, so 522 tests and ~25 review rounds missed it; found by the first live browser run + Vercel logs. Guard: `apps/web/src/lib/server-client-boundary.test.ts` (naming heuristic; misses PascalCase non-component exports and dynamic imports).
+- **Process lesson:** run `next build` and a logged-in render of every server page (the e2e script) BEFORE declaring a phase done; add `pnpm --filter @upsc/web build` to the pre-deploy checks.
+- **deploy.sh + private Node 22:** step 5 (`npx vercel`) failed under the locally-installed Node 22 (`npx` could not find its lib dir). Use a standard Node 22 install, or run the Vercel step with the system Node.
+- **Smoke adds a practice set to the demo student's account on every deploy** (accepted).

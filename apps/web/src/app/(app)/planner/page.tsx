@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { PlannerTabs, PLANNER_VIEWS, type PlannerViewId } from "@/components/planner/PlannerTabs";
+import { PlannerTabs } from "@/components/planner/PlannerTabs";
+import { isPlannerView, type PlannerViewId } from "@/lib/planner-views";
 import { BacklogView } from "@/components/planner/BacklogView";
 import { TodayView } from "@/components/planner/TodayView";
 import { WeekView } from "@/components/planner/WeekView";
@@ -24,7 +25,7 @@ const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export default async function PlannerPage({ searchParams }: { searchParams: Promise<{ view?: string; date?: string }> }) {
   const sp = await searchParams;
-  const view: PlannerViewId = (PLANNER_VIEWS as readonly string[]).includes(sp.view ?? "") ? (sp.view as PlannerViewId) : "today";
+  const view: PlannerViewId = isPlannerView(sp.view) ? sp.view : "today";
   const date = sp.date && DATE_RE.test(sp.date) ? sp.date : undefined;
 
   type Data =
