@@ -61,7 +61,13 @@ pnpm --filter @upsc/api seed        # safe to run twice
 ```
 
 The Docker image does not contain migrations or seed data: both always run from your machine.
-Daily deploy is the same `./scripts/deploy.sh` (`--dry-run` prints the steps only).
+Daily deploy is the same `./scripts/deploy.sh` (`--dry-run` prints the steps only). Its order is
+**tests → migrate → seed → Render → Vercel → smoke**. The seed step is mandatory (since Phase 1 the
+free plan's feature keys, the practice syllabus nodes and the sample questions arrive only through
+it; without it practice and study sessions return 402 and the smoke test fails) and safe to repeat.
+It needs `SUPABASE_SERVICE_ROLE_KEY` (and `DEMO_PASSWORD`) on the deploying machine only: never put
+the service-role key in Render or Vercel. Run the deploy without `NODE_ENV=production` set (the seed
+refuses it, and `deploy.sh` stops before step 1 if it is set).
 
 ### First live login: troubleshooting
 

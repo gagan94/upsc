@@ -5,7 +5,7 @@
 >
 > Live result: _(to be filled in: date, commit, web URL, SMOKE OK?, e2e summary pass/fail counts)_
 
-Setup of the stack (Supabase, Neon, Render, Vercel) is unchanged: see `docs/demo/phase-0.md`. Phase 1 adds database migrations and new seed data, so run `db:migrate` and `seed` before the deploy (same commands as Phase 0, section 2).
+Setup of the stack (Supabase, Neon, Render, Vercel) is unchanged: see `docs/demo/phase-0.md`. Phase 1 adds database migrations and new seed data. `./scripts/deploy.sh` now runs them in this order: **tests → migrate → seed → Render → Vercel → smoke** (`--dry-run` prints the six steps). The seed is mandatory: the five new feature keys (`planner.basic`, `study.session`, `practice.session`, `practice.pyq`, `practice.mistake_notebook`) reach the free plan, and the practice syllabus nodes and 100 sample questions reach the database, only through it; without it `POST /practice/sessions` and `POST /study-sessions` return 402 and the smoke test fails. The seed needs `SUPABASE_SERVICE_ROLE_KEY` on the deploying machine only (never on Render or Vercel), and must not run with `NODE_ENV=production`. Re-seeding is safe: it updates the catalog (subjects now point at their Prelims syllabus nodes) and question stems in place.
 
 ## 1. What is new
 
@@ -31,7 +31,7 @@ If `newstudent` has already been onboarded (by a previous demo or the e2e run), 
 
 ## 3. The 10-minute stakeholder demo
 
-1. **New student onboarding (2 min).** Log in as a fresh account. On Home click "Finish personalising my workspace". Choose 2027, Preparing, Both papers, 3 hours a day, Morning and Evening, a support option or two. On the review step show the starter week, then "Accept plan and start". You land on Home with a plan.
+1. **New student onboarding (2 min).** Sign up or log in with an account that has not started onboarding: you land straight on onboarding (an account that left onboarding half-way lands on Home; click "Finish personalising my workspace"). Choose 2027, Preparing, Both papers, 3 hours a day, Morning and Evening, a support option or two. On the review step show the starter week, then "Accept plan and start". You land on Home with a plan.
 2. **Planner (2 min).** Open Planner: Today, then Week and Month for load. Add a task with only a title (it goes to the Backlog), schedule it for today, tick it complete.
 3. **Study session (1 min).** Top bar "Study session": choose a length (minimum 5 min), Start, show the timer and Pause. End it, give a focus rating, open "Study session history".
 4. **Practice test (2 min).** Prelims, "New practice set": pick Indian Polity, 10 questions, Test mode. Answer a few, flag one, skip one, Submit. Mention that correct answers are not sent to the browser before submit.
@@ -57,6 +57,7 @@ If `newstudent` has already been onboarded (by a previous demo or the e2e run), 
 - **No "Week N" chip** on Home (the API does not expose account creation date).
 - **"How others answered"** shows "Not enough data yet" until 100 first attempts exist.
 - **Tab close can lose the last unsaved answer** (answers autosave within a second and on tab hide; the browser warns before leaving).
+- **Each deploy's smoke test adds one practice set** to the demo student's attempts (accepted; re-seeding does not remove it).
 - Study timer: the displayed time can snap back by up to 45 s when the server credits less than the local estimate; the shortest session in the UI is 5 minutes.
 - Practice sizes offered are 10, 20 and 50; a subject with fewer questions starts a shorter set and says so.
 - Free-tier hosting: cold starts, Supabase pause after inactivity, no email confirmation, no 2FA (as in Phase 0).
