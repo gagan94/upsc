@@ -98,6 +98,8 @@ export function validateForm(v: QuestionFormValues): Record<string, string> {
   if (!UUID.test(v.subjectNodeId.trim())) e.subjectNodeId = "Choose a subject or enter a valid syllabus node id";
   if (v.topic.trim().length > 200) e.topic = "Topic must be 200 characters or fewer";
   if (!v.gsPaper.trim()) e.gsPaper = "GS paper is required";
+  else if (v.gsPaper.trim().length > 50) e.gsPaper = "GS paper must be 50 characters or fewer";
+  if (v.pyqPaper.trim().length > 100) e.pyqPaper = "PYQ paper must be 100 characters or fewer";
   const y = v.pyqYear.trim();
   if (y) {
     const n = Number(y);
@@ -106,15 +108,18 @@ export function validateForm(v: QuestionFormValues): Record<string, string> {
   return e;
 }
 
+/** Body of POST /admin/questions; `statements` is omitted for the single format. */
+export type QuestionBody = Omit<NewQuestion, "statements"> & { statements?: string[] | null };
+
 /** Request body for POST/PATCH /admin/questions (call only after validateForm is clean). */
-export function toBody(v: QuestionFormValues): NewQuestion {
+export function toBody(v: QuestionFormValues): QuestionBody {
   const optionReasoning: Partial<Record<OptionKey, string>> = {};
   for (const k of OPTION_KEYS) if (v.reasoning[k].trim()) optionReasoning[k] = v.reasoning[k].trim();
   const y = v.pyqYear.trim();
   return {
     format: v.format,
     stem: v.stem.trim(),
-    statements: v.format === "statements" ? v.statements.map((s) => s.trim()) : (undefined as unknown as null),
+    ...(v.format === "statements" ? { statements: v.statements.map((s) => s.trim()) } : {}),
     options: OPTION_KEYS.map((key) => ({ key, text: v.options[key].trim() })),
     correctOption: v.correctOption as OptionKey,
     explanation: v.explanation.trim(),
@@ -128,6 +133,22 @@ export function toBody(v: QuestionFormValues): NewQuestion {
     pyqYear: y ? Number(y) : null,
     pyqPaper: v.pyqPaper.trim() || null,
   };
+}
+
+/**
+ * PATCH body: only the fields that differ from the saved question (plus `reason` when the key changed).
+ * Returns null when nothing changed. `statements` is sent as null when switching back to the single format.
+ */
+export function diffBody(v: QuestionFormValues, saved: QuestionAdminView, reason?: string): Record<string, unknown> | null {
+  const next = toBody(v) as unknown as Record<string, unknown>;
+  const prev = toBody(fromQuestion(saved)) as unknown as Record<string, unknown>;
+  next.statements ??= null;
+  prev.statements ??= null;
+  const out: Record<string, unknown> = {};
+  for (const k of Object.keys(next)) if (JSON.stringify(next[k]) !== JSON.stringify(prev[k])) out[k] = next[k];
+  if (Object.keys(out).length === 0) return null;
+  if ("correctOption" in out && reason) out.reason = reason;
+  return out;
 }
 
 /** What a question still lacks before it can be published (API: 400 incomplete_question). */

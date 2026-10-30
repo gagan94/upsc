@@ -1,16 +1,13 @@
 import Link from "next/link";
 import { QuestionsTable } from "@/components/admin/QuestionsTable";
+import { loadNodes } from "@/lib/admin-nodes";
 import { serverApi } from "@/lib/server-api";
-import type { PracticeSubject, QuestionAdminPage } from "@/lib/types";
+import type { QuestionAdminPage } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function QuestionsPage() {
-  const [data, subjects] = await Promise.all([
-    serverApi<QuestionAdminPage>("/admin/questions?status=all&limit=25"),
-    // Best effort: only subjects that already have published questions are listed here.
-    serverApi<{ subjects: PracticeSubject[] }>("/practice/subjects").then((r) => r.subjects, () => [] as PracticeSubject[]),
-  ]);
+  const [data, nodes] = await Promise.all([serverApi<QuestionAdminPage>("/admin/questions?status=all&limit=25"), loadNodes()]);
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -27,7 +24,7 @@ export default async function QuestionsPage() {
           </Link>
         </div>
       </div>
-      <QuestionsTable initial={data} subjects={subjects} />
+      <QuestionsTable initial={data} nodes={nodes} />
     </div>
   );
 }

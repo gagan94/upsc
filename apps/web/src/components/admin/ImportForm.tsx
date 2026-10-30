@@ -20,9 +20,15 @@ export function ImportForm() {
     if (!file) return;
     setError(null);
     setResult(null);
+    if (file.size > MAX_BYTES) {
+      setText("");
+      setError("The file is larger than 5 MB. Split it into smaller files.");
+      return;
+    }
     try {
       setText(await file.text());
     } catch {
+      setText("");
       setError("Couldn't read that file.");
     }
   }

@@ -42,7 +42,6 @@ describe("toBody", () => {
     const body = toBody({ ...ok(), explanation: " Because. ", reasoning: { A: "yes", B: "", C: "", D: "" }, topic: " " });
     expect(body).toMatchObject({
       format: "single",
-      statements: undefined,
       explanation: "Because.",
       optionReasoning: { A: "yes" },
       misconception: null,
@@ -51,6 +50,7 @@ describe("toBody", () => {
       pyqYear: null,
       pyqPaper: null,
     });
+    expect(body).not.toHaveProperty("statements");
     expect(body.options).toEqual([
       { key: "A", text: "Ganga" },
       { key: "B", text: "Godavari" },

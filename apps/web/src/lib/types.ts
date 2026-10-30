@@ -277,6 +277,17 @@ export type NewQuestion = Omit<
   "id" | "version" | "createdBy" | "createdAt" | "updatedAt" | "status" | "verificationStatus"
 >;
 
+/** One entry of GET /admin/syllabus-nodes (published nodes only). */
+export interface SyllabusNode {
+  id: string;
+  slug: string;
+  title: string;
+  paper: string;
+  examStage: string;
+  level: number;
+  parentId: string | null;
+}
+
 /** GET /admin/questions */
 export interface QuestionAdminPage {
   questions: QuestionAdminView[];

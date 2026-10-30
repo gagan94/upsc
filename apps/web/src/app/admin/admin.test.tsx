@@ -110,12 +110,20 @@ describe("admin layout", () => {
 });
 
 describe("admin overview", () => {
-  it("links to users and plans", () => {
-    render(<AdminHome />);
+  it("links admins to questions, reports, users and plans", async () => {
+    serverApi.mockResolvedValue({ user: admin });
+    render(await AdminHome());
     expect(screen.getByRole("heading", { level: 1, name: "Admin" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Questions/ })).toHaveAttribute("href", "/admin/questions");
     expect(screen.getByRole("link", { name: /Users/ })).toHaveAttribute("href", "/admin/users");
     expect(screen.getByRole("link", { name: /Plans & entitlements/ })).toHaveAttribute("href", "/admin/plans");
     expect(screen.getByText("Other sections arrive in later phases.")).toBeInTheDocument();
+  });
+
+  it("shows content editors only the question cards", async () => {
+    serverApi.mockResolvedValue({ user: { ...admin, roles: ["content_editor"] } });
+    render(await AdminHome());
+    expect(screen.getAllByRole("link").map((l) => l.getAttribute("href"))).toEqual(["/admin/questions", "/admin/question-reports"]);
   });
 });
 

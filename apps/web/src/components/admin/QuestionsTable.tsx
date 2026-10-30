@@ -7,20 +7,23 @@ import { Field } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
 import { apiFetch } from "@/lib/api";
 import { buildListQuery, type ListFilters } from "@/lib/question-form";
-import type { PracticeSubject, QuestionAdminPage, QuestionAdminView } from "@/lib/types";
+import { nodeLabel, orderNodes } from "@/lib/syllabus";
+import type { QuestionAdminPage, QuestionAdminView, SyllabusNode } from "@/lib/types";
+import { NodesError } from "./NodesError";
 import { StatusBadge, VerificationBadge } from "./StatusBadge";
 
 const DEFAULTS: ListFilters = { status: "all", subjectNodeId: "", sourceType: "", q: "" };
 const SOURCE_LABEL: Record<string, string> = { platform: "Platform", pyq: "Previous year", ai_generated: "AI generated" };
 
-export function QuestionsTable({ initial, subjects }: { initial: QuestionAdminPage; subjects: PracticeSubject[] }) {
+export function QuestionsTable({ initial, nodes }: { initial: QuestionAdminPage; nodes: SyllabusNode[] | null }) {
   const [rows, setRows] = useState<QuestionAdminView[]>(initial.questions);
   const [cursor, setCursor] = useState(initial.nextCursor);
   const [draft, setDraft] = useState<ListFilters>(DEFAULTS);
   const [applied, setApplied] = useState<ListFilters>(DEFAULTS);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const titleOf = (id: string) => subjects.find((s) => s.id === id)?.title ?? `${id.slice(0, 8)}…`;
+  const byId = new Map((nodes ?? []).map((n) => [n.id, n]));
+  const titleOf = (id: string) => (byId.has(id) ? nodeLabel(byId.get(id)!) : `${id.slice(0, 8)}…`);
 
   async function apply() {
     setLoading(true);
@@ -56,6 +59,7 @@ export function QuestionsTable({ initial, subjects }: { initial: QuestionAdminPa
 
   return (
     <div className="mt-4">
+      {!nodes && <NodesError />}
       <form
         className="grid gap-3 rounded-card border border-border bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4"
         onSubmit={(e) => {
@@ -78,7 +82,7 @@ export function QuestionsTable({ initial, subjects }: { initial: QuestionAdminPa
           label="Subject"
           value={draft.subjectNodeId}
           onChange={(e) => setDraft({ ...draft, subjectNodeId: e.target.value })}
-          options={[{ value: "", label: "All subjects" }, ...subjects.map((s) => ({ value: s.id, label: s.title }))]}
+          options={[{ value: "", label: "All subjects" }, ...orderNodes(nodes ?? []).map((n) => ({ value: n.id, label: nodeLabel(n) }))]}
         />
         <Select
           label="Source"

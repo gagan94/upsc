@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Banner } from "@/components/ui/Banner";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
@@ -9,6 +9,7 @@ import { Select } from "@/components/ui/Select";
 import { ApiError, apiFetch } from "@/lib/api";
 import {
   OPTION_KEYS,
+  diffBody,
   emptyForm,
   fromQuestion,
   publishBlockers,
@@ -16,27 +17,30 @@ import {
   validateForm,
   type QuestionFormValues,
 } from "@/lib/question-form";
-import type { OptionKey, PracticeSubject, QuestionAdminView } from "@/lib/types";
+import { nodeLabel, orderNodes } from "@/lib/syllabus";
+import type { OptionKey, QuestionAdminView, SyllabusNode } from "@/lib/types";
+import { NodesError } from "./NodesError";
 import { StatusBadge, VerificationBadge } from "./StatusBadge";
-
-const OTHER = "__other__";
 
 function prettyMissing(m: unknown): string {
   const s = String(m);
   return s.startsWith("optionReasoning.") ? `reasoning for ${s.slice("optionReasoning.".length)}` : s;
 }
 
-export function QuestionForm({ subjects, question }: { subjects: PracticeSubject[]; question?: QuestionAdminView }) {
+export function QuestionForm({ nodes, question }: { nodes: SyllabusNode[] | null; question?: QuestionAdminView }) {
   const router = useRouter();
   const [saved, setSaved] = useState<QuestionAdminView | undefined>(question);
   const [v, setV] = useState<QuestionFormValues>(() => (question ? fromQuestion(question) : emptyForm()));
-  const [otherSubject, setOtherSubject] = useState(
-    () => subjects.length === 0 || (!!question && !subjects.some((s) => s.id === question.subjectNodeId)),
-  );
   const [reason, setReason] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [banner, setBanner] = useState<{ tone: "error" | "success"; text: string } | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const [focusTick, setFocusTick] = useState(0);
+  // Move focus to the result banner after a lifecycle action so keyboard users keep their place.
+  useEffect(() => {
+    if (focusTick) bannerRef.current?.focus();
+  }, [focusTick]);
 
   const set = <K extends keyof QuestionFormValues>(k: K, val: QuestionFormValues[K]) => setV((p) => ({ ...p, [k]: val }));
   const dirty = !!saved && JSON.stringify(v) !== JSON.stringify(fromQuestion(saved));
@@ -77,8 +81,11 @@ export function QuestionForm({ subjects, question }: { subjects: PracticeSubject
         router.push(`/admin/questions/${q.id}`);
         return;
       }
-      const body: Record<string, unknown> = { ...toBody(v), statements: v.format === "statements" ? toBody(v).statements : null };
-      if (keyChanged) body.reason = reason.trim();
+      const body = diffBody(v, saved, keyChanged ? reason.trim() : undefined);
+      if (!body) {
+        setBanner({ tone: "success", text: "No changes to save." });
+        return;
+      }
       const { question: q } = await apiFetch<{ question: QuestionAdminView }>(`/admin/questions/${saved.id}`, {
         method: "PATCH",
         body: JSON.stringify(body),
@@ -107,8 +114,10 @@ export function QuestionForm({ subjects, question }: { subjects: PracticeSubject
       setSaved(q);
       setV((p) => (dirty ? p : fromQuestion(q)));
       setBanner({ tone: "success", text: kind === "publish" ? "Published." : kind === "retire" ? "Retired." : "Verified." });
+      setFocusTick((t) => t + 1);
     } catch (e) {
       fail(e);
+      setFocusTick((t) => t + 1);
     } finally {
       setBusy(null);
     }
@@ -132,11 +141,8 @@ export function QuestionForm({ subjects, question }: { subjects: PracticeSubject
     }
   }
 
-  const subjectOptions = [
-    { value: "", label: "Choose a subject" },
-    ...subjects.map((s) => ({ value: s.id, label: s.title })),
-    { value: OTHER, label: "Other (enter a syllabus node id)" },
-  ];
+  if (!nodes) return <NodesError />;
+  const subjectOptions = [{ value: "", label: "Choose a subject" }, ...orderNodes(nodes).map((n) => ({ value: n.id, label: nodeLabel(n) }))];
 
   return (
     <form
@@ -154,7 +160,11 @@ export function QuestionForm({ subjects, question }: { subjects: PracticeSubject
           <span className="rounded-control border border-border bg-bg px-2 py-0.5 text-xs font-semibold">Version {saved.version}</span>
         </div>
       )}
-      {banner && <Banner tone={banner.tone}>{banner.text}</Banner>}
+      {banner && (
+        <div ref={bannerRef} tabIndex={-1} className="outline-none focus-visible:outline-2 focus-visible:outline-primary">
+          <Banner tone={banner.tone}>{banner.text}</Banner>
+        </div>
+      )}
 
       <Select
         label="Format"
@@ -196,7 +206,8 @@ export function QuestionForm({ subjects, question }: { subjects: PracticeSubject
       )}
 
       <fieldset className="flex flex-col gap-4">
-        <legend className="text-sm font-semibold">Options (exactly four; mark the correct one)</legend>
+        <legend id="options-legend" className="text-sm font-semibold">Options (exactly four; mark the correct one)</legend>
+        <div role="radiogroup" aria-labelledby="options-legend" className="flex flex-col gap-4">
         {OPTION_KEYS.map((k: OptionKey) => (
           <div key={k} className="flex flex-col gap-2 rounded-card border border-border bg-surface p-3">
             <Field
@@ -225,6 +236,7 @@ export function QuestionForm({ subjects, question }: { subjects: PracticeSubject
             />
           </div>
         ))}
+        </div>
         {errors.correctOption && <p role="alert" className="text-xs font-semibold text-danger">{errors.correctOption}</p>}
       </fieldset>
 
@@ -266,29 +278,13 @@ export function QuestionForm({ subjects, question }: { subjects: PracticeSubject
         <Field label="GS paper" value={v.gsPaper} onChange={(e) => set("gsPaper", e.target.value)} error={errors.gsPaper} />
         <Select
           label="Subject"
-          value={otherSubject ? OTHER : v.subjectNodeId}
-          onChange={(e) => {
-            if (e.target.value === OTHER) setOtherSubject(true);
-            else {
-              setOtherSubject(false);
-              set("subjectNodeId", e.target.value);
-            }
-          }}
+          value={v.subjectNodeId}
+          onChange={(e) => set("subjectNodeId", e.target.value)}
           options={subjectOptions}
-          error={otherSubject ? null : errors.subjectNodeId}
+          error={errors.subjectNodeId}
         />
         <Field label="Topic" value={v.topic} onChange={(e) => set("topic", e.target.value)} error={errors.topic} />
       </div>
-      {otherSubject && (
-        <Field
-          label="Syllabus node id"
-          hint="Only subjects that already have published questions are listed. Paste the syllabus node id (UUID) for any other subject."
-          value={v.subjectNodeId}
-          onChange={(e) => set("subjectNodeId", e.target.value)}
-          error={errors.subjectNodeId}
-        />
-      )}
-
       <div className="grid gap-3 sm:grid-cols-3">
         <Select
           label="Source type"
@@ -301,7 +297,7 @@ export function QuestionForm({ subjects, question }: { subjects: PracticeSubject
           ]}
         />
         <Field label="PYQ year" inputMode="numeric" value={v.pyqYear} onChange={(e) => set("pyqYear", e.target.value)} error={errors.pyqYear} />
-        <Field label="PYQ paper" value={v.pyqPaper} onChange={(e) => set("pyqPaper", e.target.value)} />
+        <Field label="PYQ paper" value={v.pyqPaper} onChange={(e) => set("pyqPaper", e.target.value)} error={errors.pyqPaper} />
       </div>
 
       <div className="flex flex-wrap gap-3">

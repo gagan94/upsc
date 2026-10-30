@@ -39,11 +39,13 @@ import ImportQuestionsPage from "./import/page";
 import QuestionReportsPage from "../question-reports/page";
 
 const user = (roles: string[]) => ({ id: "a", email: "a@x.co", name: "Ed", roles, timezone: "Asia/Kolkata", locale: "en" });
-const subjects = [{ id: "n1", title: "Geography", gsPaper: "GS1", publishedCount: 1, pyqVerifiedCount: 0 }];
+const NID = "0190b3a0-0000-7000-8000-000000000001";
+const QID = "0190b3a0-0000-7000-8000-0000000000aa";
+const nodes = [{ id: NID, slug: "geo", title: "Geography", paper: "GS1", examStage: "prelims", level: 3, parentId: null }];
 const q = {
   id: "q1", format: "single", stem: "A stem", statements: null,
   options: ["A", "B", "C", "D"].map((key) => ({ key, text: key })), correctOption: "A", explanation: "", optionReasoning: {},
-  misconception: null, difficulty: "easy", subjectNodeId: "n1", topic: null, gsPaper: "GS1", sourceType: "platform", pyqYear: null,
+  misconception: null, difficulty: "easy", subjectNodeId: NID, topic: null, gsPaper: "GS1", sourceType: "platform", pyqYear: null,
   pyqPaper: null, verificationStatus: "unverified", status: "draft", version: 1, createdBy: null, createdAt: "2026-10-01T00:00:00Z", updatedAt: "2026-10-01T00:00:00Z",
 };
 
@@ -69,26 +71,35 @@ describe("question bank access", () => {
 
 describe("question pages", () => {
   it("list page fetches status=all with a page size and the subjects, and links to new/import/reports", async () => {
-    serverApi.mockImplementation(async (p: string) => (p.startsWith("/practice") ? { subjects } : { questions: [q], nextCursor: null }));
+    serverApi.mockImplementation(async (p: string) => (p.startsWith("/admin/syllabus") ? { nodes } : { questions: [q], nextCursor: null }));
     render(await QuestionsPage());
     expect(serverApi).toHaveBeenCalledWith("/admin/questions?status=all&limit=25");
     expect(screen.getByRole("link", { name: "New question" })).toHaveAttribute("href", "/admin/questions/new");
     expect(screen.getByRole("link", { name: "Import" })).toHaveAttribute("href", "/admin/questions/import");
     expect(screen.getByRole("link", { name: "Reports" })).toHaveAttribute("href", "/admin/question-reports");
-    expect(screen.getAllByText("Geography").length).toBeGreaterThan(1); // filter option + row subject
+    expect(screen.getAllByText("Geography · GS Paper I").length).toBeGreaterThan(1); // filter option + row subject
   });
 
-  it("list page still renders when the subject list fails", async () => {
+  it("list page still renders, with an error and retry, when the subject list fails", async () => {
     serverApi.mockImplementation(async (p: string) => {
-      if (p.startsWith("/practice")) throw new ApiError(500, "internal", "x");
+      if (p.startsWith("/admin/syllabus")) throw new ApiError(500, "internal", "x");
       return { questions: [], nextCursor: null };
     });
     render(await QuestionsPage());
     expect(screen.getByText("No questions yet")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("couldn't load the subject list");
+    expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
+  });
+
+  it("form pages show the error and no form when the subject list fails", async () => {
+    serverApi.mockRejectedValue(new ApiError(500, "internal", "x"));
+    render(await NewQuestionPage());
+    expect(screen.getByRole("alert")).toHaveTextContent("couldn't load the subject list");
+    expect(screen.queryByRole("button", { name: "Create question" })).toBeNull();
   });
 
   it("new and import pages render their forms", async () => {
-    serverApi.mockResolvedValue({ subjects });
+    serverApi.mockResolvedValue({ nodes });
     render(await NewQuestionPage());
     expect(screen.getByRole("button", { name: "Create question" })).toBeInTheDocument();
     render(<ImportQuestionsPage />);
@@ -96,12 +107,16 @@ describe("question pages", () => {
   });
 
   it("edit page loads the question and 404s for an unknown id", async () => {
-    serverApi.mockImplementation(async (p: string) => (p.startsWith("/practice") ? { subjects } : { question: q }));
-    render(await EditQuestionPage({ params: Promise.resolve({ id: "q1" }) }));
-    expect(serverApi).toHaveBeenCalledWith("/admin/questions/q1");
+    serverApi.mockImplementation(async (p: string) => (p.startsWith("/admin/syllabus") ? { nodes } : { question: q }));
+    render(await EditQuestionPage({ params: Promise.resolve({ id: QID }) }));
+    expect(serverApi).toHaveBeenCalledWith(`/admin/questions/${QID}`);
     expect(screen.getByRole("button", { name: "Save changes" })).toBeInTheDocument();
+    serverApi.mockReset();
     serverApi.mockRejectedValue(new ApiError(404, "not_found", "x"));
+    await expect(EditQuestionPage({ params: Promise.resolve({ id: QID }) })).rejects.toThrow("NEXT_NOT_FOUND");
+    serverApi.mockClear();
     await expect(EditQuestionPage({ params: Promise.resolve({ id: "zz" }) })).rejects.toThrow("NEXT_NOT_FOUND");
+    expect(serverApi).not.toHaveBeenCalled();
   });
 
   it("reports page lists open reports", async () => {
