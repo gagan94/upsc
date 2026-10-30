@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PlannerTabs, PLANNER_VIEWS, type PlannerViewId } from "@/components/planner/PlannerTabs";
 import { BacklogView } from "@/components/planner/BacklogView";
 import { TodayView } from "@/components/planner/TodayView";
@@ -85,7 +86,12 @@ export default async function PlannerPage({ searchParams }: { searchParams: Prom
     <div className="flex flex-col gap-4">
       <div>
         <h1 className="text-2xl font-bold text-text">Planner</h1>
-        <p className="mt-1 text-sm text-muted">Plan your study days and track what you finish.</p>
+        <p className="mt-1 text-sm text-muted">
+          Plan your study days and track what you finish.{" "}
+          <Link href="/planner/sessions" className="font-semibold text-primary hover:underline">
+            Study session history
+          </Link>
+        </p>
       </div>
       <PlannerTabs view={view}>
         {data === null ? (

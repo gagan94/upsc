@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Modal } from "@/components/ui/Modal";
+import { useStartSession } from "@/components/study/StudySessionProvider";
 import type { TaskView } from "@/lib/types";
 import { RescheduleDialog } from "./RescheduleDialog";
 
@@ -34,12 +35,22 @@ export function TaskActions({
   const rootRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
   const isOpenTask = task.status === "todo" || task.status === "in_progress";
+  const openStart = useStartSession();
 
   const items: { label: string; run: () => void }[] = [
     ...(isOpenTask
       ? [
           { label: "Complete", run: () => setDialog("complete") },
           { label: "Skip", run: () => handlers.onSkip(task) },
+        ]
+      : []),
+    ...(isOpenTask && openStart
+      ? [
+          {
+            label: "Start session",
+            run: () =>
+              openStart({ taskId: task.id, title: task.title, subjectNodeId: task.subjectNodeId, subjectTitle: task.subjectTitle }),
+          },
         ]
       : []),
     { label: "Reschedule", run: () => setDialog("reschedule") },

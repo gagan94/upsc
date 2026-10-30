@@ -137,11 +137,25 @@ export interface StudySessionView {
 }
 /** GET /study-sessions (ended sessions) */
 export interface EndedStudySessionView extends StudySessionView {
+  idleSeconds?: number;
   endedAt?: string | null;
-  endReason?: "target_reached" | "user" | null;
+  endReason?: "target_reached" | "user" | "recovered" | "discarded" | null;
   focusRating?: number | null;
   notes?: string | null;
 }
+/** POST /study-sessions body */
+export interface StartSessionInput {
+  plannedMin: number;
+  taskId?: string;
+  subjectNodeId?: string;
+}
+/** POST /study-sessions/:id/end body */
+export interface EndSessionInput {
+  focusRating?: number;
+  notes?: string;
+  completeTask?: boolean;
+}
+export type RecoverAction = "resume" | "end" | "discard";
 
 /* ---- Goals, progress, home ---- */
 export interface GoalsView {

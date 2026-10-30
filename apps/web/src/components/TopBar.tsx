@@ -2,6 +2,7 @@
 
 import { forwardRef } from "react";
 import type { UserView } from "@/lib/types";
+import { SessionBar } from "./study/SessionBar";
 import { Icon } from "./Icon";
 import { UserMenu } from "./UserMenu";
 
@@ -35,6 +36,7 @@ export const TopBar = forwardRef<HTMLButtonElement, Props>(function TopBar(
         </span>
       </div>
       <div className="ml-auto flex items-center gap-3">
+        <SessionBar />
         <label className="hidden items-center gap-2 rounded-control border border-border bg-bg px-3 py-2 text-sm text-muted md:flex md:w-64 lg:w-80">
           <Icon name="search" size={16} />
           <input

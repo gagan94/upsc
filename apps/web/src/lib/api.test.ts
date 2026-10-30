@@ -64,4 +64,13 @@ describe("apiFetch", () => {
     expect(err.code).toBe("network_error");
     expect(err.status).toBe(502);
   });
+
+  it("keeps extra envelope fields in details", async () => {
+    fetchMock.mockResolvedValue(
+      json({ error: { code: "session_conflict", message: "x", active: { id: "s1" } } }, 409),
+    );
+    const err = (await apiFetch("/study-sessions").catch((e: unknown) => e)) as ApiError;
+    expect(err.code).toBe("session_conflict");
+    expect(err.details).toEqual({ active: { id: "s1" } });
+  });
 });

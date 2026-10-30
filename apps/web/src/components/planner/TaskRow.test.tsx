@@ -3,6 +3,7 @@ import userEvent from "./user-shim";
 import { describe, expect, it, vi } from "vitest";
 import { TaskRow } from "./TaskRow";
 import { task } from "./fixtures";
+import { StartCtxForTest } from "@/components/study/StudySessionProvider";
 
 const handlers = () => ({
   onComplete: vi.fn(),
@@ -48,5 +49,31 @@ describe("TaskRow", () => {
     await userEvent.click(screen.getByRole("button", { name: /Actions for/ }));
     await userEvent.keyboard("{Escape}");
     expect(screen.queryByRole("menu")).toBeNull();
+  });
+
+  it("offers Start session for open tasks inside a session provider, prefilled with the task", async () => {
+    const open = vi.fn();
+    render(
+      <StartCtxForTest value={open}>
+        <TaskRow task={task({ subjectNodeId: "n1", subjectTitle: "Polity" })} tz="Asia/Kolkata" {...handlers()} />
+      </StartCtxForTest>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: /Actions for/ }));
+    await userEvent.click(screen.getByRole("menuitem", { name: "Start session" }));
+    expect(open).toHaveBeenCalledWith({ taskId: "t1", title: "Read Laxmikanth ch 3", subjectNodeId: "n1", subjectTitle: "Polity" });
+  });
+
+  it("does not offer Start session for completed tasks or outside the provider", async () => {
+    const { unmount } = render(
+      <StartCtxForTest value={vi.fn()}>
+        <TaskRow task={task({ status: "completed" })} tz="Asia/Kolkata" {...handlers()} />
+      </StartCtxForTest>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: /Actions for/ }));
+    expect(screen.queryByRole("menuitem", { name: "Start session" })).toBeNull();
+    unmount();
+    render(<TaskRow task={task()} tz="Asia/Kolkata" {...handlers()} />);
+    await userEvent.click(screen.getByRole("button", { name: /Actions for/ }));
+    expect(screen.queryByRole("menuitem", { name: "Start session" })).toBeNull();
   });
 });
