@@ -25,11 +25,11 @@ function without(s: Lists, id: string): Lists {
 }
 
 /** Remove the task wherever it is, then file it where it belongs for `date` in `tz`. */
-function place(s: Lists, t: TaskView, date: string, tz: string): Lists {
+function place(s: Lists, t: TaskView, date: string, tz: string, to: string): Lists {
   const n = without(s, t.id);
   if (!t.scheduledStart) return { ...n, unscheduled: [...n.unscheduled, t] };
   const day = localDate(new Date(t.scheduledStart), tz);
-  if (day === date) return { ...n, tasks: [...n.tasks, t].sort(byStart) };
+  if (day >= date && day <= to) return { ...n, tasks: [...n.tasks, t].sort(byStart) };
   if (day < date && (t.status === "todo" || t.status === "in_progress")) return { ...n, overdue: [...n.overdue, t].sort(byStart) };
   return n;
 }
@@ -39,11 +39,14 @@ const post = (path: string, body?: unknown) =>
 
 export function usePlannerMutations({
   date,
+  to = date,
   tz,
   subjects,
   initial,
 }: {
   date: string;
+  /** Last day (inclusive) of the visible range; defaults to `date` (a single day). */
+  to?: string;
   tz: string;
   subjects: SubjectOption[];
   initial: Lists;
@@ -58,7 +61,7 @@ export function usePlannerMutations({
   };
   useEffect(() => clearTimer, []);
 
-  const put = useCallback((t: TaskView) => setLists((s) => place(s, t, date, tz)), [date, tz]);
+  const put = useCallback((t: TaskView) => setLists((s) => place(s, t, date, tz, to)), [date, tz, to]);
 
   /** Apply `next` now; on failure put `orig` back and raise the banner. */
   const optimistic = useCallback(
