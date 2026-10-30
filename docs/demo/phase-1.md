@@ -1,9 +1,9 @@
 # Phase 1 demo runbook: Plan & practise
 
-> **STATUS: PENDING LIVE VERIFICATION**
-> Implemented on branch `phase-1-build`; unit/integration suites and type checks pass locally. Not yet done against live services: `db:migrate` and `seed` on Neon/Supabase, `./scripts/deploy.sh`, `scripts/smoke.sh`, and `scripts/e2e/phase1.mjs`. The controller fills in this block (date, commit, URL, smoke and e2e results) after the deploy; until then treat every step below as untested live.
->
-> Live result: _(to be filled in: date, commit, web URL, SMOKE OK?, e2e summary pass/fail counts)_
+> **STATUS: LIVE (2026-10-30).** Web: https://upsc-web-rho.vercel.app · API: https://upsc-api.onrender.com
+> Verified live: migrations 0003–0009 and the seed on Neon/Supabase, `scripts/smoke.sh` = SMOKE OK (10/10), and the browser click-through `scripts/e2e/phase1.mjs` = **30 passed, 0 failed** (new-student onboarding → planner → study session → practice test → results/review → bookmarks; student Home/planner/mistakes/settings; admin question bank create/publish/import; student kept out of admin).
+> The first live run found a production-only crash (`/planner` and `/prelims` → 500: server pages imported values from "use client" modules). Fixed on `fix/server-client-boundary`, with a static guard test (`apps/web/src/lib/server-client-boundary.test.ts`) so it cannot recur unnoticed.
+> Not verified: phone-width layouts, Figma fidelity of the new screens, real-Postgres concurrency (only PGlite), tab-close autosave (best-effort).
 
 Setup of the stack (Supabase, Neon, Render, Vercel) is unchanged: see `docs/demo/phase-0.md`. Phase 1 adds database migrations and new seed data. `./scripts/deploy.sh` now runs them in this order: **tests → migrate → seed → Render → Vercel → smoke** (`--dry-run` prints the six steps). The seed is mandatory: the five new feature keys (`planner.basic`, `study.session`, `practice.session`, `practice.pyq`, `practice.mistake_notebook`) reach the free plan, and the practice syllabus nodes and 100 sample questions reach the database, only through it; without it `POST /practice/sessions` and `POST /study-sessions` return 402 and the smoke test fails. The seed needs `SUPABASE_SERVICE_ROLE_KEY` on the deploying machine only (never on Render or Vercel), and must not run with `NODE_ENV=production`. Re-seeding is safe: it updates the catalog (subjects now point at their Prelims syllabus nodes) and question stems in place.
 
