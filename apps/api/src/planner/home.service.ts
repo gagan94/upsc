@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { DB, Db } from '../db/db.module';
 import { dayRange, localDateOf } from '../common/dates';
 import type { UserView } from '../identity/users.service';
 import { PreparationService } from '../me/preparation.service';
@@ -12,6 +13,7 @@ const MS_PER_DAY = 86400000;
 @Injectable()
 export class HomeService {
   constructor(
+    @Inject(DB) private readonly db: Db,
     private readonly prep: PreparationService,
     private readonly goals: GoalsService,
     private readonly tasks: TasksService,
@@ -27,7 +29,7 @@ export class HomeService {
       this.tasks.list(user.id, { from: start, to: end }),
       this.goals.progress(user.id, tz),
       this.goals.streakDays(user.id, tz),
-      homePracticeSummary(user.id),
+      homePracticeSummary(this.db, user.id),
     ]);
     const todayMs = Date.parse(`${today}T00:00:00Z`);
     return {

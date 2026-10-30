@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, asc, eq, inArray, or, sql, SQL } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNull, or, sql, SQL } from 'drizzle-orm';
 import { AppError } from '../common/errors';
 import { DB, Db } from '../db/db.module';
 import { newId } from '../db/ids';
-import { questions, questionVersions, sessionQuestions, sessions, syllabusNodes } from '../db/schema';
+import { mistakeEntries, questions, questionVersions, sessionQuestions, sessions, syllabusNodes } from '../db/schema';
 import type { OptionKey, QuestionOption, SessionConfig, SessionSummary } from '../db/schema/practice';
 import { CONFIDENCE_LEVELS } from '../db/schema/practice';
 import { bookmarkedQuestionIds } from './bookmarks-seam';
@@ -257,7 +257,7 @@ export class SessionsService {
   }
 
   /** Load the caller's session; an in-progress one past `ends_at` is auto-submitted (once) first. */
-  private async closeIfOverdue(userId: string, id: string) {
+  async closeIfOverdue(userId: string, id: string) {
     const row = await this.load(this.db, userId, id);
     if (row.s.status !== 'in_progress' || !row.overdue) return row;
     await this.db.transaction(async (tx) => {
@@ -324,6 +324,7 @@ export class SessionsService {
         .set({ correct: p.correct, marks: String(p.marks) })
         .where(and(eq(sessionQuestions.sessionId, s.id), eq(sessionQuestions.ordinal, q.ordinal)));
     }
+    await this.recordMistakes(tx, s.userId, qs, scored.perQuestion);
     const topics = new Map<string, SessionSummary['byTopic'][number]>();
     for (const [i, q] of qs.entries()) {
       const t = topics.get(q.subjectNodeId) ?? { subjectNodeId: q.subjectNodeId, title: q.subjectTitle, correct: 0, total: 0 };
@@ -347,11 +348,41 @@ export class SessionsService {
       .where(eq(sessions.id, s.id));
   }
 
+  /** Mistake notebook updates; runs inside finalize (same lock), so each session contributes exactly once. */
+  private async recordMistakes(
+    tx: Tx,
+    userId: string,
+    qs: { questionId: string; selected: OptionKey | null; confidence: Confidence | null }[],
+    per: { correct: boolean | null }[],
+  ): Promise<void> {
+    for (const [i, q] of qs.entries()) {
+      const correct = per[i].correct;
+      if (q.selected === null || correct === null) continue;
+      const key = { userId, questionId: q.questionId };
+      if (!correct) {
+        await tx
+          .insert(mistakeEntries)
+          .values({ ...key, reason: 'incorrect', timesWrong: 1 })
+          .onConflictDoUpdate({
+            target: [mistakeEntries.userId, mistakeEntries.questionId],
+            set: { reason: 'incorrect', timesWrong: sql`${mistakeEntries.timesWrong} + 1`, lastSeen: sql`now()`, resolvedAt: null },
+          });
+      } else if (q.confidence === 'guess') {
+        await tx.insert(mistakeEntries).values({ ...key, reason: 'guessed', timesWrong: 1 }).onConflictDoNothing();
+      } else {
+        await tx
+          .update(mistakeEntries)
+          .set({ resolvedAt: sql`now()` })
+          .where(and(eq(mistakeEntries.userId, userId), eq(mistakeEntries.questionId, q.questionId), isNull(mistakeEntries.resolvedAt)));
+      }
+    }
+  }
+
   /** Results are read back from stored rows only, so every call returns the identical payload. */
   private async buildResults(userId: string, id: string): Promise<ResultsView> {
     const { s, timeTaken } = await this.load(this.db, userId, id);
     const qs = await this.questionRows(this.db, id);
-    const bookmarked = await bookmarkedQuestionIds(userId, qs.map((q) => q.questionId));
+    const bookmarked = await bookmarkedQuestionIds(this.db, userId, qs.map((q) => q.questionId));
     const byTopic = s.summary?.byTopic ?? [];
     const accuracy = num(s.accuracy) ?? 0;
     const incorrect = s.incorrectCount ?? 0;

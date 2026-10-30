@@ -138,3 +138,56 @@ export const sessionQuestions = practice.table(
   },
   (t) => [primaryKey({ columns: [t.sessionId, t.ordinal] }), index('session_questions_question_idx').on(t.questionId)],
 );
+
+export const MISTAKE_REASONS = ['incorrect', 'guessed'] as const;
+export const REPORT_TYPES = ['wrong_key', 'typo', 'ambiguous', 'other'] as const;
+
+export const bookmarks = practice.table(
+  'bookmarks',
+  {
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    questionId: uuid('question_id')
+      .notNull()
+      .references(() => questions.id),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.questionId] })],
+);
+
+export const mistakeEntries = practice.table(
+  'mistake_entries',
+  {
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    questionId: uuid('question_id')
+      .notNull()
+      .references(() => questions.id),
+    reason: text('reason', { enum: MISTAKE_REASONS }).notNull(),
+    timesWrong: integer('times_wrong').notNull().default(1),
+    firstSeen: timestamp('first_seen', { withTimezone: true }).notNull().defaultNow(),
+    lastSeen: timestamp('last_seen', { withTimezone: true }).notNull().defaultNow(),
+    resolvedAt: timestamp('resolved_at', { withTimezone: true }),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.questionId] })],
+);
+
+export const issueReports = practice.table(
+  'issue_reports',
+  {
+    id: uuid('id').primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    questionId: uuid('question_id')
+      .notNull()
+      .references(() => questions.id),
+    type: text('type', { enum: REPORT_TYPES }).notNull(),
+    text: text('text'),
+    status: text('status').notNull().default('open'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('issue_reports_status_created_idx').on(t.status, t.createdAt)],
+);
