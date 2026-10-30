@@ -488,6 +488,48 @@ describe("Workspace timing and integrity (R20)", () => {
     expect(screen.queryByText("00:05 remaining")).not.toBeInTheDocument();
   });
 
+  it("a conflict restore survives a newer refetch that resolves first", async () => {
+    const gets: Array<(d: PracticeSessionDetail) => void> = [];
+    apiFetch.mockImplementation((_p: string, init?: RequestInit) => {
+      if (init?.method === "PUT") return Promise.reject(new ApiError(409, "already_answered", "locked"));
+      return new Promise((r) => gets.push(r));
+    });
+    renderWs();
+    await click(radio(/^A/));
+    await ms(AUTOSAVE_DEBOUNCE_MS); // PUT 409 -> conflict refetch #1 (hangs)
+    expect(gets).toHaveLength(1);
+    await act(async () => void document.dispatchEvent(new Event("visibilitychange"))); // refetch #2
+    expect(gets).toHaveLength(2);
+    const server = detail({ questions: [question(1, { selected: "B" }), question(2), question(3), question(4)] });
+    await act(async () => {
+      gets[1](server);
+      gets[0](server);
+    });
+    expect(radio(/^B/)).toHaveAttribute("aria-checked", "true");
+    expect(radio(/^A/)).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("skips the periodic re-sync while a save is in flight, then resumes", async () => {
+    let release!: () => void;
+    let hang = true;
+    apiFetch.mockImplementation(async (_p: string, init?: RequestInit) => {
+      if (init?.method === "PUT") {
+        if (hang) await new Promise<void>((r) => (release = r));
+        return { saved: true };
+      }
+      return detail({ remainingSeconds: 300 });
+    });
+    renderWs(detail({ remainingSeconds: 900 }));
+    await click(radio(/^A/));
+    await ms(AUTOSAVE_DEBOUNCE_MS); // PUT now hangs
+    await ms(60_000);
+    expect(apiFetch.mock.calls.filter((c) => !c[1]?.method)).toHaveLength(0);
+    hang = false;
+    await act(async () => release());
+    await ms(60_000);
+    expect(apiFetch.mock.calls.filter((c) => !c[1]?.method)).toHaveLength(1);
+  });
+
   it("the submit dialog notes un-Checked learning selections", async () => {
     renderWs(detail({ mode: "learning" }));
     await press("a");

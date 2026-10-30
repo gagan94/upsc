@@ -149,6 +149,9 @@ export function useAutosave(opts: {
     const d = debounce;
     const r = retry;
     const queue = pending.current; // the Map instance never changes
+    // Best-effort only: apiFetch awaits an async getSession(), so on a real tab close this request
+    // will likely never be issued. Tab close relies on the beforeunload warning and the
+    // visibilitychange->hidden flush (the page is still alive then).
     const onPageHide = () => void flushRef.current();
     window.addEventListener("pagehide", onPageHide);
     return () => {
@@ -173,5 +176,8 @@ export function useAutosave(opts: {
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [status]);
 
-  return { status, save, commit, flush };
+  /** True while a save is in flight or edits are waiting to be sent. */
+  const isBusy = useCallback(() => running.current !== null || pending.current.size > 0 || debounce.current !== null, []);
+
+  return { status, save, commit, flush, isBusy };
 }

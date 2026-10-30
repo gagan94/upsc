@@ -80,14 +80,16 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
       const startedAt = performance.now();
       try {
         const fresh = await apiFetch<PracticeSessionDetail>(`/practice/sessions/${id}`);
-        // A response is stale if a newer request started meanwhile, or the set is already being closed.
-        if (seq !== fetchSeq.current || navigated.current || submitLock.current) return;
-        if (fresh.session.status !== "in_progress") return toResults();
-        countdownRef.current?.sync(fresh.session.remainingSeconds, startedAt);
+        // The conflict restore is always applied, whatever order responses arrive in.
         if (replaceOrdinal !== undefined) {
           const q = fresh.questions.find((x) => x.ordinal === replaceOrdinal);
           if (q) patchQuestion(replaceOrdinal, () => sanitize(q, learning));
         }
+        // Only the timer re-anchor and the closing decision are gated: stale if a newer request
+        // started meanwhile, or the set is already being closed.
+        if (seq !== fetchSeq.current || navigated.current || submitLock.current) return;
+        if (fresh.session.status !== "in_progress") return toResults();
+        countdownRef.current?.sync(fresh.session.remainingSeconds, startedAt);
       } catch (e) {
         if (e instanceof ApiError && e.status === 409) toResults();
         // Otherwise keep running on the last known sync; the next response re-syncs.
@@ -108,6 +110,10 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
     onConflict: (ordinal) => void refetch(ordinal),
   });
 
+  const autosaveRef = useRef(autosave);
+  useEffect(() => {
+    autosaveRef.current = autosave;
+  });
   const zeroReached = useRef(false);
   const autoSubmit = useCallback(async () => {
     zeroReached.current = true;
@@ -116,6 +122,7 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
     try {
       // Same ordering as a manual submit: pending edits first. A terminal 409 from the flush
       // (session already closed) navigates and sets `navigated`, so the POST is skipped.
+      // If a non-terminal flush failed we still POST: time is up and the server records what it has.
       await autosave.flush();
       if (navigated.current) return;
       await apiFetch(`/practice/sessions/${id}/submit`, { method: "POST" });
@@ -176,7 +183,10 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
   // Cheap periodic re-sync of the timer from the server.
   useEffect(() => {
     if (initial.session.remainingSeconds === null) return;
-    const t = setInterval(() => void refetch(), RESYNC_MS);
+    // Skipped while saves are running or pending (retried on the next tick) so a re-sync never overlaps them.
+    const t = setInterval(() => {
+      if (!autosaveRef.current.isBusy()) void refetch();
+    }, RESYNC_MS);
     return () => clearInterval(t);
   }, [initial.session.remainingSeconds, refetch]);
 
