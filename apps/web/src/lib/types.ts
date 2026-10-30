@@ -254,7 +254,8 @@ export interface QuestionAdminView {
   options: QuestionOption[];
   correctOption: OptionKey;
   explanation: string;
-  optionReasoning: Record<OptionKey, string>;
+  /** Only the options that have reasoning appear as keys (a draft may have none). */
+  optionReasoning: Partial<Record<OptionKey, string>>;
   misconception: { option: OptionKey; text: string } | null;
   difficulty: Difficulty;
   subjectNodeId: string;
@@ -266,14 +267,44 @@ export interface QuestionAdminView {
   verificationStatus: VerificationStatus;
   status: QuestionStatus;
   version: number;
+  createdBy: string | null;
   createdAt: string;
   updatedAt: string;
 }
+/** POST /admin/questions body (status and verification are server-controlled and ignored). */
 export type NewQuestion = Omit<
   QuestionAdminView,
-  "id" | "version" | "createdAt" | "updatedAt" | "status" | "verificationStatus"
-> &
-  Partial<Pick<QuestionAdminView, "status" | "verificationStatus">>;
+  "id" | "version" | "createdBy" | "createdAt" | "updatedAt" | "status" | "verificationStatus"
+>;
+
+/** One entry of GET /admin/syllabus-nodes (published nodes only). */
+export interface SyllabusNode {
+  id: string;
+  slug: string;
+  title: string;
+  paper: string;
+  examStage: string;
+  level: number;
+  parentId: string | null;
+}
+
+/** GET /admin/questions */
+export interface QuestionAdminPage {
+  questions: QuestionAdminView[];
+  nextCursor: string | null;
+}
+
+/** One entry of GET /admin/question-reports (stem is a short preview). */
+export interface AdminQuestionReport {
+  id: string;
+  questionId: string;
+  userId: string;
+  type: "wrong_key" | "typo" | "ambiguous" | "other";
+  text: string | null;
+  status: string;
+  createdAt: string;
+  stem: string;
+}
 
 export interface QuestionImportResult {
   created: number;

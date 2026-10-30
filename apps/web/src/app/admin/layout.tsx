@@ -28,13 +28,13 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   if (outcome.kind === "unauth") redirect("/auth/signout");
   if (outcome.kind === "error") return <ErrorPanel title={"We couldn't load the admin console"} />;
   const { user } = outcome;
-  if (!user.roles.includes("admin")) redirect("/home");
+  if (!user.roles.some((r) => r === "admin" || r === "content_editor")) redirect("/home");
 
   return (
     <div className="flex min-h-screen bg-bg text-text">
       <aside className="hidden w-64 shrink-0 bg-sidebar md:block">
         <div className="px-7 pt-5 text-lg font-bold text-surface">Admin</div>
-        <AdminNav />
+        <AdminNav roles={user.roles} />
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center justify-between gap-4 border-b border-border bg-surface px-4 py-3">
