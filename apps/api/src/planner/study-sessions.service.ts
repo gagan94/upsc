@@ -173,13 +173,16 @@ export class StudySessionsService {
     return this.transition(userId, id, ACTIVE, set, sql`not ${staleSql}`, { rejectStale: true });
   }
 
-  /** Pause and resume do not credit the time since the last heartbeat. */
+  /**
+   * Pause and resume do not credit the time since the last heartbeat. Like heartbeat, they never revive a
+   * stale session (that would reset last_heartbeat_at): 409 session_stale, row untouched; use recover.
+   */
   pause(userId: string, id: string): Promise<SessionView> {
-    return this.transition(userId, id, ['running'], { status: 'paused', lastHeartbeatAt: touch });
+    return this.transition(userId, id, ['running'], { status: 'paused', lastHeartbeatAt: touch }, sql`not ${staleSql}`, { rejectStale: true });
   }
 
   resume(userId: string, id: string): Promise<SessionView> {
-    return this.transition(userId, id, ['paused'], { status: 'running', lastHeartbeatAt: touch });
+    return this.transition(userId, id, ['paused'], { status: 'running', lastHeartbeatAt: touch }, sql`not ${staleSql}`, { rejectStale: true });
   }
 
   /**

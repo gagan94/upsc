@@ -176,6 +176,39 @@ describe('study sessions', () => {
     expect((await call('get', '/study-sessions/active', 'u-pstale')).body.session).toMatchObject({ status: 'paused', stale: true });
   });
 
+  it('pause on a stale running session is 409 session_stale and changes nothing; recover still works', async () => {
+    const s = await start('u-pausestale');
+    await backdate(s.id, 11 * 60);
+    const before = await rowOf(s.id);
+    const r = await call('post', `/study-sessions/${s.id}/pause`, 'u-pausestale');
+    expect([r.status, r.body.error.code]).toEqual([409, 'session_stale']);
+    expect(await rowOf(s.id)).toEqual(before);
+    expect((await call('get', '/study-sessions/active', 'u-pausestale')).body.session).toMatchObject({ status: 'running', stale: true });
+    const rec = await call('post', `/study-sessions/${s.id}/recover`, 'u-pausestale', { action: 'end' });
+    expect(rec.body.session).toMatchObject({ status: 'ended', endReason: 'recovered' });
+  });
+
+  it('resume on a stale paused session is 409 session_stale and changes nothing; recover resume works', async () => {
+    const s = await start('u-resumestale');
+    await call('post', `/study-sessions/${s.id}/pause`, 'u-resumestale');
+    await backdate(s.id, 11 * 60);
+    const before = await rowOf(s.id);
+    const r = await call('post', `/study-sessions/${s.id}/resume`, 'u-resumestale');
+    expect([r.status, r.body.error.code]).toEqual([409, 'session_stale']);
+    expect(await rowOf(s.id)).toEqual(before);
+    expect((await call('get', '/study-sessions/active', 'u-resumestale')).body.session).toMatchObject({ status: 'paused', stale: true });
+    const rec = await call('post', `/study-sessions/${s.id}/recover`, 'u-resumestale', { action: 'resume' });
+    expect(rec.body.session).toMatchObject({ status: 'running', stale: false });
+  });
+
+  it('pause and resume on fresh sessions still work, and a wrong-state pause is invalid_state', async () => {
+    const s = await start('u-pr-fresh');
+    expect((await call('post', `/study-sessions/${s.id}/pause`, 'u-pr-fresh')).body.session.status).toBe('paused');
+    const again = await call('post', `/study-sessions/${s.id}/pause`, 'u-pr-fresh');
+    expect([again.status, again.body.error.code]).toEqual([409, 'invalid_state']);
+    expect((await call('post', `/study-sessions/${s.id}/resume`, 'u-pr-fresh')).body.session.status).toBe('running');
+  });
+
   it('plain end on a stale session ends at the last heartbeat without crediting the gap', async () => {
     const s = await start('u-endstale');
     await backdate(s.id, 30);
