@@ -15,6 +15,7 @@ import { useCountdown } from "./useCountdown";
 
 const KEYS: OptionKey[] = ["A", "B", "C", "D"];
 const MIN_TIME_DELTA_MS = 1000;
+const RESYNC_MS = 60_000;
 const SAVE_TEXT: Record<SaveStatus, string> = { idle: "", saving: "Saving…", saved: "Saved", error: "Could not save — retrying" };
 
 /** Defence in depth: in test mode the client never holds feedback, whatever a payload carried. */
@@ -71,13 +72,18 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
   }, []);
 
   /** Re-reads the server's view; every response that carries remainingSeconds re-syncs the timer. */
-  const countdownRef = useRef<{ sync: (s: number | null) => void } | null>(null);
+  const countdownRef = useRef<{ sync: (s: number | null, at?: number) => void } | null>(null);
+  const fetchSeq = useRef(0);
   const refetch = useCallback(
     async (replaceOrdinal?: number) => {
+      const seq = ++fetchSeq.current;
+      const startedAt = performance.now();
       try {
         const fresh = await apiFetch<PracticeSessionDetail>(`/practice/sessions/${id}`);
+        // A response is stale if a newer request started meanwhile, or the set is already being closed.
+        if (seq !== fetchSeq.current || navigated.current || submitLock.current) return;
         if (fresh.session.status !== "in_progress") return toResults();
-        countdownRef.current?.sync(fresh.session.remainingSeconds);
+        countdownRef.current?.sync(fresh.session.remainingSeconds, startedAt);
         if (replaceOrdinal !== undefined) {
           const q = fresh.questions.find((x) => x.ordinal === replaceOrdinal);
           if (q) patchQuestion(replaceOrdinal, () => sanitize(q, learning));
@@ -102,10 +108,16 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
     onConflict: (ordinal) => void refetch(ordinal),
   });
 
+  const zeroReached = useRef(false);
   const autoSubmit = useCallback(async () => {
-    if (submitLock.current) return;
+    zeroReached.current = true;
+    if (submitLock.current) return; // a manual submit is running; if it fails, submit() re-triggers this
     submitLock.current = true;
     try {
+      // Same ordering as a manual submit: pending edits first. A terminal 409 from the flush
+      // (session already closed) navigates and sets `navigated`, so the POST is skipped.
+      await autosave.flush();
+      if (navigated.current) return;
       await apiFetch(`/practice/sessions/${id}/submit`, { method: "POST" });
       toResults();
     } catch (e) {
@@ -113,7 +125,7 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
       submitLock.current = false;
       setAutoSubmitFailed(true);
     }
-  }, [id, toResults]);
+  }, [autosave, id, toResults]);
 
   const countdown = useCountdown(initial.session.remainingSeconds, () => void autoSubmit());
   countdownRef.current = countdown;
@@ -160,6 +172,26 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);
   }, [autosave, refetch]);
+
+  // Cheap periodic re-sync of the timer from the server.
+  useEffect(() => {
+    if (initial.session.remainingSeconds === null) return;
+    const t = setInterval(() => void refetch(), RESYNC_MS);
+    return () => clearInterval(t);
+  }, [initial.session.remainingSeconds, refetch]);
+
+  // Move focus to the heading and announce the new position when the question changes (not on mount).
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const [announcement, setAnnouncement] = useState("");
+  const firstRender = useRef(true);
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    headingRef.current?.focus();
+    setAnnouncement(`Question ${idx + 1} of ${total}`);
+  }, [idx, total]);
 
   const select = useCallback(
     (key: OptionKey) => {
@@ -229,6 +261,7 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
       if (!(await autosave.flush())) {
         setSubmitError("Could not save your latest answers. Check your connection, then submit again.");
         submitLock.current = false;
+        if (zeroReached.current) void autoSubmit();
         return;
       }
       await apiFetch(`/practice/sessions/${id}/submit`, { method: "POST" });
@@ -237,10 +270,11 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
       if (e instanceof ApiError && e.status === 409) return toResults();
       setSubmitError("We couldn't submit your answers. Please try again.");
       submitLock.current = false;
+      if (zeroReached.current) void autoSubmit();
     } finally {
       setSubmitting(false);
     }
-  }, [autosave, id, toResults]);
+  }, [autoSubmit, autosave, id, toResults]);
 
   // Keyboard: A-D select, N next, P previous, F flag. Never while typing, with modifiers or over a dialog.
   const keyState = useRef({ select, flag, go, idx, dialogOpen, submitting });
@@ -255,7 +289,10 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
       if ((KEYS as string[]).includes(k)) s.select(k as OptionKey);
       else if (k === "N") s.go(s.idx + 1);
       else if (k === "P") s.go(s.idx - 1);
-      else if (k === "F") s.flag();
+      else if (k === "F") {
+        if (e.repeat) return;
+        s.flag();
+      }
       else return;
       e.preventDefault();
     }
@@ -276,7 +313,7 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
     <div className="flex flex-col gap-4">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-text">{`Practice · Question ${current.ordinal} of ${total}`}</h1>
+          <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-text focus:outline-none focus-visible:outline-2 focus-visible:outline-primary">{`Practice · Question ${current.ordinal} of ${total}`}</h1>
           <p className="text-xs text-muted">{learning ? "Learning mode" : "Test mode"} · Sample questions</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -290,6 +327,8 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
           <Button onClick={openDialog} disabled={submitting}>Submit</Button>
         </div>
       </header>
+
+      <p data-testid="question-announcement" aria-live="polite" role="status" className="sr-only">{announcement}</p>
 
       {note ? <Banner tone="info">{note}</Banner> : null}
       {autoSubmitFailed ? (
@@ -327,6 +366,7 @@ export function Workspace({ initial, note, initialOrdinal }: { initial: Practice
         open={dialogOpen}
         unanswered={unanswered}
         flagged={flagged}
+        unchecked={learning ? qs.filter((q) => q.selected !== null && q.feedback === undefined).length : 0}
         submitting={submitting}
         error={submitError}
         onConfirm={() => void submit()}

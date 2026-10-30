@@ -8,6 +8,7 @@ export function SubmitDialog({
   open,
   unanswered,
   flagged,
+  unchecked,
   submitting,
   error,
   onConfirm,
@@ -16,6 +17,7 @@ export function SubmitDialog({
   open: boolean;
   unanswered: number;
   flagged: number;
+  unchecked: number;
   submitting: boolean;
   error: string | null;
   onConfirm: () => void;
@@ -29,6 +31,9 @@ export function SubmitDialog({
           <li>{`${unanswered} unanswered`}</li>
           <li>{`${flagged} flagged for review`}</li>
         </ul>
+        {unchecked > 0 ? (
+          <p className="text-sm text-muted">{`${unchecked} selected ${unchecked === 1 ? "answer hasn't" : "answers haven't"} been checked and won't be recorded.`}</p>
+        ) : null}
         {error ? <Banner tone="error">{error}</Banner> : null}
         <div className="flex justify-end gap-2">
           <Button variant="secondary" onClick={onClose} disabled={submitting}>Keep working</Button>

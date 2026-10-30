@@ -31,8 +31,9 @@ export function useCountdown(initialSeconds: number | null, onZero: () => void) 
   }, []);
 
   const sync = useCallback(
-    (remainingSeconds: number | null) => {
-      anchor.current = { base: remainingSeconds, at: performance.now() };
+    (remainingSeconds: number | null, at: number = performance.now()) => {
+      // `at` lets a caller anchor at the moment a request was sent, so latency never overstates the time left.
+      anchor.current = { base: remainingSeconds, at };
       if (remainingSeconds === null) setSeconds(null);
       else tick();
     },

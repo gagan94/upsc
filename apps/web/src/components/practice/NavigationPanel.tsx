@@ -31,11 +31,11 @@ export function NavigationPanel({ items, current, onGo }: { items: NavItem[]; cu
           </li>
         ))}
       </ul>
-      <dl className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted" aria-label="Legend">
-        <div className="flex items-center gap-1"><span aria-hidden="true" className="h-3 w-3 rounded-sm bg-primary" />Answered</div>
-        <div className="flex items-center gap-1"><span aria-hidden="true" className="h-3 w-3 rounded-full bg-amber-500" />Flagged</div>
-        <div className="flex items-center gap-1"><span aria-hidden="true" className="h-3 w-3 rounded-sm border border-border" />Remaining</div>
-      </dl>
+      <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted" aria-label="Legend">
+        <li className="flex items-center gap-1"><span aria-hidden="true" className="h-3 w-3 rounded-sm bg-primary" />Answered</li>
+        <li className="flex items-center gap-1"><span aria-hidden="true" className="h-3 w-3 rounded-full bg-amber-500" />Flagged</li>
+        <li className="flex items-center gap-1"><span aria-hidden="true" className="h-3 w-3 rounded-sm border border-border" />Remaining</li>
+      </ul>
     </nav>
   );
 }

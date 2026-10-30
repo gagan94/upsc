@@ -53,6 +53,7 @@ describe("Workspace header and timer", () => {
 
   it("turns amber at 5 minutes and red at 1 minute, announcing each", async () => {
     renderWs(detail({ remainingSeconds: 302 }));
+    apiFetch.mockRejectedValue(new ApiError(0, "network_error", "down")); // periodic re-sync is exercised elsewhere
     const badge = screen.getByTestId("timer-badge");
     expect(badge).toHaveAttribute("data-tone", "normal");
     const live = screen.getByTestId("timer-announcement");
@@ -380,6 +381,118 @@ describe("Workspace learning mode", () => {
   it("offers no Clear in learning mode", () => {
     renderWs(detail({ mode: "learning" }));
     expect(screen.queryByRole("button", { name: "Clear" })).not.toBeInTheDocument();
+  });
+});
+
+describe("Workspace timing and integrity (R20)", () => {
+  const order = () => apiFetch.mock.calls.map((c) => `${c[1]?.method ?? "GET"} ${c[0]}`);
+
+  it("auto-submit at zero PUTs pending edits before the submit POST", async () => {
+    renderWs(detail({ remainingSeconds: 3 }));
+    await ms(2800);
+    await click(radio(/^C/)); // inside the debounce window
+    await ms(300);
+    const o = order();
+    const put = o.findIndex((x) => x.startsWith("PUT"));
+    const post = o.findIndex((x) => x.endsWith("/submit"));
+    expect(put).toBeGreaterThanOrEqual(0);
+    expect(post).toBeGreaterThan(put);
+    expect(submitCalls()).toHaveLength(1);
+    expect(push).toHaveBeenCalledWith(RESULTS);
+  });
+
+  it("submit POST waits for a slow in-flight PUT across concurrent flushes", async () => {
+    let release!: () => void;
+    apiFetch.mockImplementation(async (_p: string, init?: RequestInit) => {
+      if (init?.method === "PUT") {
+        await new Promise<void>((r) => (release = r));
+        return { saved: true };
+      }
+      return {};
+    });
+    renderWs();
+    await press("a");
+    await act(async () => void fireEvent.blur(screen.getByRole("radiogroup", { name: "Answer options" })));
+    const dialog = await (async () => {
+      await click(screen.getByRole("button", { name: "Submit" }));
+      return screen.getByRole("dialog");
+    })();
+    await click(within(dialog).getByRole("button", { name: "Submit now" }));
+    expect(submitCalls()).toHaveLength(0);
+    await act(async () => release());
+    await ms(0);
+    expect(submitCalls()).toHaveLength(1);
+  });
+
+  it("moves focus to the heading and announces the new question, but not on mount", async () => {
+    renderWs();
+    const live = screen.getByTestId("question-announcement");
+    expect(live).toHaveTextContent("");
+    await click(screen.getByRole("button", { name: "Next" }));
+    expect(document.activeElement).toBe(screen.getByRole("heading", { name: /Question 2 of 4/ }));
+    expect(live).toHaveTextContent("Question 2 of 4");
+    await press("p");
+    expect(document.activeElement).toBe(screen.getByRole("heading", { name: /Question 1 of 4/ }));
+    await click(screen.getByRole("button", { name: "Question 3, not answered" }));
+    expect(live).toHaveTextContent("Question 3 of 4");
+  });
+
+  it("retries the zero trigger when a manual submit held the lock and failed", async () => {
+    let posts = 0;
+    apiFetch.mockImplementation(async (p: string, init?: RequestInit) => {
+      if (init?.method === "PUT") return { saved: true };
+      if (p.endsWith("/submit")) {
+        posts++;
+        if (posts === 1) {
+          await new Promise((r) => setTimeout(r, 2000));
+          throw new ApiError(500, "internal", "boom");
+        }
+        return {};
+      }
+      return {};
+    });
+    renderWs(detail({ remainingSeconds: 5 }));
+    await click(screen.getByRole("button", { name: "Submit" }));
+    await click(within(screen.getByRole("dialog")).getByRole("button", { name: "Submit now" }));
+    await ms(5500); // zero reached while the first submit is still failing
+    await ms(2500);
+    expect(posts).toBe(2);
+    expect(push).toHaveBeenCalledWith(RESULTS);
+  });
+
+  it("F ignores key repeat", async () => {
+    renderWs();
+    await press("f");
+    await act(async () => void fireEvent.keyDown(document.body, { key: "f", repeat: true }));
+    expect(screen.getByRole("button", { name: "Flagged for review" })).toBeInTheDocument();
+  });
+
+  it("re-syncs the timer from the server every 60 s", async () => {
+    renderWs(detail({ remainingSeconds: 600 }));
+    apiFetch.mockImplementation(async () => detail({ remainingSeconds: 300 }));
+    await ms(60_000);
+    expect(apiFetch).toHaveBeenCalledWith(`/practice/sessions/${SESSION_ID}`);
+    expect(screen.getByText("05:00 remaining")).toBeInTheDocument();
+  });
+
+  it("a periodic response that arrives after the set is closing is not applied", async () => {
+    renderWs(detail({ remainingSeconds: 600 }));
+    let respond!: () => void;
+    apiFetch.mockImplementation((_p: string, init?: RequestInit) =>
+      init?.method === "POST" ? Promise.resolve({}) : new Promise((r) => (respond = () => r(detail({ remainingSeconds: 5 })))),
+    );
+    await ms(60_000);
+    await click(screen.getByRole("button", { name: "Submit" }));
+    await click(within(screen.getByRole("dialog")).getByRole("button", { name: "Submit now" }));
+    await act(async () => respond());
+    expect(screen.queryByText("00:05 remaining")).not.toBeInTheDocument();
+  });
+
+  it("the submit dialog notes un-Checked learning selections", async () => {
+    renderWs(detail({ mode: "learning" }));
+    await press("a");
+    await click(screen.getByRole("button", { name: "Submit" }));
+    expect(within(screen.getByRole("dialog")).getByText(/1 selected answer hasn't been checked and won't be recorded/)).toBeInTheDocument();
   });
 });
 

@@ -6,6 +6,7 @@ import type { AnswerPayload, AnswerResult } from "@/lib/types";
 
 export const AUTOSAVE_DEBOUNCE_MS = 800;
 export const RETRY_DELAY_MS = 3000;
+export const RETRY_MAX_MS = 30_000;
 const MAX_TIME_DELTA_MS = 600_000;
 
 export type SaveStatus = "idle" | "saving" | "saved" | "error";
@@ -34,6 +35,8 @@ export function useAutosave(opts: {
   const running = useRef<Promise<boolean> | null>(null);
   const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
   const retry = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const failures = useRef(0);
+  const failed = useRef(false);
   const mounted = useRef(true);
   const optsRef = useRef(opts);
   useEffect(() => {
@@ -54,31 +57,38 @@ export function useAutosave(opts: {
         const result = await apiFetch<AnswerResult>(`/practice/sessions/${optsRef.current.sessionId}/answers/${ordinal}`, {
           method: "PUT",
           body: JSON.stringify(body),
+          keepalive: true, // lets the request outlive the page when it is sent while unloading
         });
-        optsRef.current.onResult(ordinal, result);
+        if (mounted.current) optsRef.current.onResult(ordinal, result);
       } catch (e) {
         if (e instanceof ApiError && e.status === 409 && (e.code === "session_expired" || e.code === "session_submitted")) {
           pending.current.clear();
+          failed.current = false;
           setStatusSafe("idle");
-          optsRef.current.onTerminal(e.code);
+          if (mounted.current) optsRef.current.onTerminal(e.code);
           return true;
         }
         if (e instanceof ApiError && e.status === 409 && e.code === "already_answered") {
-          optsRef.current.onConflict(ordinal);
+          if (mounted.current) optsRef.current.onConflict(ordinal);
           continue;
         }
         // Keep the failed patch; anything newer for the same question wins.
         const newer = pending.current.get(ordinal);
         pending.current.set(ordinal, newer ? merge(patch, newer) : patch);
+        failed.current = true;
         setStatusSafe("error");
         if (retry.current) clearTimeout(retry.current);
+        const delay = Math.min(RETRY_MAX_MS, RETRY_DELAY_MS * 2 ** failures.current);
+        failures.current += 1;
         retry.current = setTimeout(() => {
           retry.current = null;
           if (mounted.current) void flushRef.current();
-        }, RETRY_DELAY_MS);
+        }, delay);
         return false;
       }
     }
+    failed.current = false;
+    failures.current = 0;
     setStatusSafe("saved");
     return true;
   }, [setStatusSafe]);
@@ -93,9 +103,13 @@ export function useAutosave(opts: {
       clearTimeout(retry.current);
       retry.current = null;
     }
+    // Success means: nothing pending, nothing in flight, and the last PUT did not fail.
     for (;;) {
-      if (running.current) await running.current;
-      if (!pending.current.size) return true;
+      if (running.current) {
+        await running.current;
+        continue;
+      }
+      if (!pending.current.size) return !failed.current;
       const run = drain().finally(() => {
         if (running.current === run) running.current = null;
       });
@@ -134,12 +148,30 @@ export function useAutosave(opts: {
     mounted.current = true;
     const d = debounce;
     const r = retry;
+    const queue = pending.current; // the Map instance never changes
+    const onPageHide = () => void flushRef.current();
+    window.addEventListener("pagehide", onPageHide);
     return () => {
+      window.removeEventListener("pagehide", onPageHide);
+      // Leaving the page: send what is pending (keepalive PUT), fire and forget.
+      const hasPending = queue.size > 0;
       mounted.current = false;
       if (d.current) clearTimeout(d.current);
       if (r.current) clearTimeout(r.current);
+      if (hasPending) void flushRef.current();
     };
   }, []);
+
+  // Warn before the tab closes while edits are unsaved or a save is failing.
+  useEffect(() => {
+    if (status !== "saving" && status !== "error") return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [status]);
 
   return { status, save, commit, flush };
 }
