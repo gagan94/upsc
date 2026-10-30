@@ -1,4 +1,4 @@
-import { index, integer, jsonb, pgSchema, primaryKey, text, timestamp, uuid, char } from 'drizzle-orm/pg-core';
+import { boolean, char, index, integer, jsonb, numeric, pgSchema, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { syllabusNodes } from './catalog';
 import { users } from './identity';
 
@@ -68,4 +68,73 @@ export const questionVersions = practice.table(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [primaryKey({ columns: [t.questionId, t.version] })],
+);
+
+export const SESSION_KINDS = ['practice', 'retry'] as const;
+export const SESSION_MODES = ['learning', 'test'] as const;
+export const SESSION_STATUSES = ['in_progress', 'submitted', 'expired'] as const;
+export const PRACTICE_SOURCES = ['platform', 'pyq', 'mixed'] as const;
+export const CONFIDENCE_LEVELS = ['guess', 'fairly', 'sure'] as const;
+
+export interface SessionConfig {
+  subjectNodeIds: string[];
+  source: (typeof PRACTICE_SOURCES)[number];
+  count: number;
+}
+export interface Marking {
+  correct: number;
+  incorrect: number;
+}
+export interface SessionSummary {
+  byTopic: { subjectNodeId: string; title: string; correct: number; total: number }[];
+}
+
+export const sessions = practice.table(
+  'sessions',
+  {
+    id: uuid('id').primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    kind: text('kind', { enum: SESSION_KINDS }).notNull().default('practice'),
+    mode: text('mode', { enum: SESSION_MODES }).notNull(),
+    timed: boolean('timed').notNull(),
+    config: jsonb('config').$type<SessionConfig>().notNull(),
+    marking: jsonb('marking').$type<Marking>().notNull(),
+    startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    endsAt: timestamp('ends_at', { withTimezone: true }),
+    submittedAt: timestamp('submitted_at', { withTimezone: true }),
+    status: text('status', { enum: SESSION_STATUSES }).notNull().default('in_progress'),
+    score: numeric('score'),
+    accuracy: numeric('accuracy'),
+    correctCount: integer('correct_count'),
+    incorrectCount: integer('incorrect_count'),
+    skippedCount: integer('skipped_count'),
+    summary: jsonb('summary').$type<SessionSummary>(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index('sessions_user_created_idx').on(t.userId, t.createdAt)],
+);
+
+export const sessionQuestions = practice.table(
+  'session_questions',
+  {
+    sessionId: uuid('session_id')
+      .notNull()
+      .references(() => sessions.id),
+    ordinal: integer('ordinal').notNull(),
+    questionId: uuid('question_id')
+      .notNull()
+      .references(() => questions.id),
+    questionVersion: integer('question_version').notNull(),
+    selected: char('selected', { length: 1 }).$type<OptionKey>(),
+    flagged: boolean('flagged').notNull().default(false),
+    confidence: text('confidence', { enum: CONFIDENCE_LEVELS }),
+    timeMs: integer('time_ms').notNull().default(0),
+    answeredAt: timestamp('answered_at', { withTimezone: true }),
+    reasoningText: text('reasoning_text'),
+    correct: boolean('correct'),
+    marks: numeric('marks'),
+  },
+  (t) => [primaryKey({ columns: [t.sessionId, t.ordinal] }), index('session_questions_question_idx').on(t.questionId)],
 );
