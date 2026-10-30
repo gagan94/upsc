@@ -8,6 +8,7 @@ import {
   goals,
   mistakeEntries,
   planEntitlements,
+  sessionQuestions,
   plans,
   preparationProfiles,
   questions,
@@ -21,6 +22,8 @@ import { FEATURE_KEYS } from '../billing/feature-keys';
 import { FakeAuthAdmin, type AuthAdmin } from './auth-admin';
 import { runSeed } from './run-seed';
 import { seedPlanner } from './seed-planner';
+import { loadQuestions, seedQuestions, type QuestionSeed } from './seed-questions';
+import { scoreAnswers } from '../practice/scoring';
 
 jest.setTimeout(30000);
 
@@ -53,7 +56,9 @@ describe('runSeed', () => {
   let db: Db;
   let close: () => Promise<void>;
   const authAdmin = new FakeAuthAdmin();
-  const opts = { demoPassword: 'test-password-1', authAdmin };
+  // Pinned clock (11:30 IST) so every date-dependent assertion is deterministic.
+  const NOW = new Date('2026-10-30T06:00:00Z');
+  const opts = { demoPassword: 'test-password-1', authAdmin, now: NOW };
 
   const counts = async (): Promise<Record<string, number>> => {
     const out: Record<string, number> = {};
@@ -171,13 +176,70 @@ describe('runSeed', () => {
     expect(ps.every((p) => p.status === 'submitted')).toBe(true);
     expect(ps.filter((p) => p.mode === 'test' && p.score !== null)).toHaveLength(1);
     expect(ps.filter((p) => p.mode === 'learning' && p.score === null)).toHaveLength(2);
-    expect((await db.select().from(mistakeEntries).where(eq(mistakeEntries.userId, s.id))).length).toBeGreaterThanOrEqual(3);
     expect(await db.select().from(bookmarks).where(eq(bookmarks.userId, s.id))).toHaveLength(3);
     const ex = await db.select().from(examDates);
     expect(ex.map((e) => [e.exam, e.year, e.status]).sort()).toEqual([
       ['mains', 2027, 'illustrative'],
       ['prelims', 2027, 'illustrative'],
     ]);
+  });
+
+  it('builds the mistake notebook exactly as the practice engine would from the seeded answers', async () => {
+    const [s] = await db.select().from(users).where(eq(users.email, 'student@example.com'));
+    const answers = await db
+      .select({
+        questionId: sessionQuestions.questionId,
+        selected: sessionQuestions.selected,
+        correct: sessionQuestions.correct,
+        confidence: sessionQuestions.confidence,
+        submittedAt: sessions.submittedAt,
+        ordinal: sessionQuestions.ordinal,
+      })
+      .from(sessionQuestions)
+      .innerJoin(sessions, eq(sessions.id, sessionQuestions.sessionId))
+      .where(eq(sessions.userId, s.id));
+    answers.sort((a, b) => (a.submittedAt as Date).getTime() - (b.submittedAt as Date).getTime() || a.ordinal - b.ordinal);
+    type E = { reason: string; timesWrong: number; firstSeen: number; lastSeen: number; resolvedAt: number | null };
+    const want = new Map<string, E>();
+    for (const a of answers) {
+      if (a.selected === null || a.correct === null) continue;
+      const at = (a.submittedAt as Date).getTime();
+      const e = want.get(a.questionId);
+      if (!a.correct) {
+        if (e) Object.assign(e, { reason: 'incorrect', timesWrong: e.timesWrong + 1, lastSeen: at, resolvedAt: null });
+        else want.set(a.questionId, { reason: 'incorrect', timesWrong: 1, firstSeen: at, lastSeen: at, resolvedAt: null });
+      } else if (a.confidence === 'guess') {
+        if (!e) want.set(a.questionId, { reason: 'guessed', timesWrong: 1, firstSeen: at, lastSeen: at, resolvedAt: null });
+      } else if (e && e.resolvedAt === null) e.resolvedAt = at;
+    }
+    const got = await db.select().from(mistakeEntries).where(eq(mistakeEntries.userId, s.id));
+    const norm = new Map(
+      got.map((g) => [
+        g.questionId,
+        { reason: g.reason, timesWrong: g.timesWrong, firstSeen: g.firstSeen.getTime(), lastSeen: g.lastSeen.getTime(), resolvedAt: g.resolvedAt?.getTime() ?? null },
+      ]),
+    );
+    expect(want.size).toBeGreaterThanOrEqual(3);
+    expect(norm).toEqual(want);
+    expect([...want.values()].some((e) => e.timesWrong === 2)).toBe(true);
+    expect([...want.values()].some((e) => e.resolvedAt !== null)).toBe(true);
+  });
+
+  it('keeps every seeded practice session internally consistent', async () => {
+    const [s] = await db.select().from(users).where(eq(users.email, 'student@example.com'));
+    for (const p of await db.select().from(sessions).where(eq(sessions.userId, s.id))) {
+      const rows = await db.select().from(sessionQuestions).where(eq(sessionQuestions.sessionId, p.id));
+      const qs = await db.select().from(questions);
+      const key = new Map(qs.map((q) => [q.id, q.correctOption]));
+      expect((p.correctCount ?? 0) + (p.incorrectCount ?? 0) + (p.skippedCount ?? 0)).toBe(rows.length);
+      expect((p.summary?.byTopic ?? []).reduce((n, t) => n + t.total, 0)).toBe(rows.length);
+      const scored = scoreAnswers(rows.map((r) => ({ selected: r.selected, correctOption: key.get(r.questionId) as string })), p.marking, p.mode);
+      expect(p.correctCount).toBe(scored.correct);
+      expect(p.incorrectCount).toBe(scored.incorrect);
+      expect(p.skippedCount).toBe(scored.skipped);
+      expect(Number(p.accuracy)).toBeCloseTo(scored.accuracy, 10);
+      expect(p.score === null ? null : Number(p.score)).toBe(scored.score);
+    }
   });
 
   it('gives the default free plan an entitlement for every feature key', async () => {
@@ -230,6 +292,39 @@ describe('seedPlanner without the student account', () => {
       await expect(seedPlanner(db, { demoPassword: 'x', authAdmin: new FakeAuthAdmin() })).rejects.toThrow(
         /student@example\.com.*seed-identity/,
       );
+    } finally {
+      await close();
+    }
+  });
+});
+
+describe('seedQuestions atomicity', () => {
+  it('aborts with zero writes when any row is invalid', async () => {
+    const { db, close } = await createTestDb();
+    try {
+      const [first, second] = loadQuestions();
+      const ctx = { demoPassword: 'x', authAdmin: new FakeAuthAdmin() };
+      await expect(seedQuestions(db, ctx, [first, { ...second, stem: '' } as QuestionSeed])).rejects.toThrow(/questions\.json/);
+      expect(await db.select().from(questions)).toEqual([]);
+    } finally {
+      await close();
+    }
+  });
+});
+
+describe('runSeed early in the IST morning', () => {
+  it('never completes a task before it was scheduled', async () => {
+    const { db, close } = await createTestDb();
+    try {
+      // 02:30 IST on 30 October: before the earliest "today" slot.
+      const now = new Date('2026-10-29T21:00:00Z');
+      await runSeed(db, { demoPassword: 'test-password-1', authAdmin: new FakeAuthAdmin(), now });
+      const done = (await db.select().from(tasks)).filter((t) => t.status === 'completed');
+      expect(done).toHaveLength(2);
+      for (const t of done) {
+        expect((t.completedAt as Date).getTime()).toBeGreaterThanOrEqual((t.scheduledStart as Date).getTime());
+        expect((t.completedAt as Date).getTime()).toBeLessThanOrEqual(now.getTime());
+      }
     } finally {
       await close();
     }

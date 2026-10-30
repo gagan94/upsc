@@ -70,7 +70,42 @@ const PRACTICE: PracticePlan[] = [
   { n: 3, mode: 'learning', subjects: ['prelims-history'], count: 5, daysAgo: 4, pattern: ['right', 'right', 'wrong', 'right', 'right'] },
 ];
 
-/** Demo planner/practice data for student@example.com. Deletes and recreates only the rows it owns. */
+interface MistakeRow {
+  questionId: string;
+  reason: 'incorrect' | 'guessed';
+  timesWrong: number;
+  firstSeen: Date;
+  lastSeen: Date;
+  resolvedAt: Date | null;
+}
+
+/**
+ * Mirrors `recordMistakes` in practice/sessions.service.ts (kept in sync by a test that recomputes the
+ * table from the seeded answers): wrong -> upsert, times_wrong + 1, reopen; correct with confidence
+ * 'guess' -> a 'guessed' entry only if none exists; any other correct answer resolves an open entry.
+ */
+function applyMistakeRules(
+  entries: Map<string, MistakeRow>,
+  qid: string,
+  correct: boolean,
+  confidence: string | null,
+  at: Date,
+): void {
+  const existing = entries.get(qid);
+  if (!correct) {
+    if (existing) Object.assign(existing, { reason: 'incorrect', timesWrong: existing.timesWrong + 1, lastSeen: at, resolvedAt: null });
+    else entries.set(qid, { questionId: qid, reason: 'incorrect', timesWrong: 1, firstSeen: at, lastSeen: at, resolvedAt: null });
+  } else if (confidence === 'guess') {
+    if (!existing) entries.set(qid, { questionId: qid, reason: 'guessed', timesWrong: 1, firstSeen: at, lastSeen: at, resolvedAt: null });
+  } else if (existing && existing.resolvedAt === null) {
+    existing.resolvedAt = at;
+  }
+}
+
+/**
+ * Demo planner/practice data for student@example.com. Deletes and recreates only the rows it owns.
+ * Meant for fresh/demo environments: re-running overwrites the demo rows (and exam dates) it owns.
+ */
 export async function seedPlanner(db: Db, ctx: SeedContext): Promise<void> {
   const [student] = await db.select({ id: users.id }).from(users).where(eq(users.email, STUDENT_EMAIL));
   if (!student) throw new Error(`seed-planner: ${STUDENT_EMAIL} does not exist; run seed-identity first`);
@@ -152,10 +187,12 @@ export async function seedPlanner(db: Db, ctx: SeedContext): Promise<void> {
       source: 'seed' as const,
       ...v,
     });
+    // Completed tasks sit on today's IST slots, or on yesterday's when the seed runs before they happen.
+    const base = istAt(now, 0, 7, 52) <= now ? 0 : -1;
     const done = (at: Date) => ({ status: 'completed' as const, completedAt: at > now ? now : at });
     await tx.insert(tasks).values([
-      task(1, { title: 'Read: Preamble and basic structure', subjectNodeId: polity, activityType: 'reading', durationMin: 45, actualMin: 45, priority: 'high', scheduledStart: istAt(now, 0, 6, 30), ...done(istAt(now, 0, 7, 15)) }),
-      task(2, { title: 'Practise 10 Polity MCQs', subjectNodeId: polity, activityType: 'practice_mcq', durationMin: 20, actualMin: 22, scheduledStart: istAt(now, 0, 7, 30), ...done(istAt(now, 0, 7, 52)) }),
+      task(1, { title: 'Read: Preamble and basic structure', subjectNodeId: polity, activityType: 'reading', durationMin: 45, actualMin: 45, priority: 'high', scheduledStart: istAt(now, base, 6, 30), ...done(istAt(now, base, 7, 15)) }),
+      task(2, { title: 'Practise 10 Polity MCQs', subjectNodeId: polity, activityType: 'practice_mcq', durationMin: 20, actualMin: 22, scheduledStart: istAt(now, base, 7, 30), ...done(istAt(now, base, 7, 52)) }),
       task(3, { title: 'Revise Fundamental Rights notes', subjectNodeId: polity, activityType: 'revision', durationMin: 30, priority: 'high', scheduledStart: istAt(now, -1, 18, 0), status: 'todo' }),
       task(4, { title: 'Read: Modern India timeline', subjectNodeId: syllabusId('prelims-history'), activityType: 'reading', durationMin: 40, scheduledStart: istAt(now, 1, 9, 0), status: 'todo' }),
       task(5, { title: 'Practise 10 Economy MCQs', subjectNodeId: economy, activityType: 'practice_mcq', durationMin: 20, scheduledStart: istAt(now, 1, 16, 0), status: 'todo' }),
@@ -196,7 +233,9 @@ export async function seedPlanner(db: Db, ctx: SeedContext): Promise<void> {
     );
 
     // Three submitted practice sessions with mixed correctness.
-    for (const { p, picked } of built) {
+    // Oldest first, so the mistake notebook is built exactly as the engine would have built it over time.
+    const mistakes = new Map<string, MistakeRow>();
+    for (const { p, picked } of [...built].sort((a, b) => b.p.daysAgo - a.p.daysAgo)) {
       const startedAt = istAt(now, -p.daysAgo, 17);
       const answers = picked.map((q, i) => {
         const o = p.pattern[i];
@@ -249,14 +288,13 @@ export async function seedPlanner(db: Db, ctx: SeedContext): Promise<void> {
         })),
       );
       for (const [i, x] of answers.entries()) {
-        const c = scored.perQuestion[i].correct;
-        const guessed = c === true && x.confidence === 'guess';
-        if (c === null || (c && !guessed)) continue;
-        await tx
-          .insert(mistakeEntries)
-          .values({ userId, questionId: questionId(x.q.slug), reason: guessed ? 'guessed' : 'incorrect', timesWrong: 1, firstSeen: submittedAt, lastSeen: submittedAt })
-          .onConflictDoNothing();
+        const correct = scored.perQuestion[i].correct;
+        if (x.selected === null || correct === null) continue;
+        applyMistakeRules(mistakes, questionId(x.q.slug), correct, x.confidence, submittedAt);
       }
+    }
+    if (mistakes.size) {
+      await tx.insert(mistakeEntries).values([...mistakes.values()].map((m) => ({ userId, ...m })));
     }
 
     await tx.insert(bookmarks).values(bookmarkIds.map((qid) => ({ userId, questionId: qid, createdAt: istAt(now, -1, 20) })));
