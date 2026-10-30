@@ -70,6 +70,11 @@ export function SessionBar() {
   return (
     <div role="group" className="flex items-center gap-2 rounded-control border border-border bg-bg px-3 py-1.5 text-sm" aria-label="Study session">
       {body}
+      {s.notice ? (
+        <span role="status" className="text-xs text-muted">
+          {s.notice}
+        </span>
+      ) : null}
       {s.error ? (
         <span role="alert" className="text-xs font-semibold text-danger">
           {s.error}

@@ -147,22 +147,107 @@ describe("StudySessionProvider + SessionBar", () => {
   });
 
   describe("heartbeat and timer", () => {
-    it("beats every 30 s with interacted from events, and the timer never goes backwards", async () => {
+    it("beats every 30 s with interacted from events; no backward jitter when the server is at or ahead of the local estimate", async () => {
       routes["GET /study-sessions/active"] = () => ({ session: session({ activeSeconds: 100 }) });
       await mount();
       await tick(20_000);
       expect(screen.getByRole("timer")).toHaveTextContent("2:00");
-      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session({ activeSeconds: 105 }) }); // server behind
+      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session({ activeSeconds: 140 }) }); // ahead of 130
       act(() => void document.dispatchEvent(new KeyboardEvent("keydown", { key: "a" })));
       await tick(10_000);
       expect(bodyOf(calls("POST /study-sessions/s1/heartbeat")[0])).toEqual({ interacted: true });
-      expect(screen.getByRole("timer")).toHaveTextContent("2:10"); // 100+30 local, not 105
+      expect(screen.getByRole("timer")).toHaveTextContent("2:20");
       await tick(1000);
-      expect(screen.getByRole("timer")).toHaveTextContent("2:11");
-      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session({ activeSeconds: 200 }) }); // server ahead
+      expect(screen.getByRole("timer")).toHaveTextContent("2:21");
+      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session({ activeSeconds: 200 }) });
       await tick(29_000);
       expect(bodyOf(calls("POST /study-sessions/s1/heartbeat")[1])).toEqual({ interacted: false });
       expect(screen.getByRole("timer")).toHaveTextContent("3:20");
+    });
+
+    it("the server is authoritative: idle beats that credit nothing snap the display back to the server value", async () => {
+      routes["GET /study-sessions/active"] = () => ({ session: session({ activeSeconds: 100 }) });
+      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session({ activeSeconds: 100 }) }); // interacted:false -> nothing credited
+      await mount();
+      await tick(29_000);
+      expect(screen.getByRole("timer")).toHaveTextContent("2:09");
+      await tick(1_000);
+      expect(screen.getByRole("timer")).toHaveTextContent("1:40");
+      await tick(30_000);
+      expect(screen.getByRole("timer")).toHaveTextContent("1:40");
+      expect(calls("POST /study-sessions/s1/heartbeat")).toHaveLength(2);
+    });
+
+    it("extrapolates at most 45 s past the last server value", async () => {
+      routes["GET /study-sessions/active"] = () => ({ session: session({ activeSeconds: 100 }) });
+      routes["POST /study-sessions/s1/heartbeat"] = () => new ApiError(0, "network_error", "down");
+      await mount();
+      await tick(40_000);
+      expect(screen.getByRole("timer")).toHaveTextContent("2:20");
+      await tick(10_000);
+      expect(screen.getByRole("timer")).toHaveTextContent("2:25");
+      await tick(5_000);
+      expect(screen.getByRole("timer")).toHaveTextContent("2:25");
+    });
+
+    it("ignores a heartbeat response that was in flight when the session ended", async () => {
+      routes["GET /study-sessions/active"] = () => ({ session: session() });
+      let release!: () => void;
+      let n = 0;
+      routes["POST /study-sessions/s1/heartbeat"] = () =>
+        n++ === 0 ? new Promise((r) => (release = () => r({ session: session({ activeSeconds: 30 }) }))) : { session: session() };
+      routes["POST /study-sessions/s1/end"] = () => ({ session: session({ status: "ended" }) });
+      await mount();
+      await tick(30_000); // first beat is now pending
+      await userEvent.click(btn("End"));
+      const dlg = screen.getByRole("dialog", { name: "End study session" });
+      await userEvent.click(within(dlg).getByRole("button", { name: "End session" }));
+      expect(screen.getByText("No active session")).toBeInTheDocument();
+      await act(async () => release());
+      expect(screen.getByText("No active session")).toBeInTheDocument();
+      expect(screen.queryByRole("timer")).toBeNull();
+    });
+
+    it("ignores a heartbeat response that arrives after the pause response", async () => {
+      routes["GET /study-sessions/active"] = () => ({ session: session() });
+      let release!: () => void;
+      let n = 0;
+      routes["POST /study-sessions/s1/heartbeat"] = () =>
+        n++ === 0 ? new Promise((r) => (release = () => r({ session: session({ activeSeconds: 30 }) }))) : { session: session() };
+      routes["POST /study-sessions/s1/pause"] = () => ({ session: session({ status: "paused" }) });
+      await mount();
+      await tick(30_000);
+      await userEvent.click(btn("Pause"));
+      expect(btn("Resume")).toBeInTheDocument();
+      await act(async () => release());
+      expect(btn("Resume")).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Pause" })).toBeNull();
+    });
+
+    it("keeps beating when the idle pause request fails, and shows no prompt", async () => {
+      routes["GET /study-sessions/active"] = () => ({ session: session() });
+      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session() });
+      routes["POST /study-sessions/s1/pause"] = () => new ApiError(0, "network_error", "down");
+      await mount();
+      await tick(180_000);
+      expect(calls("POST /study-sessions/s1/pause")).toHaveLength(1);
+      expect(screen.queryByRole("dialog")).toBeNull();
+      // 5 periodic beats + the final beat of the pause attempt + the fallback beat
+      expect(calls("POST /study-sessions/s1/heartbeat")).toHaveLength(7);
+      await tick(30_000);
+      expect(calls("POST /study-sessions/s1/pause")).toHaveLength(2);
+    });
+
+    it("clears a stale error text when the user acts again", async () => {
+      routes["GET /study-sessions/active"] = () => ({ session: session() });
+      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session() });
+      routes["POST /study-sessions/s1/pause"] = () => new ApiError(500, "internal", "boom");
+      await mount();
+      await userEvent.click(btn("Pause"));
+      expect(screen.getByRole("alert")).toHaveTextContent("Couldn't pause");
+      routes["POST /study-sessions/s1/pause"] = () => ({ session: session({ status: "paused" }) });
+      await userEvent.click(btn("Pause"));
+      expect(screen.queryByText(/Couldn't pause/)).toBeNull();
     });
 
     it("pause sends a final heartbeat first, then pauses; resume likewise", async () => {
@@ -221,6 +306,39 @@ describe("StudySessionProvider + SessionBar", () => {
       await userEvent.click(within(dlg).getByRole("checkbox", { name: "Mark linked task complete" }));
       await userEvent.click(within(dlg).getByRole("button", { name: "End session" }));
       expect(bodyOf(calls("POST /study-sessions/s1/end")[0])).toEqual({ completeTask: true });
+    });
+    it("shows the server's value (after a final heartbeat) for time studied and target", async () => {
+      routes["GET /study-sessions/active"] = () => ({ session: session({ activeSeconds: 1600, plannedMin: 26 }) });
+      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session({ activeSeconds: 1500, plannedMin: 26 }) });
+      await mount();
+      await userEvent.click(btn("End"));
+      const dlg = screen.getByRole("dialog", { name: "End study session" });
+      expect(bodyOf(calls("POST /study-sessions/s1/heartbeat")[0])).toEqual({ interacted: true });
+      expect(dlg).toHaveTextContent("25:00");
+      expect(dlg).toHaveTextContent("Not reached");
+    });
+    it("a session already finished in another tab: resyncs, closes the dialog and says so", async () => {
+      const dlg = await run();
+      routes["POST /study-sessions/s1/end"] = () => new ApiError(409, "invalid_state", "x");
+      routes["GET /study-sessions/active"] = () => ({ session: null });
+      await userEvent.click(within(dlg).getByRole("button", { name: "End session" }));
+      expect(screen.queryByRole("dialog")).toBeNull();
+      expect(screen.getByText("This session was already finished")).toBeInTheDocument();
+      expect(screen.getByText("No active session")).toBeInTheDocument();
+    });
+    it("conflict: the other session was already finished elsewhere -> notice and resync", async () => {
+      const other = session({ id: "s0" });
+      routes["POST /study-sessions"] = () => new ApiError(409, "session_conflict", "x", { active: other });
+      routes["POST /study-sessions/s0/heartbeat"] = () => ({ session: other });
+      routes["POST /study-sessions/s0/end"] = () => new ApiError(404, "not_found", "x");
+      await mount();
+      await userEvent.click(btn("Study session"));
+      await userEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Start" }));
+      const before = calls("GET /study-sessions/active").length;
+      await userEvent.click(btn("End it and start new"));
+      expect(screen.queryByRole("dialog")).toBeNull();
+      expect(screen.getByText("This session was already finished")).toBeInTheDocument();
+      expect(calls("GET /study-sessions/active").length).toBe(before + 1);
     });
     it("hides the checkbox when no task is linked", async () => {
       routes["GET /study-sessions/active"] = () => ({ session: session() });

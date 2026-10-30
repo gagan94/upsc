@@ -57,7 +57,10 @@ export function useHeartbeat({
       void send();
     };
     const onVisible = () => {
-      if (document.visibilityState === "visible") void send();
+      if (document.visibilityState !== "visible") return;
+      // Past the idle limit the next tick pauses the session; a beat now would only credit idle time.
+      if (watchIdle && Date.now() - lastEvent >= IDLE_MS) return;
+      void send();
     };
     for (const e of EVENTS) document.addEventListener(e, mark, { passive: true });
     document.addEventListener("visibilitychange", onVisible);

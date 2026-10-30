@@ -17,10 +17,12 @@ export interface StudySessionApi {
   /** False until the first GET /study-sessions/active settled. */
   loaded: boolean;
   loadFailed: boolean;
-  /** Seconds studied, counted locally between heartbeats; never decreases while the session is the same. */
+  /** Seconds studied: the server's last activeSeconds plus at most 45 s of local counting since that response. */
   seconds: number;
   /** Last action failure, for the bar to show. */
   error: string | null;
+  /** Short non-error notice (for example the session was already finished elsewhere). */
+  notice: string | null;
   clearError: () => void;
   retryLoad: () => void;
   openStart: (prefill?: StartPrefill) => void;
@@ -59,7 +61,12 @@ interface Clock {
   running: boolean;
 }
 const IDLE_CLOCK: Clock = { id: null, base: 0, at: 0, running: false };
-const displayAt = (c: Clock, now: number) => (c.running ? c.base + Math.floor(Math.max(0, now - c.at) / 1000) : c.base);
+/** The server's activeSeconds is authoritative; locally we only extrapolate up to this many seconds past it. */
+export const LOCAL_EXTRAPOLATION_S = 45;
+const displayAt = (c: Clock, now: number) =>
+  c.running ? c.base + Math.min(LOCAL_EXTRAPOLATION_S, Math.floor(Math.max(0, now - c.at) / 1000)) : c.base;
+
+const FINISHED_NOTICE = "This session was already finished";
 
 const post = <T,>(path: string, body?: unknown) =>
   apiFetch<T>(path, { method: "POST", body: JSON.stringify(body ?? {}) });
@@ -69,6 +76,7 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(false);
   const [loadFailed, setLoadFailed] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [clock, setClock] = useState<Clock>(IDLE_CLOCK);
   const [startPrefill, setStartPrefill] = useState<StartPrefill | null | undefined>(undefined);
@@ -80,24 +88,29 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
   const sessionRef = useRef<StudySessionView | null>(null);
   const clockRef = useRef<Clock>(IDLE_CLOCK);
   const idleBusy = useRef(false);
+  /** Bumped by every local transition (pause, resume, end, start, recover, discard, clear); older in-flight responses are ignored. */
+  const epoch = useRef(0);
+  const resetMessages = useCallback(() => {
+    setError(null);
+    setNotice(null);
+  }, []);
 
   const setClockBoth = (c: Clock) => {
     clockRef.current = c;
     setClock(c);
   };
 
-  /** Adopt a server view. The local timer carries on from whichever is further, so it never steps back. */
+  /** Adopt a server view: its activeSeconds replaces the base unconditionally. */
   const apply = useCallback((view: StudySessionView) => {
     const t = Date.now();
-    const prev = clockRef.current;
-    const local = prev.id === view.id ? displayAt(prev, t) : 0;
     sessionRef.current = view;
     setSession(view);
     setNow(t);
-    setClockBoth({ id: view.id, base: Math.max(view.activeSeconds, local), at: t, running: view.status === "running" && !view.stale });
+    setClockBoth({ id: view.id, base: view.activeSeconds, at: t, running: view.status === "running" && !view.stale });
   }, []);
 
   const clear = useCallback(() => {
+    epoch.current += 1;
     sessionRef.current = null;
     setSession(null);
     setClockBoth(IDLE_CLOCK);
@@ -108,6 +121,7 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
   const markStale = useCallback(() => {
     const s = sessionRef.current;
     if (!s) return;
+    epoch.current += 1;
     const t = Date.now();
     const c = clockRef.current;
     const stale = { ...s, stale: true };
@@ -119,15 +133,17 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const load = useCallback(async () => {
+    const e0 = epoch.current;
     try {
       const r = await apiFetch<{ session: StudySessionView | null }>("/study-sessions/active");
+      if (e0 !== epoch.current) return;
       setLoadFailed(false);
       if (r.session) {
         setRecoveryHidden(false);
         apply(r.session);
       } else clear();
     } catch {
-      setLoadFailed(true);
+      if (e0 === epoch.current) setLoadFailed(true);
     }
     setLoaded(true);
   }, [apply, clear]);
@@ -152,16 +168,20 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
     [markStale, load],
   );
 
-  /** One heartbeat. Resolves false when the session went stale or the call failed. */
+  /** One heartbeat. Resolves false when the session went stale, the response was superseded, or the call failed. */
   const beat = useCallback(
     async (interacted: boolean): Promise<boolean> => {
       const s = sessionRef.current;
       if (!s || s.stale) return false;
+      const e0 = epoch.current;
+      const current = () => epoch.current === e0 && sessionRef.current?.id === s.id;
       try {
         const r = await post<{ session: StudySessionView }>(`/study-sessions/${s.id}/heartbeat`, { interacted });
+        if (!current()) return false; // a later local transition (or another session) owns the UI now
         apply(r.session);
         return true;
       } catch (e) {
+        if (!current()) return false;
         if (e instanceof ApiError && e.code === "session_stale") markStale();
         else if (e instanceof ApiError && (e.code === "invalid_state" || e.code === "not_found")) void load();
         return false; // a network blip is retried by the next beat
@@ -175,19 +195,21 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
     async (kind: "pause" | "resume", interacted: boolean): Promise<boolean> => {
       const s = sessionRef.current;
       if (!s) return false;
+      resetMessages();
       await beat(interacted);
-      if (sessionRef.current?.stale) return false;
+      if (sessionRef.current?.id !== s.id || sessionRef.current.stale) return false;
+      const e0 = ++epoch.current;
       try {
         const r = await post<{ session: StudySessionView }>(`/study-sessions/${s.id}/${kind}`);
-        setError(null);
+        if (epoch.current !== e0) return false;
         apply(r.session);
         return true;
       } catch (e) {
-        fail(e, `Couldn't ${kind} the session. Try again.`);
+        if (epoch.current === e0) fail(e, `Couldn't ${kind} the session. Try again.`);
         return false;
       }
     },
-    [apply, beat, fail],
+    [apply, beat, fail, resetMessages],
   );
 
   const pause = useCallback(() => transition("pause", true), [transition]);
@@ -202,10 +224,11 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
     idleBusy.current = true;
     try {
       if (await transition("pause", false)) setIdlePrompt(true);
+      else if (sessionRef.current?.status === "running" && !sessionRef.current.stale) await beat(false); // pause failed: keep beating
     } finally {
       idleBusy.current = false;
     }
-  }, [transition]);
+  }, [transition, beat]);
 
   useHeartbeat({
     active: !!session && !session.stale && (session.status === "running" || session.status === "paused"),
@@ -216,9 +239,10 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
 
   const start = useCallback(
     async (input: StartSessionInput): Promise<StartResult> => {
+      resetMessages();
+      epoch.current += 1;
       try {
         const r = await post<{ session: StudySessionView }>("/study-sessions", input);
-        setError(null);
         setRecoveryHidden(false);
         apply(r.session);
         setStartPrefill(undefined);
@@ -234,31 +258,48 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
         return "error";
       }
     },
-    [apply, load],
+    [apply, load, resetMessages],
   );
+
+  /** The session was ended, discarded or recovered elsewhere: resync, close dialogs and say so. */
+  const finishedElsewhere = useCallback(() => {
+    setEndOpen(false);
+    setIdlePrompt(false);
+    setConflict(null);
+    setNotice(FINISHED_NOTICE);
+    void load();
+  }, [load]);
 
   const end = useCallback(
     async (input: EndSessionInput): Promise<boolean> => {
       const s = sessionRef.current;
       if (!s) return false;
+      resetMessages();
       await beat(true);
-      if (sessionRef.current?.stale) return false;
+      if (sessionRef.current?.id !== s.id || sessionRef.current.stale) return false;
+      const e0 = ++epoch.current;
       try {
         await post(`/study-sessions/${s.id}/end`, input);
-        setError(null);
         clear();
         return true;
       } catch (e) {
+        if (epoch.current !== e0) return false;
         if (e instanceof ApiError && e.code === "session_stale") markStale();
+        else if (e instanceof ApiError && (e.code === "invalid_state" || e.code === "not_found")) {
+          finishedElsewhere();
+          return true;
+        }
         return false;
       }
     },
-    [beat, clear, markStale],
+    [beat, clear, markStale, finishedElsewhere, resetMessages],
   );
 
   const discard = useCallback(async (): Promise<boolean> => {
     const s = sessionRef.current;
     if (!s) return false;
+    resetMessages();
+    epoch.current += 1;
     try {
       await post(`/study-sessions/${s.id}/discard`);
       clear();
@@ -267,15 +308,16 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
       fail(e, "Couldn't discard the session. Try again.");
       return false;
     }
-  }, [clear, fail]);
+  }, [clear, fail, resetMessages]);
 
   const recover = useCallback(
     async (action: RecoverAction): Promise<boolean> => {
       const s = sessionRef.current;
       if (!s) return false;
+      resetMessages();
+      epoch.current += 1;
       try {
         const r = await post<{ session: StudySessionView }>(`/study-sessions/${s.id}/recover`, { action });
-        setError(null);
         if (action === "resume") apply(r.session);
         else clear();
         return true;
@@ -285,7 +327,7 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
         return false;
       }
     },
-    [apply, clear, load],
+    [apply, clear, load, resetMessages],
   );
 
   const continueOther = useCallback(() => {
@@ -299,31 +341,43 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
   const endOtherAndStart = useCallback(async () => {
     if (!conflict?.active) return false;
     const { active, input } = conflict;
+    resetMessages();
     try {
       if (!active.stale) await post(`/study-sessions/${active.id}/heartbeat`, { interacted: true }).catch(() => undefined);
       await post(`/study-sessions/${active.id}/end`);
-    } catch {
-      setError("Couldn't end the other session. Try again.");
-      setConflict(null);
+    } catch (e) {
+      if (e instanceof ApiError && (e.code === "invalid_state" || e.code === "not_found")) finishedElsewhere();
+      else {
+        setError("Couldn't end the other session. Try again.");
+        setConflict(null);
+      }
       return false;
     }
     setConflict(null);
     return (await start(input)) === "started";
-  }, [conflict, start]);
+  }, [conflict, start, finishedElsewhere, resetMessages]);
 
-  const openStart = useCallback((prefill?: StartPrefill) => setStartPrefill(prefill ?? null), []);
-  const openEnd = useCallback(() => setEndOpen(true), []);
+  const openStart = useCallback((prefill?: StartPrefill) => {
+    resetMessages();
+    setStartPrefill(prefill ?? null);
+  }, [resetMessages]);
+  /** Opens the End dialog and syncs the server's time first, so the summary shows what will be recorded. */
+  const openEnd = useCallback(() => {
+    resetMessages();
+    setEndOpen(true);
+    void beat(true);
+  }, [beat, resetMessages]);
   const openRecovery = useCallback(() => setRecoveryHidden(false), []);
-  const clearError = useCallback(() => setError(null), []);
+  const clearError = useCallback(() => resetMessages(), [resetMessages]);
   const retryLoad = useCallback(() => void load(), [load]);
 
   const seconds = displayAt(clock, now);
   const api = useMemo<StudySessionApi>(
     () => ({
-      session, loaded, loadFailed, seconds, error, clearError, retryLoad, openStart, openEnd, openRecovery,
+      session, loaded, loadFailed, seconds, error, notice, clearError, retryLoad, openStart, openEnd, openRecovery,
       start, pause, resume, end, discard,
     }),
-    [session, loaded, loadFailed, seconds, error, clearError, retryLoad, openStart, openEnd, openRecovery, start, pause, resume, end, discard],
+    [session, loaded, loadFailed, seconds, error, notice, clearError, retryLoad, openStart, openEnd, openRecovery, start, pause, resume, end, discard],
   );
 
   return (
@@ -350,10 +404,10 @@ export function StudySessionProvider({ children }: { children: ReactNode }) {
           onResume={resume}
           onEnd={() => {
             setIdlePrompt(false);
-            setEndOpen(true);
+            openEnd();
           }}
         />
-        <EndSessionDialog open={endOpen && !!session && !session.stale} session={session} seconds={seconds} onClose={() => setEndOpen(false)} onEnd={end} />
+        <EndSessionDialog open={endOpen && !!session && !session.stale} session={session} seconds={session?.activeSeconds ?? 0} onClose={() => setEndOpen(false)} onEnd={end} />
       </StartCtx.Provider>
     </Ctx.Provider>
   );

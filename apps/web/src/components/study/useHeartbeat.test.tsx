@@ -54,4 +54,17 @@ describe("useHeartbeat", () => {
     expect(onBeat).not.toHaveBeenCalled();
     expect(onIdle).not.toHaveBeenCalled();
   });
+
+  it("returning to the page beats at once, unless the idle limit has already passed", async () => {
+    const { onBeat } = setup();
+    await tick(10_000);
+    act(() => void document.dispatchEvent(new Event("visibilitychange")));
+    await tick(0);
+    expect(onBeat).toHaveBeenCalledTimes(1);
+    onBeat.mockClear();
+    act(() => void vi.setSystemTime(Date.now() + 200_000)); // machine slept; timers have not fired
+    act(() => void document.dispatchEvent(new Event("visibilitychange")));
+    await tick(0);
+    expect(onBeat).not.toHaveBeenCalled();
+  });
 });
