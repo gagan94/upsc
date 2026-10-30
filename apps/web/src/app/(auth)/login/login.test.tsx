@@ -14,6 +14,9 @@ vi.mock("@/lib/supabase-browser", () => ({
   createBrowserSupabase: () => ({ auth: { signInWithPassword, signInWithOAuth } }),
 }));
 
+const apiFetch = vi.fn();
+vi.mock("@/lib/api", () => ({ apiFetch: (...a: unknown[]) => apiFetch(...a) }));
+
 import LoginPage from "./page";
 
 function fill(email = "a@b.co", password = "pw") {
@@ -26,6 +29,8 @@ beforeEach(() => {
   replace.mockReset();
   signInWithPassword.mockReset();
   signInWithOAuth.mockReset();
+  apiFetch.mockReset();
+  apiFetch.mockResolvedValue({ status: "completed", step: 5, answers: {} });
 });
 afterEach(() => vi.unstubAllEnvs());
 
@@ -38,6 +43,46 @@ describe("LoginPage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Log in" }));
     await waitFor(() => expect(replace).toHaveBeenCalledWith("/learn"));
     expect(signInWithPassword).toHaveBeenCalledWith({ email: "a@b.co", password: "pw" });
+  });
+
+  it("sends a not_started user to /onboarding, dropping a deep return_to", async () => {
+    params = new URLSearchParams("return_to=/practice");
+    signInWithPassword.mockResolvedValue({ error: null });
+    apiFetch.mockResolvedValue({ status: "not_started", step: 0, answers: {} });
+    render(<LoginPage />);
+    fill();
+    fireEvent.click(screen.getByRole("button", { name: "Log in" }));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/onboarding"));
+    expect(apiFetch).toHaveBeenCalledWith("/me/onboarding");
+    expect(replace).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(["in_progress", "skipped", "completed"])("keeps the usual destination when onboarding is %s", async (status) => {
+    params = new URLSearchParams("return_to=/practice");
+    signInWithPassword.mockResolvedValue({ error: null });
+    apiFetch.mockResolvedValue({ status, step: 1, answers: {} });
+    render(<LoginPage />);
+    fill();
+    fireEvent.click(screen.getByRole("button", { name: "Log in" }));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/practice"));
+  });
+
+  it("goes to the usual destination when the onboarding lookup fails", async () => {
+    signInWithPassword.mockResolvedValue({ error: null });
+    apiFetch.mockRejectedValue(new Error("down"));
+    render(<LoginPage />);
+    fill();
+    fireEvent.click(screen.getByRole("button", { name: "Log in" }));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/home"));
+  });
+
+  it("does not look up onboarding when sign-in fails", async () => {
+    signInWithPassword.mockResolvedValue({ error: { code: "invalid_credentials" } });
+    render(<LoginPage />);
+    fill();
+    fireEvent.click(screen.getByRole("button", { name: "Log in" }));
+    await screen.findByRole("alert");
+    expect(apiFetch).not.toHaveBeenCalled();
   });
 
   it("ignores an unsafe return_to", async () => {

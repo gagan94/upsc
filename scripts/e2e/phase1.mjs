@@ -104,7 +104,7 @@ scenario("a", "New student: onboarding, planner, tasks, study session", (s) => {
   const taskTitle = `E2E task ${STAMP}`;
   let onboarded = false; // true only if this run completed onboarding
 
-  s.step("log in as newstudent and reach Home", async ({ page }) => {
+  s.step("log in as newstudent (not_started lands straight on /onboarding)", async ({ page }) => {
     await login(page, ACCOUNTS.newstudent);
     if (!/\/onboarding/.test(page.url())) {
       await see(heading(page, "Your preparation at a glance"), "Home heading");
@@ -112,6 +112,8 @@ scenario("a", "New student: onboarding, planner, tasks, study session", (s) => {
   }, { critical: true });
 
   s.step("onboarding wizard: 4 steps + review, accept plan", async ({ page }) => {
+    // A fresh newstudent (not_started) is already on /onboarding after login. Only an earlier, interrupted
+    // run (in_progress) or a completed one lands on Home: resume via the banner, or skip if there is none.
     if (!/\/onboarding/.test(page.url())) {
       await see(heading(page, "Your preparation at a glance"), "Home heading");
       const banner = page.getByRole("link", { name: "Finish personalising my workspace" });
