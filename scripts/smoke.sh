@@ -75,4 +75,41 @@ admin_code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 -H "Authorizat
 [ "$admin_code" = "403" ] || fail "admin/users returned HTTP ${admin_code:-none} for a student, expected 403"
 ok "admin/users is 403 for a student"
 
+# 5. Planner: today's view loads for the student.
+today_code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 -H "Authorization: Bearer $token" "$WEB_URL/api/v1/planner/today" || true)
+[ "$today_code" = "200" ] || fail "planner/today returned HTTP ${today_code:-none}, expected 200"
+ok "planner/today is 200"
+
+# 6. Practice: a 5-question Polity test, answer one, submit, check the results add up.
+psubj_resp=$(curl -s --max-time 20 -H "Authorization: Bearer $token" "$WEB_URL/api/v1/practice/subjects" || true)
+polity_id=$(printf '%s' "$psubj_resp" | json_get '(d.subjects.find(s=>s.title==="Indian Polity")||{}).id')
+[ -n "$polity_id" ] || fail "practice/subjects has no Indian Polity subject"
+ok "practice/subjects lists Indian Polity"
+
+create_body=$(node -e 'process.stdout.write(JSON.stringify({subjectNodeIds:[process.argv[1]],source:"platform",count:5,mode:"test",timed:false}))' "$polity_id")
+create_resp=$(curl -s --max-time 30 -X POST "$WEB_URL/api/v1/practice/sessions" \
+  -H "Authorization: Bearer $token" -H 'Content-Type: application/json' -d "$create_body" || true)
+got=$(printf '%s' "$create_resp" | json_get 'd.got')
+[ "$got" = "5" ] || fail "practice session returned got=${got:-none}, expected 5"
+case "$create_resp" in *correctOption*) fail "practice session body leaks correctOption in test mode" ;; esac
+session_id=$(printf '%s' "$create_resp" | json_get 'd.session.id')
+[ -n "$session_id" ] || fail "practice session has no id"
+ok "practice session created with 5 questions and no answer key"
+
+ans_code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 -X PUT "$WEB_URL/api/v1/practice/sessions/$session_id/answers/1" \
+  -H "Authorization: Bearer $token" -H 'Content-Type: application/json' -d '{"selected":"A"}' || true)
+[ "$ans_code" = "200" ] || fail "answering a question returned HTTP ${ans_code:-none}, expected 200"
+sub_code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 -X POST "$WEB_URL/api/v1/practice/sessions/$session_id/submit" \
+  -H "Authorization: Bearer $token" || true)
+[ "$sub_code" = "200" ] || fail "submitting the session returned HTTP ${sub_code:-none}, expected 200"
+res_resp=$(curl -s --max-time 20 -H "Authorization: Bearer $token" "$WEB_URL/api/v1/practice/sessions/$session_id/results" || true)
+total=$(printf '%s' "$res_resp" | json_get 'd.correct+d.incorrect+d.skipped')
+[ "$total" = "5" ] || fail "results correct+incorrect+skipped is ${total:-unknown}, expected 5"
+ok "practice results add up to 5"
+
+# 7. The question bank admin API must be forbidden for a student.
+aq_code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 -H "Authorization: Bearer $token" "$WEB_URL/api/v1/admin/questions" || true)
+[ "$aq_code" = "403" ] || fail "admin/questions returned HTTP ${aq_code:-none} for a student, expected 403"
+ok "admin/questions is 403 for a student"
+
 echo "SMOKE OK"

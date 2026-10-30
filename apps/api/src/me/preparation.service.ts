@@ -88,8 +88,8 @@ export class PreparationService {
     return this.getProfile(userId);
   }
 
-  async getPreferences(userId: string): Promise<PrefsView> {
-    const [r] = await this.db.select().from(studyPreferences).where(eq(studyPreferences.userId, userId)).limit(1);
+  async getPreferences(userId: string, ex: Db = this.db): Promise<PrefsView> {
+    const [r] = await ex.select().from(studyPreferences).where(eq(studyPreferences.userId, userId)).limit(1);
     if (!r) return { ...PREFS_DEFAULTS, windows: [] };
     return {
       dailyGoalMin: r.dailyGoalMin ?? PREFS_DEFAULTS.dailyGoalMin,
@@ -101,13 +101,13 @@ export class PreparationService {
     };
   }
 
-  async upsertPreferences(userId: string, patch: PrefsPatch): Promise<PrefsView> {
+  async upsertPreferences(userId: string, patch: PrefsPatch, ex: Db = this.db): Promise<PrefsView> {
     const values = { ...patch, updatedAt: new Date() };
-    await this.db
+    await ex
       .insert(studyPreferences)
       .values({ userId, ...values })
       .onConflictDoUpdate({ target: studyPreferences.userId, set: values });
-    return this.getPreferences(userId);
+    return this.getPreferences(userId, ex);
   }
 
   async getAccountProfile(userId: string): Promise<ProfileView> {

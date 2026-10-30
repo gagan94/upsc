@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { DB, Db } from '../db/db.module';
+import { subjects } from '../db/schema';
 
 export interface SubjectSummary {
   id: string;
@@ -9,6 +10,12 @@ export interface SubjectSummary {
   gsPaper: string;
   moduleCount: number;
   lessonCount: number;
+}
+
+export interface PlanSubject {
+  slug: string;
+  title: string;
+  syllabusNodeId: string;
 }
 
 @Injectable()
@@ -31,5 +38,15 @@ export class CatalogService {
       ORDER BY s."order", s.title
     `);
     return result.rows as unknown as SubjectSummary[];
+  }
+
+  /** Published subjects (slug, title, syllabus node), in catalog order; optionally only the given slugs. */
+  async findBySlugs(slugs?: string[]): Promise<PlanSubject[]> {
+    const rows = await this.db
+      .select({ slug: subjects.slug, title: subjects.title, syllabusNodeId: subjects.syllabusNodeId })
+      .from(subjects)
+      .where(slugs ? and(eq(subjects.status, 'published'), inArray(subjects.slug, slugs)) : eq(subjects.status, 'published'))
+      .orderBy(asc(subjects.order), asc(subjects.title));
+    return rows;
   }
 }

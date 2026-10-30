@@ -2,18 +2,15 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, Use
 import { z } from 'zod';
 import { dayRange, localDateOf } from '../common/dates';
 import { AppError } from '../common/errors';
-import { parse } from '../common/validation';
+import { dateISO, parse } from '../common/validation';
 import { ACTIVITY_TYPES, PRIORITIES } from '../db/schema/planner';
 import { AuthGuard } from '../identity/auth.guard';
 import { CurrentUser } from '../identity/decorators';
 import type { UserView } from '../identity/users.service';
 import { PreparationService } from '../me/preparation.service';
+import { StudySessionsService } from './study-sessions.service';
 import { TasksService } from './tasks.service';
 
-const dateISO = z
-  .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD')
-  .refine((s) => !Number.isNaN(Date.parse(`${s}T00:00:00Z`)) && new Date(`${s}T00:00:00Z`).toISOString().startsWith(s), 'Invalid date');
 const instant = z
   .string()
   .datetime({ offset: true })
@@ -61,6 +58,7 @@ export class TasksController {
   constructor(
     private readonly tasks: TasksService,
     private readonly prep: PreparationService,
+    private readonly sessions: StudySessionsService,
   ) {}
 
   @Get('today')
@@ -68,11 +66,12 @@ export class TasksController {
     const { date: given } = parse(todaySchema, query);
     const date = given ?? localDateOf(new Date(), user.timezone);
     const { start, end } = dayRange(date, user.timezone);
-    const [dayTasks, overdue, unscheduledCount, prefs] = await Promise.all([
+    const [dayTasks, overdue, unscheduledCount, prefs, recordedMin] = await Promise.all([
       this.tasks.list(user.id, { from: start, to: end }),
       this.tasks.overdue(user.id, start),
       this.tasks.unscheduledCount(user.id),
       this.prep.getPreferences(user.id),
+      this.sessions.recordedMinutes(user.id, start, end),
     ]);
     const plannedMin = dayTasks.filter((t) => t.status !== 'skipped').reduce((s, t) => s + (t.durationMin ?? 0), 0);
     return {
@@ -81,7 +80,7 @@ export class TasksController {
       overdue,
       stats: {
         plannedMin,
-        recordedMin: 0, // wired in Task 4
+        recordedMin,
         completed: dayTasks.filter((t) => t.status === 'completed').length,
         total: dayTasks.length,
       },

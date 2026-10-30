@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { and, asc, eq, inArray, isNull, gte, lt, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNull, gte, lt, ne, sql } from 'drizzle-orm';
 import { AppError } from '../common/errors';
 import { DB, Db } from '../db/db.module';
 import { newId } from '../db/ids';
@@ -39,13 +39,16 @@ export interface NewTask {
 export type TaskPatch = Partial<NewTask>;
 
 const notDeleted = (userId: string) => and(eq(tasks.userId, userId), isNull(tasks.deletedAt));
+/** The backlog: open tasks with no scheduled start. */
+const backlog = (userId: string) =>
+  and(notDeleted(userId), isNull(tasks.scheduledStart), inArray(tasks.status, ['todo', 'in_progress']));
 
 @Injectable()
 export class TasksService {
   constructor(@Inject(DB) private readonly db: Db) {}
 
-  private select() {
-    return this.db
+  private select(ex: Db = this.db) {
+    return ex
       .select({ t: tasks, subjectTitle: syllabusNodes.title })
       .from(tasks)
       .leftJoin(syllabusNodes, eq(syllabusNodes.id, tasks.subjectNodeId));
@@ -71,10 +74,10 @@ export class TasksService {
     };
   }
 
-  private async assertSubject(ids: (string | null | undefined)[]): Promise<void> {
+  private async assertSubject(ids: (string | null | undefined)[], ex: Db = this.db): Promise<void> {
     const wanted = [...new Set(ids.filter((x): x is string => !!x))];
     if (!wanted.length) return;
-    const found = await this.db.select({ id: syllabusNodes.id }).from(syllabusNodes).where(inArray(syllabusNodes.id, wanted));
+    const found = await ex.select({ id: syllabusNodes.id }).from(syllabusNodes).where(inArray(syllabusNodes.id, wanted));
     if (found.length !== wanted.length) throw new AppError(400, 'validation_failed', 'subjectNodeId: unknown syllabus node');
   }
 
@@ -83,11 +86,12 @@ export class TasksService {
     return v;
   }
 
-  async createMany(userId: string, inputs: NewTask[], source: Row['source']): Promise<TaskView[]> {
+  /** `ex` lets a caller run the insert inside its own transaction. */
+  async createMany(userId: string, inputs: NewTask[], source: Row['source'], ex: Db = this.db): Promise<TaskView[]> {
     if (!inputs.length) return [];
-    await this.assertSubject(inputs.map((i) => i.subjectNodeId));
+    await this.assertSubject(inputs.map((i) => i.subjectNodeId), ex);
     const ids = inputs.map(() => newId());
-    await this.db.insert(tasks).values(
+    await ex.insert(tasks).values(
       inputs.map((i, n) => ({
         id: ids[n],
         userId,
@@ -102,7 +106,7 @@ export class TasksService {
         notes: i.notes ?? null,
       })),
     );
-    const rows = await this.select().where(and(notDeleted(userId), inArray(tasks.id, ids)));
+    const rows = await this.select(ex).where(and(notDeleted(userId), inArray(tasks.id, ids)));
     const byId = new Map(rows.map((r) => [r.t.id, this.view(r)]));
     return ids.map((id) => byId.get(id)!);
   }
@@ -124,7 +128,7 @@ export class TasksService {
 
   async unscheduled(userId: string): Promise<TaskView[]> {
     const rows = await this.select()
-      .where(and(notDeleted(userId), isNull(tasks.scheduledStart)))
+      .where(backlog(userId))
       .orderBy(asc(tasks.createdAt), asc(tasks.id));
     return rows.map((r) => this.view(r));
   }
@@ -133,7 +137,7 @@ export class TasksService {
     const [r] = await this.db
       .select({ n: sql<number>`count(*)::int` })
       .from(tasks)
-      .where(and(notDeleted(userId), isNull(tasks.scheduledStart)));
+      .where(backlog(userId));
     return r?.n ?? 0;
   }
 
@@ -177,10 +181,16 @@ export class TasksService {
     if (!r.length) throw new AppError(404, 'not_found', 'Task not found');
   }
 
-  complete(userId: string, id: string, input: { actualMin?: number } = {}): Promise<TaskView> {
-    const set: Partial<typeof tasks.$inferInsert> = { status: 'completed', completedAt: new Date() };
+  /** Idempotent: an already-completed task is returned unchanged. */
+  async complete(userId: string, id: string, input: { actualMin?: number } = {}): Promise<TaskView> {
+    const now = new Date();
+    const set: Partial<typeof tasks.$inferInsert> = { status: 'completed', completedAt: now, updatedAt: now };
     if (input.actualMin !== undefined) set.actualMin = input.actualMin;
-    return this.mutate(userId, id, set);
+    await this.db
+      .update(tasks)
+      .set(set)
+      .where(and(notDeleted(userId), eq(tasks.id, id), ne(tasks.status, 'completed')));
+    return this.get(userId, id);
   }
 
   skip(userId: string, id: string): Promise<TaskView> {
