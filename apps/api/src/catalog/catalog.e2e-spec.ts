@@ -12,17 +12,19 @@ describe('GET /learn/subjects', () => {
   let app: INestApplication;
   let db: Db;
   let close: () => Promise<void>;
+  let nodeId: string;
+  let pubId: string;
 
   beforeAll(async () => {
     ({ app, db, close } = await createTestApp({
       config: { supabase: { url: TEST_SUPABASE_URL, jwtSecret: TEST_JWT_SECRET } },
     }));
-    const nodeId = newId();
+    nodeId = newId();
     await db.insert(syllabusNodes).values({
       id: nodeId, parentId: null, path: 'gs1', level: 0, examStage: 'prelims', paper: 'GS1',
       title: 'GS1', slug: 'gs1', order: 0, status: 'published',
     });
-    const pubId = newId();
+    pubId = newId();
     const draftId = newId();
     await db.insert(subjects).values([
       { id: pubId, syllabusNodeId: nodeId, slug: 'polity', title: 'Polity', description: 'd', gsPaper: 'GS2', order: 1, status: 'published' },
@@ -62,9 +64,28 @@ describe('GET /learn/subjects', () => {
       .expect(200);
     expect(res.body.subjects).toHaveLength(1);
     expect(res.body.subjects[0]).toMatchObject({
-      slug: 'polity', title: 'Polity', gsPaper: 'GS2', moduleCount: 2, lessonCount: 3,
+      id: pubId, slug: 'polity', title: 'Polity', gsPaper: 'GS2', syllabusNodeId: nodeId, moduleCount: 2, lessonCount: 3,
     });
     expect(JSON.stringify(res.body)).not.toContain('bodyBlocks');
     expect(JSON.stringify(res.body)).not.toContain('secret');
+  });
+
+  it('a subject\'s syllabusNodeId is accepted as a planner task subjectNodeId (the catalog id is not)', async () => {
+    const token = await signTestToken({ sub: 'cat-task', email: 'cat-task@example.com' });
+    const list = await request(app.getHttpServer()).get('/api/v1/learn/subjects').set('Authorization', `Bearer ${token}`).expect(200);
+    const subject = list.body.subjects[0] as { id: string; syllabusNodeId: string };
+    const body = { title: 'Read polity', scheduledStart: '2026-11-02T04:00:00.000Z', durationMin: 30, activityType: 'reading' };
+    const ok = await request(app.getHttpServer())
+      .post('/api/v1/planner/tasks')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ ...body, subjectNodeId: subject.syllabusNodeId });
+    expect(ok.status).toBe(201);
+    expect(ok.body.task).toMatchObject({ subjectNodeId: subject.syllabusNodeId, subjectTitle: 'GS1' });
+    const bad = await request(app.getHttpServer())
+      .post('/api/v1/planner/tasks')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ ...body, subjectNodeId: subject.id });
+    expect(bad.status).toBe(400);
+    expect(bad.body.error.code).toBe('validation_failed');
   });
 });

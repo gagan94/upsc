@@ -17,6 +17,10 @@ vi.mock("@/components/AppShell", () => ({
   AppShell: ({ children }: { children: React.ReactNode }) => <div data-testid="shell">{children}</div>,
 }));
 
+vi.mock("@/components/study/StudySessionProvider", () => ({
+  StudySessionProvider: ({ children }: { children: React.ReactNode }) => <div data-testid="study-provider">{children}</div>,
+}));
+
 import AppLayout from "./layout";
 
 const user = { id: "u", email: "a@x.co", name: "A", roles: ["student"], timezone: "Asia/Kolkata", locale: "en" };
@@ -34,6 +38,12 @@ describe("app layout", () => {
     expect(screen.getByTestId("shell")).toHaveTextContent("child");
   });
 
+  it("mounts the study-session provider around the shell, and not on the error panel", async () => {
+    serverApi.mockResolvedValue({ user });
+    render(await AppLayout({ children: <p>child</p> }));
+    expect(screen.getByTestId("study-provider")).toContainElement(screen.getByTestId("shell"));
+  });
+
   it("signs out (no login loop) when the API rejects the session", async () => {
     serverApi.mockRejectedValue(new ApiError(401, "unauthenticated", "no"));
     await expect(AppLayout({ children: <p>x</p> })).rejects.toThrow("NEXT_REDIRECT:/auth/signout");
@@ -44,6 +54,7 @@ describe("app layout", () => {
     serverApi.mockRejectedValue(new ApiError(0, "network_error", "down"));
     render(await AppLayout({ children: <p>x</p> }));
     expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.queryByTestId("study-provider")).toBeNull();
     expect(screen.getByRole("link", { name: "Log out" })).toHaveAttribute("href", "/auth/signout");
     fireEvent.click(screen.getByRole("button", { name: "Try again" }));
     expect(refresh).toHaveBeenCalled();

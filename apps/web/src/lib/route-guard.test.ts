@@ -7,6 +7,12 @@ describe("decideRedirect", () => {
       "/login?return_to=%2Flearn%3Fa%3D1",
     );
   });
+  it("protects /onboarding: signed-out users go to login, signed-in users pass", () => {
+    expect(decideRedirect({ pathname: "/onboarding", search: "", signedIn: false })).toBe(
+      "/login?return_to=%2Fonboarding",
+    );
+    expect(decideRedirect({ pathname: "/onboarding", search: "", signedIn: true })).toBeNull();
+  });
   it("allows public paths when signed out", () => {
     for (const p of ["/login", "/signup", "/auth/callback"]) {
       expect(decideRedirect({ pathname: p, search: "", signedIn: false })).toBeNull();

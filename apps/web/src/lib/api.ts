@@ -3,11 +3,14 @@ import { createBrowserSupabase } from "@/lib/supabase-browser";
 export class ApiError extends Error {
   status: number;
   code: string;
-  constructor(status: number, code: string, message: string) {
+  /** Extra fields of the error envelope (for example `active` on 409 session_conflict). */
+  details: Record<string, unknown>;
+  constructor(status: number, code: string, message: string, details: Record<string, unknown> = {}) {
     super(message);
     this.name = "ApiError";
     this.status = status;
     this.code = code;
+    this.details = details;
   }
 }
 
@@ -17,7 +20,7 @@ export async function parseResponse<T>(res: Response): Promise<T> {
     if (res.status === 204) return undefined as T;
     return (await res.json()) as T;
   }
-  let body: { error?: { code?: string; message?: string } } | undefined;
+  let body: { error?: { code?: string; message?: string; [k: string]: unknown } } | undefined;
   try {
     body = await res.json();
   } catch {
@@ -27,7 +30,8 @@ export async function parseResponse<T>(res: Response): Promise<T> {
   if (!e?.code) {
     throw new ApiError(res.status, "network_error", `Request failed (${res.status})`);
   }
-  throw new ApiError(res.status, e.code, e.message ?? e.code);
+  const { code, message, ...details } = e;
+  throw new ApiError(res.status, code as string, (message as string | undefined) ?? (code as string), details);
 }
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {

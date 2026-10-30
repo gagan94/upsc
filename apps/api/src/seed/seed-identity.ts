@@ -7,6 +7,7 @@ import { seedId } from './ids';
 export const DEMO_USERS = [
   { email: 'student@example.com', name: 'Vinayaka', roles: ['student'] },
   { email: 'admin@example.com', name: 'Admin', roles: ['admin'] },
+  { email: 'newstudent@example.com', name: 'New Student', roles: ['student'] },
 ] as const;
 
 export async function seedIdentity(db: Db, ctx: SeedContext): Promise<void> {

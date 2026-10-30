@@ -49,7 +49,7 @@ One-time owner setup checklist:
 - [ ] Vercel: `npx vercel login` (or export `VERCEL_TOKEN`), then `npx vercel link` in `apps/web`, set the `NEXT_PUBLIC_*` vars and `API_ORIGIN`
 - [ ] Fill the deploy variables in `.env` (see `.env.example`), then run migrate and seed once, BEFORE anyone signs up with the demo emails
 
-Daily deploy (tests, migrations, Render deploy hook, Vercel production deploy, smoke test):
+Daily deploy (tests, migrations, seed — mandatory, needs `SUPABASE_SERVICE_ROLE_KEY` locally only — Render deploy hook, Vercel production deploy, smoke test):
 
 ```sh
 set -a; . ./.env; set +a

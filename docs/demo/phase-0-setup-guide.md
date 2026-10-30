@@ -148,9 +148,11 @@ takes up to a minute.)
 ## Part 7 — Your daily deploy
 
 1. In the project folder: `set -a; . ./.env; set +a` then `./scripts/deploy.sh --dry-run`
-   (prints the 5 steps, runs nothing).
-2. Real run: `./scripts/deploy.sh`. It tests, migrates the database, triggers Render, deploys
-   Vercel, then runs the smoke test. Success ends with `DEPLOY DONE` (and `SMOKE OK` above it).
+   (prints the 6 steps, runs nothing).
+2. Real run: `./scripts/deploy.sh`. It tests, migrates the database, seeds (mandatory; needs
+   `SUPABASE_SERVICE_ROLE_KEY` in your `.env` on this machine only, never on Render or Vercel),
+   triggers Render, deploys Vercel, then runs the smoke test. Success ends with `DEPLOY DONE`
+   (and `SMOKE OK` above it).
 3. Before a stakeholder demo, open the site 2 minutes early (wakes the API) and follow the
    "Before every demo" list in `phase-0.md`.
 

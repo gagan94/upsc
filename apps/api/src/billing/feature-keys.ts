@@ -12,6 +12,11 @@ export const FEATURE_KEYS = [
   'messages.send',
   'planner.calendar_sync',
   'revision.basic',
+  'planner.basic',
+  'study.session',
+  'practice.session',
+  'practice.pyq',
+  'practice.mistake_notebook',
 ] as const;
 
 export type FeatureKey = (typeof FEATURE_KEYS)[number];

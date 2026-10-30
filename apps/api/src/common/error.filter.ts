@@ -33,6 +33,16 @@ export class ErrorFilter implements ExceptionFilter {
       });
       return;
     }
+    // body-parser (http-errors) failures: oversized or malformed JSON.
+    const bp = exception as { type?: string; status?: number } | null;
+    if (bp?.type === 'entity.too.large') {
+      res.status(413).json({ error: { code: 'payload_too_large', message: 'Request body is too large' } });
+      return;
+    }
+    if (bp?.type === 'entity.parse.failed') {
+      res.status(400).json({ error: { code: 'bad_request', message: 'Malformed JSON body' } });
+      return;
+    }
     this.logger.error(exception instanceof Error ? exception.stack : String(exception));
     res.status(500).json({ error: { code: 'internal_error', message: 'Internal server error' } });
   }

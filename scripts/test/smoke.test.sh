@@ -47,6 +47,11 @@ run_case "subjects count != 8"            subjects7   fail
 run_case "admin endpoint returns 200"     admin200    fail
 run_case "health never ready"             never-ready fail SMOKE_WAIT_SECONDS=2
 run_case "health db down"                 db-down     fail
+run_case "planner/today fails"            today500    fail
+run_case "answer key leaks in test mode"  leak        fail
+run_case "session returns 4 questions"    got4        fail
+run_case "results do not add up to 5"     total4      fail
+run_case "admin/questions returns 200"    adminq200   fail
 
 # Missing env must be reported by name.
 out=$(env -u DEMO_PASSWORD SUPABASE_URL=http://x SUPABASE_ANON_KEY=k bash "$SMOKE" http://x 2>&1); rc=$?

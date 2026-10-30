@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { AppShell } from "@/components/AppShell";
 import { ErrorPanel } from "@/components/ErrorPanel";
+import { StudySessionProvider } from "@/components/study/StudySessionProvider";
 import { ApiError } from "@/lib/api";
 import { serverApi } from "@/lib/server-api";
 import type { UserView } from "@/lib/types";
@@ -18,5 +19,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     if (e instanceof ApiError && e.status === 401) redirect("/auth/signout");
     return <ErrorPanel title={"We couldn't load your workspace"} />;
   }
-  return <AppShell user={user}>{children}</AppShell>;
+  // The study-session provider lives only here: never on /login, /signup or /onboarding.
+  return (
+    <StudySessionProvider>
+      <AppShell user={user}>{children}</AppShell>
+    </StudySessionProvider>
+  );
 }

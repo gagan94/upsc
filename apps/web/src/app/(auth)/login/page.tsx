@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Suspense, useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AuthCard, FormError, inputClass, primaryButtonClass, secondaryButtonClass } from "@/components/AuthCard";
+import { apiFetch } from "@/lib/api";
+import type { OnboardingView } from "@/lib/types";
 import { authErrorMessage } from "@/lib/auth-errors";
 import { createBrowserSupabase } from "@/lib/supabase-browser";
 import { safeReturnTo } from "@/lib/safe-redirect";
@@ -33,7 +35,15 @@ function LoginForm() {
         setPending(false);
         return;
       }
-      router.replace(safeReturnTo(returnTo));
+      // Same rule as sign-up: a user who never started onboarding goes there first (a deep return_to is dropped).
+      let target = safeReturnTo(returnTo);
+      try {
+        const { status } = await apiFetch<OnboardingView>("/me/onboarding");
+        if (status === "not_started") target = "/onboarding";
+      } catch {
+        // Lookup failed: keep the usual destination.
+      }
+      router.replace(target);
     } catch {
       setError(authErrorMessage(null));
       setPending(false);

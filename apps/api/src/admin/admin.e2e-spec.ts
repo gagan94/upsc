@@ -144,12 +144,12 @@ describe('admin API', () => {
   });
 
   describe('GET /admin/plans', () => {
-    it('returns free with 13 entitlements ordered by featureKey', async () => {
+    it('returns free with 18 entitlements ordered by featureKey', async () => {
       const res = await get('/admin/plans', adminToken).expect(200);
       const free = res.body.plans.find((p: { key: string }) => p.key === 'free');
       expect(free).toMatchObject({ key: 'free', isDefault: true });
       expect(typeof free.name).toBe('string');
-      expect(free.entitlements).toHaveLength(13);
+      expect(free.entitlements).toHaveLength(18);
       expect(Object.keys(free.entitlements[0]).sort()).toEqual(['enabled', 'featureKey', 'limitValue', 'period']);
       const keys = free.entitlements.map((e: { featureKey: string }) => e.featureKey);
       expect(keys).toEqual([...keys].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)));

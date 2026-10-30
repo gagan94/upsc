@@ -23,7 +23,7 @@ const nextIstMidnight = () =>
   new Date(Math.ceil((Date.now() + IST_OFFSET_MS) / IST_DAY_MS) * IST_DAY_MS - IST_OFFSET_MS);
 
 describe('FEATURE_KEYS', () => {
-  it('has the 13 keys', () => expect(FEATURE_KEYS).toHaveLength(13));
+  it('has the 18 keys', () => expect(FEATURE_KEYS).toHaveLength(18));
 });
 
 describe('EntitlementsService', () => {
