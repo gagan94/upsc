@@ -15,12 +15,14 @@ const FILTERS = [
   { value: "skipped", label: "Skipped" },
 ];
 
-export function statusOf(q: Q): { icon: string; text: string } {
-  if (q.selected === null) return { icon: "–", text: "Skipped" };
-  if (q.correct === true) return { icon: "✓", text: "Correct" };
-  if (q.correct === false) return { icon: "✗", text: "Incorrect" };
+export function answerStatus(selected: string | null, correct: boolean | null): { icon: string; text: string } {
+  if (selected === null) return { icon: "–", text: "Skipped" };
+  if (correct === true) return { icon: "✓", text: "Correct" };
+  if (correct === false) return { icon: "✗", text: "Incorrect" };
   return { icon: "•", text: "Answered" };
 }
+
+export const statusOf = (q: Q) => answerStatus(q.selected, q.correct);
 
 const keep: Record<Filter, (q: Q) => boolean> = {
   all: () => true,

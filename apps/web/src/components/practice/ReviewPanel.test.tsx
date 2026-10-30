@@ -1,6 +1,7 @@
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@/components/planner/user-shim";
 import { ApiError } from "@/lib/api";
+import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RESULTS_SESSION_ID, review } from "./review-fixtures";
 
@@ -60,6 +61,19 @@ describe("BookmarkButton", () => {
   });
 });
 
+describe("BookmarkButton in flight", () => {
+  it("ignores a second click while the first request is pending", async () => {
+    let done!: () => void;
+    apiFetch.mockReturnValue(new Promise((r) => (done = () => r({}))));
+    render(<BookmarkButton questionId="q-1" initial={false} />);
+    await userEvent.click(screen.getByRole("button", { name: "Bookmark question" }));
+    await userEvent.click(screen.getByRole("button", { name: "Remove bookmark" }));
+    expect(apiFetch).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("button", { name: "Remove bookmark" })).toBeInTheDocument();
+    await act(async () => done());
+  });
+});
+
 describe("ReasoningBox", () => {
   it("saves the note through the reasoning endpoint", async () => {
     apiFetch.mockResolvedValue({ saved: true });
@@ -104,6 +118,31 @@ describe("ReportIssueDialog", () => {
   });
 });
 
+describe("ReportIssueDialog reuse", () => {
+  it("resets after Thanks so a second report can be filed", async () => {
+    apiFetch.mockResolvedValue({ id: "r1", status: "open" });
+    function Host() {
+      const [o, setO] = useState(true);
+      return (
+        <>
+          <button onClick={() => setO(true)}>again</button>
+          <ReportIssueDialog questionId="q-1" open={o} onClose={() => setO(false)} />
+        </>
+      );
+    }
+    render(<Host />);
+    await userEvent.click(screen.getByRole("radio", { name: "Typo" }));
+    await userEvent.type(screen.getByLabelText("Details (optional)"), "first");
+    await userEvent.click(screen.getByRole("button", { name: "Send report" }));
+    await screen.findByText(/Thanks, your report was sent/);
+    await userEvent.click(screen.getAllByRole("button", { name: "Close" })[1]);
+    await userEvent.click(screen.getByRole("button", { name: "again" }));
+    expect(screen.getByLabelText("Details (optional)")).toHaveValue("");
+    expect(screen.getByRole("radio", { name: "Wrong answer key" })).toBeChecked();
+    expect(screen.getByRole("button", { name: "Send report" })).toBeInTheDocument();
+  });
+});
+
 describe("ReviewPanel", () => {
   const show = (r = review(), ordinal = 2, total = 5) =>
     render(<ReviewPanel sessionId={RESULTS_SESSION_ID} questionId="q-2" ordinal={ordinal} total={total} review={r} />);
@@ -126,8 +165,10 @@ describe("ReviewPanel", () => {
   });
 
   it("handles a skipped question and no misconception", () => {
-    show(review({ yourAnswer: null, correct: null, misconception: null, confidence: null, isSample: false } as never));
+    show(review({ yourAnswer: null, correct: null, timeMs: 0, misconception: null, confidence: null, isSample: false } as never));
     expect(screen.getByText("Your answer: Skipped")).toBeInTheDocument();
+    expect(screen.getByText("Time spent: —")).toBeInTheDocument();
+    expect(screen.queryByText(/Incorrect/)).toBeNull();
     expect(screen.queryByText(/can feel convincing/)).toBeNull();
   });
 

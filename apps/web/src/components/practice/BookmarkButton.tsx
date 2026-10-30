@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { apiFetch } from "@/lib/api";
 
 /** Optimistic bookmark toggle: flips at once, reverts (and says so) if the request fails. */
 export function BookmarkButton({ questionId, initial }: { questionId: string; initial: boolean }) {
   const [marked, setMarked] = useState(initial);
   const [failed, setFailed] = useState(false);
+  const inFlight = useRef(false);
 
   async function toggle() {
+    if (inFlight.current) return;
+    inFlight.current = true;
     const next = !marked;
     setMarked(next);
     setFailed(false);
@@ -17,6 +20,8 @@ export function BookmarkButton({ questionId, initial }: { questionId: string; in
     } catch {
       setMarked(!next);
       setFailed(true);
+    } finally {
+      inFlight.current = false;
     }
   }
 

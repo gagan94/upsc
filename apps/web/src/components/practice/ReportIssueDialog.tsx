@@ -33,12 +33,19 @@ export function ReportIssueDialog({ questionId, open, onClose }: { questionId: s
     }
   }
 
+  function close() {
+    setType("wrong_key");
+    setText("");
+    setState("idle");
+    onClose();
+  }
+
   return (
-    <Modal open={open} onClose={onClose} title="Report an issue">
+    <Modal open={open} onClose={close} title="Report an issue">
       {state === "sent" ? (
         <div className="flex flex-col gap-3">
           <p role="status" className="text-sm text-text">Thanks, your report was sent. We will look at it.</p>
-          <Button className="self-end" onClick={onClose}>Close</Button>
+          <Button className="self-end" onClick={close}>Close</Button>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -46,7 +53,7 @@ export function ReportIssueDialog({ questionId, open, onClose }: { questionId: s
           <Field multiline label="Details (optional)" rows={4} maxLength={1000} value={text} onChange={(e) => setText(e.target.value)} />
           {state === "error" ? <p role="alert" className="text-sm font-semibold text-danger">We couldn&apos;t send your report. Please try again.</p> : null}
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={onClose}>Cancel</Button>
+            <Button variant="secondary" onClick={close}>Cancel</Button>
             <Button loading={state === "sending"} onClick={send}>Send report</Button>
           </div>
         </div>

@@ -10,6 +10,8 @@ import { formatDuration } from "@/lib/format";
 import type { PracticeResults, PracticeSessionDetail } from "@/lib/types";
 import { QuestionReviewList } from "./QuestionReviewList";
 
+const scoreFmt = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
+const formatScore = (n: number) => scoreFmt.format(n).replace("-", "−");
 const pct = (fraction: number) => `${Math.round((Number.isFinite(fraction) ? fraction : 0) * 100)}%`;
 const linkBtn = "inline-flex items-center justify-center rounded-control px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
@@ -53,7 +55,7 @@ export function ResultsSummary({ sessionId, data }: { sessionId: string; data: P
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
         <Tile label="Score">
-          {data.score === null ? <span className="text-sm font-semibold text-muted">Accuracy only in learning mode</span> : data.score}
+          {data.score === null ? <span className="text-sm font-semibold text-muted">Accuracy only in learning mode</span> : formatScore(data.score)}
         </Tile>
         <Tile label="Accuracy">{pct(data.accuracy)}</Tile>
         <Tile label="Correct">{data.correct}</Tile>

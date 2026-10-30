@@ -5,6 +5,7 @@ import { useState } from "react";
 import { formatDuration } from "@/lib/format";
 import type { Confidence, OptionKey, QuestionReview } from "@/lib/types";
 import { BookmarkButton } from "./BookmarkButton";
+import { answerStatus } from "./QuestionReviewList";
 import { OthersAnswered } from "./OthersAnswered";
 import { ReasoningBox } from "./ReasoningBox";
 import { ReportIssueDialog } from "./ReportIssueDialog";
@@ -28,7 +29,7 @@ export function ReviewPanel({
   const [reporting, setReporting] = useState(false);
   const { question: q } = review;
   const base = `/prelims/review/${encodeURIComponent(sessionId)}`;
-  const status = review.yourAnswer === null ? "Skipped" : review.correct ? "Correct" : "Incorrect";
+  const status = answerStatus(review.yourAnswer, review.correct);
   return (
     <div className="flex flex-col gap-5">
       <div>
@@ -61,13 +62,13 @@ export function ReviewPanel({
 
       <section aria-label="Your result" className="flex flex-col gap-1 rounded-card border border-border bg-surface p-4 text-sm text-text">
         <p className="font-semibold">
-          <span aria-hidden="true">{status === "Correct" ? "✓ " : status === "Incorrect" ? "✗ " : "– "}</span>
-          {status}
+          <span aria-hidden="true">{status.icon} </span>
+          {status.text}
         </p>
         <p>Your answer: {review.yourAnswer ?? "Skipped"}</p>
         <p>Correct answer: {review.correctOption}</p>
         <p>Confidence: {review.confidence ? CONFIDENCE[review.confidence] : "Not set"}</p>
-        <p>Time spent: {formatDuration(review.timeMs / 1000)}</p>
+        <p>Time spent: {review.yourAnswer === null && review.timeMs === 0 ? "—" : formatDuration(review.timeMs / 1000)}</p>
         <div className="mt-2 flex flex-wrap gap-2">
           <BookmarkButton questionId={questionId} initial={review.bookmarked} />
           <button

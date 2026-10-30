@@ -28,6 +28,14 @@ describe("ResultsSummary", () => {
     expect(screen.getByLabelText("Skipped")).toHaveTextContent("1");
   });
 
+  it("formats float-tail and negative scores", () => {
+    const { unmount } = show(results({ score: 3.3400000000000003 }));
+    expect(screen.getByText("3.34")).toBeInTheDocument();
+    unmount();
+    show(results({ score: -2.64 }));
+    expect(screen.getByText("−2.64")).toBeInTheDocument();
+  });
+
   it("hides the score tile in learning mode", () => {
     show(results({ score: null }));
     expect(screen.getByText("Accuracy only in learning mode")).toBeInTheDocument();
