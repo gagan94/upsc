@@ -31,6 +31,16 @@ describe('seed-data/questions.json', () => {
     }
   });
 
+  it('statements stems match the UI order (statements are shown below the stem) and stay unique', () => {
+    const st = qs.filter((q) => q.format === 'statements');
+    expect(st).toHaveLength(33);
+    for (const q of st) {
+      expect(q.stem).toMatch(/^Consider the statements below regarding .+\. Which of them is\/are correct\?$/);
+      expect(q.stem).not.toMatch(/given above/i);
+    }
+    expect(new Set(st.map((q) => q.stem)).size).toBe(st.length);
+  });
+
   it('has at least 25 statements questions and a 40/40/20 difficulty mix', () => {
     expect(qs.filter((q) => q.format === 'statements').length).toBeGreaterThanOrEqual(25);
     const d = (k: string) => qs.filter((q) => q.difficulty === k).length;

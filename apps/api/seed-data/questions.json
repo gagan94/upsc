@@ -83,7 +83,7 @@
     "topic": "Union Executive",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the election of the President and the Vice-President of India. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the election of the President and the Vice-President of India. Which of them is/are correct?",
     "statements": [
       "The President of India is elected by an electoral college.",
       "The Vice-President of India is elected directly by the people."
@@ -165,7 +165,7 @@
     "topic": "Parliament",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Rajya Sabha and the Lok Sabha. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Rajya Sabha and the Lok Sabha. Which of them is/are correct?",
     "statements": [
       "The normal term of the Lok Sabha is six years.",
       "The Rajya Sabha is a permanent House and is not subject to dissolution."
@@ -247,7 +247,7 @@
     "topic": "Parliament",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding Money Bills. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding Money Bills. Which of them is/are correct?",
     "statements": [
       "A Money Bill can be introduced in either House of Parliament.",
       "The Rajya Sabha can reject a Money Bill passed by the Lok Sabha."
@@ -277,7 +277,7 @@
     "topic": "Judiciary and Writs",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the power to issue writs. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the power to issue writs. Which of them is/are correct?",
     "statements": [
       "The Supreme Court can issue writs under Article 32 for the enforcement of Fundamental Rights.",
       "A High Court can issue writs only for the enforcement of Fundamental Rights."
@@ -333,7 +333,7 @@
     "topic": "State Executive",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Governor of a State. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Governor of a State. Which of them is/are correct?",
     "statements": [
       "The Governor of a State is appointed by the President.",
       "The Governor holds office during the pleasure of the President."
@@ -389,7 +389,7 @@
     "topic": "Constitutional Bodies",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the Comptroller and Auditor General of India. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Comptroller and Auditor General of India. Which of them is/are correct?",
     "statements": [
       "The Comptroller and Auditor General of India is appointed by the Prime Minister.",
       "The Comptroller and Auditor General can be removed from office in the same manner and on the same grounds as a judge of the Supreme Court."
@@ -471,7 +471,7 @@
     "topic": "Constitutional Framework",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the basic structure doctrine. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the basic structure doctrine. Which of them is/are correct?",
     "statements": [
       "According to the basic structure doctrine, Parliament has no power to amend the Constitution at all.",
       "The doctrine of the basic structure was laid down by the Supreme Court in Kesavananda Bharati v. State of Kerala (1973)."
@@ -501,7 +501,7 @@
     "topic": "Parliament",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the lapse of Bills on the dissolution of the Lok Sabha. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the lapse of Bills on the dissolution of the Lok Sabha. Which of them is/are correct?",
     "statements": [
       "A Bill originated in the Rajya Sabha and pending there does not lapse on the dissolution of the Lok Sabha.",
       "A Bill passed by the Lok Sabha and pending in the Rajya Sabha lapses on the dissolution of the Lok Sabha."
@@ -713,7 +713,7 @@
     "topic": "Ancient India",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding Ashoka. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding Ashoka. Which of them is/are correct?",
     "statements": [
       "Ashoka's conversion to Buddhism is traditionally associated with the aftermath of the Kalinga war.",
       "Ashoka's inscriptions were written only in the Sanskrit language."
@@ -743,7 +743,7 @@
     "topic": "Modern India",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Permanent Settlement. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Permanent Settlement. Which of them is/are correct?",
     "statements": [
       "The Permanent Settlement was introduced in Bengal by Lord Cornwallis.",
       "Under it, the land revenue demand was fixed permanently with the zamindars."
@@ -799,7 +799,7 @@
     "topic": "Modern India",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Revolt of 1857. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Revolt of 1857. Which of them is/are correct?",
     "statements": [
       "The Revolt of 1857 began at Meerut.",
       "After the Revolt, the Government of India Act, 1858 transferred the control of the Company's territories to the British Crown."
@@ -881,7 +881,7 @@
     "topic": "Modern India",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the Government of India Act, 1935. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Government of India Act, 1935. Which of them is/are correct?",
     "statements": [
       "The All-India Federation envisaged by the Act of 1935 came into operation in 1937.",
       "The Government of India Act, 1935 introduced provincial autonomy."
@@ -911,7 +911,7 @@
     "topic": "Medieval India",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the Mansabdari system. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Mansabdari system. Which of them is/are correct?",
     "statements": [
       "The Mansabdari system was introduced by Babur.",
       "Under the Mansabdari system of the Mughals, a mansabdar's rank was expressed by two numbers, zat and sawar."
@@ -941,7 +941,7 @@
     "topic": "Freedom Struggle",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the Poona Pact. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Poona Pact. Which of them is/are correct?",
     "statements": [
       "The Poona Pact of 1932 was reached after Gandhi's fast against the Communal Award, with B. R. Ambedkar as a signatory.",
       "It provided for separate electorates for the Depressed Classes."
@@ -1127,7 +1127,7 @@
     "topic": "Indian Geography",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Tropic of Cancer in India. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Tropic of Cancer in India. Which of them is/are correct?",
     "statements": [
       "The Tropic of Cancer passes through Odisha.",
       "The Tropic of Cancer passes through Madhya Pradesh."
@@ -1157,7 +1157,7 @@
     "topic": "Indian Geography",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding rainfall in the Western Ghats and the Deccan. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding rainfall in the Western Ghats and the Deccan. Which of them is/are correct?",
     "statements": [
       "The windward side of the Western Ghats receives heavy rainfall from the southwest monsoon.",
       "The interior of the Deccan Plateau east of the Western Ghats lies in a rain shadow."
@@ -1265,7 +1265,7 @@
     "topic": "Indian Geography",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Ganga-Brahmaputra delta. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Ganga-Brahmaputra delta. Which of them is/are correct?",
     "statements": [
       "The Sundarbans delta has been formed by the Ganga and the Brahmaputra.",
       "In Bangladesh the main channel of the Brahmaputra is known as the Jamuna."
@@ -1295,7 +1295,7 @@
     "topic": "World Geography",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding ocean currents. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding ocean currents. Which of them is/are correct?",
     "statements": [
       "The Benguela Current off southwestern Africa is a warm current.",
       "The Labrador Current is a warm current flowing along the northeast coast of North America."
@@ -1325,7 +1325,7 @@
     "topic": "Indian Geography",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the retreat of the monsoon in India. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the retreat of the monsoon in India. Which of them is/are correct?",
     "statements": [
       "The southwest monsoon begins to withdraw first from northwest India.",
       "Coastal Tamil Nadu receives much of its annual rainfall in October-December from the retreating monsoon."
@@ -1537,7 +1537,7 @@
     "topic": "Public Finance",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Goods and Services Tax. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Goods and Services Tax. Which of them is/are correct?",
     "statements": [
       "The Goods and Services Tax replaced the income tax.",
       "The Goods and Services Tax is a destination-based tax on consumption."
@@ -1567,7 +1567,7 @@
     "topic": "Public Finance",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding fiscal and revenue deficits. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding fiscal and revenue deficits. Which of them is/are correct?",
     "statements": [
       "Fiscal deficit is the excess of total expenditure over total receipts excluding borrowings.",
       "Revenue deficit is the excess of revenue expenditure over revenue receipts."
@@ -1623,7 +1623,7 @@
     "topic": "Monetary Policy",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding open market operations. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding open market operations. Which of them is/are correct?",
     "statements": [
       "When the RBI sells government securities in the open market, it increases the liquidity in the banking system.",
       "Open market operations involve the buying and selling of government securities by the central bank."
@@ -1679,7 +1679,7 @@
     "topic": "National Income",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding per capita income and national income. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding per capita income and national income. Which of them is/are correct?",
     "statements": [
       "National income is always equal to GDP at market prices.",
       "Per capita income is obtained by dividing national income by the population."
@@ -1709,7 +1709,7 @@
     "topic": "Monetary Policy",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the repo rate and the Cash Reserve Ratio. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the repo rate and the Cash Reserve Ratio. Which of them is/are correct?",
     "statements": [
       "A reduction in the repo rate generally lowers the banks' cost of borrowing from the RBI.",
       "An increase in the CRR increases the lendable resources of banks."
@@ -1765,7 +1765,7 @@
     "topic": "Macroeconomics",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding deflation and disinflation. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding deflation and disinflation. Which of them is/are correct?",
     "statements": [
       "Disinflation means the same thing as deflation.",
       "Deflation is a fall in the general price level."
@@ -1951,7 +1951,7 @@
     "topic": "Environmental Governance",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Ramsar Convention. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Ramsar Convention. Which of them is/are correct?",
     "statements": [
       "The Ramsar Convention regulates international trade in endangered species.",
       "The Ramsar Convention is concerned with the conservation of wetlands."
@@ -1981,7 +1981,7 @@
     "topic": "Environmental Governance",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding the Montreal Protocol and the Kyoto Protocol. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Montreal Protocol and the Kyoto Protocol. Which of them is/are correct?",
     "statements": [
       "The Montreal Protocol aims to phase out substances that deplete the ozone layer.",
       "The Kyoto Protocol set emission reduction targets for greenhouse gases."
@@ -2089,7 +2089,7 @@
     "topic": "Ecology Basics",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding energy flow in an ecosystem. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding energy flow in an ecosystem. Which of them is/are correct?",
     "statements": [
       "Energy flows in one direction in an ecosystem, from producers to consumers.",
       "Roughly ten per cent of the energy at one trophic level is transferred to the next."
@@ -2119,7 +2119,7 @@
     "topic": "Environmental Governance",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding the Wildlife (Protection) Act. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding the Wildlife (Protection) Act. Which of them is/are correct?",
     "statements": [
       "The Wildlife (Protection) Act was enacted in 1986.",
       "The Wildlife (Protection) Act provides for the declaration of national parks and wildlife sanctuaries."
@@ -2175,7 +2175,7 @@
     "topic": "Ecology Basics",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding Rhizobium. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding Rhizobium. Which of them is/are correct?",
     "statements": [
       "Rhizobium forms root nodules on cereal crops such as wheat.",
       "Rhizobium bacteria are able to fix atmospheric nitrogen."
@@ -2309,7 +2309,7 @@
     "topic": "Physics and Chemistry",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding sound and light. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding sound and light. Which of them is/are correct?",
     "statements": [
       "Sound can travel through a vacuum.",
       "Light cannot travel through a vacuum."
@@ -2339,7 +2339,7 @@
     "topic": "Space",
     "format": "statements",
     "difficulty": "medium",
-    "stem": "Consider the following statements regarding India's Moon and Mars missions. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding India's Moon and Mars missions. Which of them is/are correct?",
     "statements": [
       "Chandrayaan-3 made a soft landing near the lunar south polar region in 2023.",
       "India's Mars Orbiter Mission made a soft landing on Mars."
@@ -2421,7 +2421,7 @@
     "topic": "Physics and Chemistry",
     "format": "statements",
     "difficulty": "hard",
-    "stem": "Consider the following statements regarding optical fibres and total internal reflection. Which of the statements given above is/are correct?",
+    "stem": "Consider the statements below regarding optical fibres and total internal reflection. Which of them is/are correct?",
     "statements": [
       "Optical fibres transmit light signals by total internal reflection.",
       "Total internal reflection occurs when light travels from a rarer medium to a denser medium."
