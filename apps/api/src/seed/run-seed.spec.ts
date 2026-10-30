@@ -1,6 +1,7 @@
 import { eq, sql } from 'drizzle-orm';
 import { createTestDb } from '../../test/db';
 import type { Db } from '../db/db.module';
+import { newId } from '../db/ids';
 import {
   bookmarks,
   examDates,
@@ -346,6 +347,29 @@ describe('runSeed early in the IST morning', () => {
         expect((t.completedAt as Date).getTime()).toBeGreaterThanOrEqual((t.scheduledStart as Date).getTime());
         expect((t.completedAt as Date).getTime()).toBeLessThanOrEqual(now.getTime());
       }
+    } finally {
+      await close();
+    }
+  });
+});
+
+describe('re-running the seed after the student used a seeded task', () => {
+  it('succeeds and keeps the student session, unlinked from the deleted seeded task', async () => {
+    const { db, close } = await createTestDb();
+    try {
+      const opts = { demoPassword: 'test-password-1', authAdmin: new FakeAuthAdmin(), now: new Date('2026-10-30T06:00:00Z') };
+      await runSeed(db, opts);
+      const [s] = await db.select().from(users).where(eq(users.email, 'student@example.com'));
+      const [seeded] = await db.select().from(tasks).where(eq(tasks.userId, s.id)).limit(1);
+      expect(seeded.source).toBe('seed');
+      const own = newId();
+      await db.insert(studySessions).values({
+        id: own, userId: s.id, taskId: seeded.id, plannedMin: 25, startedAt: new Date('2026-10-30T05:00:00Z'),
+        endedAt: new Date('2026-10-30T05:25:00Z'), activeSeconds: 1500, status: 'ended',
+      });
+      await expect(runSeed(db, opts)).resolves.toMatchObject({ tasks: 8, sessions: 5 });
+      const [after] = await db.select().from(studySessions).where(eq(studySessions.id, own));
+      expect(after).toMatchObject({ id: own, taskId: null, activeSeconds: 1500, status: 'ended' });
     } finally {
       await close();
     }

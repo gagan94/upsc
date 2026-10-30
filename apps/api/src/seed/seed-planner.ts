@@ -172,6 +172,9 @@ export async function seedPlanner(db: Db, ctx: SeedContext): Promise<void> {
     // Remove what an earlier run created (children before parents).
     const practiceIds = PRACTICE.map((p) => practiceSessionId(p.n));
     await tx.delete(studySessions).where(and(eq(studySessions.userId, userId), inArray(studySessions.id, STUDY_NUMBERS.map(studySessionId))));
+    // Sessions the student created against a seeded task keep their history but lose the link (FK is NO ACTION).
+    const seededTasks = tx.select({ id: tasks.id }).from(tasks).where(and(eq(tasks.userId, userId), eq(tasks.source, 'seed')));
+    await tx.update(studySessions).set({ taskId: null }).where(and(eq(studySessions.userId, userId), inArray(studySessions.taskId, seededTasks)));
     await tx.delete(tasks).where(and(eq(tasks.userId, userId), eq(tasks.source, 'seed')));
     await tx.delete(sessionQuestions).where(inArray(sessionQuestions.sessionId, practiceIds));
     await tx.delete(sessions).where(and(eq(sessions.userId, userId), inArray(sessions.id, practiceIds)));
