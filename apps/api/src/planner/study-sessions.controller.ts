@@ -4,17 +4,13 @@ import { EntitlementGuard } from '../billing/entitlement.guard';
 import { RequiresEntitlement } from '../billing/requires-entitlement.decorator';
 import { dayRange } from '../common/dates';
 import { AppError } from '../common/errors';
-import { parse } from '../common/validation';
+import { dateISO, parse } from '../common/validation';
 import { AuthGuard } from '../identity/auth.guard';
 import { CurrentUser } from '../identity/decorators';
 import type { UserView } from '../identity/users.service';
 import { StudySessionsService } from './study-sessions.service';
 
 const uuid = z.string().uuid();
-const dateISO = z
-  .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD')
-  .refine((v) => !Number.isNaN(Date.parse(`${v}T00:00:00Z`)) && new Date(`${v}T00:00:00Z`).toISOString().startsWith(v), 'Invalid date');
 
 const startSchema = z.object({
   plannedMin: z.number().int().min(5).max(240),
