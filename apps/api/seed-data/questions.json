@@ -1,0 +1,2734 @@
+[
+  {
+    "slug": "polity-untouchability",
+    "subject": "prelims-polity",
+    "topic": "Fundamental Rights",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which Article of the Constitution of India abolishes untouchability?",
+    "options": [
+      "Article 14",
+      "Article 17",
+      "Article 15",
+      "Article 21"
+    ],
+    "correctOption": "B",
+    "explanation": "Article 17 abolishes untouchability and forbids its practice in any form; enforcing any disability arising from it is an offence.",
+    "optionReasoning": {
+      "A": "Article 14 guarantees equality before the law, not the abolition of untouchability.",
+      "B": "Article 17 abolishes untouchability.",
+      "C": "Article 15 prohibits discrimination on grounds such as religion, race, caste, sex or place of birth, but does not name untouchability.",
+      "D": "Article 21 protects life and personal liberty."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Article 15 deals with caste-based discrimination, so it looks right, but untouchability is abolished specifically by Article 17."
+    }
+  },
+  {
+    "slug": "polity-constitution-in-force",
+    "subject": "prelims-polity",
+    "topic": "Making of the Constitution",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "On which date did the Constitution of India come into force?",
+    "options": [
+      "15 August 1947",
+      "26 November 1949",
+      "26 January 1950",
+      "26 January 1952"
+    ],
+    "correctOption": "C",
+    "explanation": "The Constituent Assembly adopted the Constitution on 26 November 1949, but it came into force on 26 January 1950, which is celebrated as Republic Day.",
+    "optionReasoning": {
+      "A": "15 August 1947 is the date of Independence, before the Constitution existed.",
+      "B": "26 November 1949 is the date of adoption, when only some provisions took effect.",
+      "C": "The Constitution came into force on 26 January 1950.",
+      "D": "26 January 1952 does not correspond to any constitutional milestone; the first general election was held in 1951-52."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Adoption and commencement are different events; 26 November 1949 is the adoption date."
+    }
+  },
+  {
+    "slug": "polity-fundamental-duties-amendment",
+    "subject": "prelims-polity",
+    "topic": "Fundamental Duties",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Fundamental Duties were added to the Constitution by which Constitutional Amendment Act?",
+    "options": [
+      "42nd Amendment",
+      "44th Amendment",
+      "52nd Amendment",
+      "73rd Amendment"
+    ],
+    "correctOption": "A",
+    "explanation": "The 42nd Amendment (1976) inserted Part IV-A with Article 51A, listing the Fundamental Duties.",
+    "optionReasoning": {
+      "A": "The 42nd Amendment inserted Part IV-A (Article 51A).",
+      "B": "The 44th Amendment (1978) removed the right to property from the Fundamental Rights and restored several safeguards.",
+      "C": "The 52nd Amendment (1985) added the anti-defection provisions (Tenth Schedule).",
+      "D": "The 73rd Amendment (1992) gave constitutional status to Panchayati Raj."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "The 44th is often linked with undoing the 42nd Amendment, but it did not introduce the Fundamental Duties."
+    }
+  },
+  {
+    "slug": "polity-president-vp-election",
+    "subject": "prelims-polity",
+    "topic": "Union Executive",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the election of the President and the Vice-President of India. Which of the statements given above is/are correct?",
+    "statements": [
+      "The President of India is elected by an electoral college.",
+      "The Vice-President of India is elected directly by the people."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The President is elected by an electoral college of elected members of Parliament and State Legislative Assemblies. The Vice-President is elected by the members of both Houses of Parliament, not directly by the people.",
+    "optionReasoning": {
+      "A": "Statement 1 is correct and statement 2 is not.",
+      "B": "Statement 2 is incorrect, so it cannot be the only correct statement.",
+      "C": "Statement 2 is incorrect, so both cannot be correct.",
+      "D": "Statement 1 is correct, so neither is wrong."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Because the President is chosen by an electoral college, many assume the Vice-President is chosen by direct vote; the VP is elected by an electoral college of MPs."
+    }
+  },
+  {
+    "slug": "polity-ls-minimum-age",
+    "subject": "prelims-polity",
+    "topic": "Parliament",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "What is the minimum age to be eligible for election to the Lok Sabha?",
+    "options": [
+      "21 years",
+      "25 years",
+      "30 years",
+      "35 years"
+    ],
+    "correctOption": "B",
+    "explanation": "Article 84 requires a candidate for the Lok Sabha to be at least 25 years old (30 for the Rajya Sabha).",
+    "optionReasoning": {
+      "A": "21 is the minimum voting age context in older rules; it is not the age for Lok Sabha candidature.",
+      "B": "25 years is the minimum age under Article 84.",
+      "C": "30 years is the minimum age for the Rajya Sabha and the Legislative Council.",
+      "D": "35 years is the minimum age for the President and Vice-President."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "30 is the minimum for the Rajya Sabha, which is easily confused with the Lok Sabha age."
+    }
+  },
+  {
+    "slug": "polity-joint-sitting-presiding",
+    "subject": "prelims-polity",
+    "topic": "Parliament",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Who presides over a joint sitting of the two Houses of Parliament?",
+    "options": [
+      "The President of India",
+      "The Vice-President of India",
+      "The Prime Minister",
+      "The Speaker of the Lok Sabha"
+    ],
+    "correctOption": "D",
+    "explanation": "Under Article 108 the Speaker of the Lok Sabha presides over a joint sitting (in the Speaker's absence, the Deputy Speaker).",
+    "optionReasoning": {
+      "A": "The President summons the sitting but does not preside over it.",
+      "B": "The Vice-President is the ex officio Chairman of the Rajya Sabha, but does not preside over a joint sitting.",
+      "C": "The Prime Minister leads the government but holds no presiding role in Parliament.",
+      "D": "The Speaker of the Lok Sabha presides over a joint sitting."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "The Vice-President is the Chairman of the Rajya Sabha, so it seems natural that the VP chairs a joint sitting; it is the Speaker who does."
+    }
+  },
+  {
+    "slug": "polity-rs-ls-term",
+    "subject": "prelims-polity",
+    "topic": "Parliament",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Rajya Sabha and the Lok Sabha. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Rajya Sabha is a permanent House and is not subject to dissolution.",
+      "The normal term of the Lok Sabha is six years."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The Rajya Sabha is never dissolved; one-third of its members retire every second year. The Lok Sabha's normal term is five years from its first sitting, not six.",
+    "optionReasoning": {
+      "A": "Statement 1 is correct and statement 2 is not.",
+      "B": "Statement 2 is wrong: the Lok Sabha term is five years.",
+      "C": "Statement 2 is wrong, so both cannot be correct.",
+      "D": "Statement 1 is correct, so 'neither' is wrong."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Six years is the term of a Rajya Sabha member, which is mistakenly transferred to the Lok Sabha."
+    }
+  },
+  {
+    "slug": "polity-right-to-education",
+    "subject": "prelims-polity",
+    "topic": "Fundamental Rights",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which Article of the Constitution provides for the right to free and compulsory education for children aged six to fourteen years?",
+    "options": [
+      "Article 21A",
+      "Article 19",
+      "Article 29",
+      "Article 32"
+    ],
+    "correctOption": "A",
+    "explanation": "Article 21A, inserted by the 86th Amendment Act (2002), makes free and compulsory education for children aged 6 to 14 a Fundamental Right.",
+    "optionReasoning": {
+      "A": "Article 21A provides the right to education.",
+      "B": "Article 19 lists the freedoms such as speech and assembly.",
+      "C": "Article 29 protects the interests of minorities, including their culture and language.",
+      "D": "Article 32 is the right to move the Supreme Court for enforcement of Fundamental Rights."
+    },
+    "misconception": {
+      "option": "D",
+      "text": "Article 32 is the remedy for enforcing rights, so it is sometimes picked for any 'right'-based question."
+    }
+  },
+  {
+    "slug": "polity-habeas-corpus",
+    "subject": "prelims-polity",
+    "topic": "Judiciary and Writs",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The writ of habeas corpus is issued to:",
+    "options": [
+      "direct a public official to perform a public duty",
+      "quash the order of a lower court",
+      "produce a detained person before the court",
+      "question the authority under which a person holds a public office"
+    ],
+    "correctOption": "C",
+    "explanation": "Habeas corpus (literally 'you may have the body') requires the detaining authority to produce the person before the court so that the lawfulness of the detention can be examined.",
+    "optionReasoning": {
+      "A": "That describes mandamus.",
+      "B": "That describes certiorari, which quashes orders of lower courts or tribunals.",
+      "C": "Habeas corpus requires the production of the detained person before the court.",
+      "D": "That describes quo warranto."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Mandamus is also commonly described as a command, so it is confused with habeas corpus."
+    }
+  },
+  {
+    "slug": "polity-money-bill",
+    "subject": "prelims-polity",
+    "topic": "Parliament",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding Money Bills. Which of the statements given above is/are correct?",
+    "statements": [
+      "A Money Bill can be introduced only in the Lok Sabha.",
+      "The Rajya Sabha can reject a Money Bill passed by the Lok Sabha."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Under Article 109 a Money Bill is introduced only in the Lok Sabha. The Rajya Sabha may only make recommendations within 14 days; the Lok Sabha may accept or reject them, so the Rajya Sabha cannot reject a Money Bill.",
+    "optionReasoning": {
+      "A": "Statement 1 is correct; statement 2 is not.",
+      "B": "Statement 2 is incorrect, so it cannot be the only correct statement.",
+      "C": "Statement 2 is incorrect, so both cannot be correct.",
+      "D": "Statement 1 is correct, so 'neither' is wrong."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Since the Rajya Sabha can reject ordinary bills, it is assumed to have the same power over Money Bills; it has only a recommendatory role."
+    }
+  },
+  {
+    "slug": "polity-writs-sc-hc",
+    "subject": "prelims-polity",
+    "topic": "Judiciary and Writs",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the power to issue writs. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Supreme Court can issue writs under Article 32 for the enforcement of Fundamental Rights.",
+      "A High Court can issue writs only for the enforcement of Fundamental Rights."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Article 32 empowers the Supreme Court to issue writs for Fundamental Rights. Article 226 gives High Courts a wider power: to issue writs for Fundamental Rights and for 'any other purpose'.",
+    "optionReasoning": {
+      "A": "Statement 1 is correct; statement 2 is wrong.",
+      "B": "Statement 2 is wrong because Article 226 is wider.",
+      "C": "Statement 2 is wrong, so both cannot be correct.",
+      "D": "Statement 1 is correct, so 'neither' is wrong."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "People often think the High Courts' writ power mirrors the Supreme Court's; Article 226 extends beyond Fundamental Rights."
+    }
+  },
+  {
+    "slug": "polity-dpsp-part",
+    "subject": "prelims-polity",
+    "topic": "Directive Principles",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The Directive Principles of State Policy are contained in which Part of the Constitution?",
+    "options": [
+      "Part III",
+      "Part IV-A",
+      "Part V",
+      "Part IV"
+    ],
+    "correctOption": "D",
+    "explanation": "Part IV (Articles 36 to 51) contains the Directive Principles of State Policy.",
+    "optionReasoning": {
+      "A": "Part III contains the Fundamental Rights.",
+      "B": "Part IV-A contains the Fundamental Duties (Article 51A).",
+      "C": "Part V deals with the Union (executive, Parliament, judiciary).",
+      "D": "Part IV contains the Directive Principles."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Part III and Part IV are adjacent and both concern citizens' welfare; Part III is the Fundamental Rights."
+    }
+  },
+  {
+    "slug": "polity-governor",
+    "subject": "prelims-polity",
+    "topic": "State Executive",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Governor of a State. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Governor of a State is appointed by the President.",
+      "The Governor holds office during the pleasure of the President."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "Article 155 states that the Governor is appointed by the President by warrant, and Article 156 says the Governor holds office during the pleasure of the President (normally for five years).",
+    "optionReasoning": {
+      "A": "Statement 2 is also correct, so 1 alone is incomplete.",
+      "B": "Statement 1 is also correct, so 2 alone is incomplete.",
+      "C": "Both statements are correct (Articles 155 and 156).",
+      "D": "Both statements are correct, so 'neither' is wrong."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Fixed five-year terms make people think the Governor cannot be removed at will; Article 156 provides for pleasure of the President."
+    }
+  },
+  {
+    "slug": "polity-president-impeachment",
+    "subject": "prelims-polity",
+    "topic": "Union Executive",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "The procedure for the impeachment of the President of India is given in which Article?",
+    "options": [
+      "Article 52",
+      "Article 61",
+      "Article 74",
+      "Article 356"
+    ],
+    "correctOption": "B",
+    "explanation": "Article 61 lays down the procedure for impeaching the President for violation of the Constitution.",
+    "optionReasoning": {
+      "A": "Article 52 says there shall be a President of India.",
+      "B": "Article 61 prescribes the impeachment procedure.",
+      "C": "Article 74 provides for the Council of Ministers to aid and advise the President.",
+      "D": "Article 356 deals with President's Rule in a State."
+    },
+    "misconception": {
+      "option": "D",
+      "text": "Article 356 is often associated with presidential power, but it concerns constitutional failure in States."
+    }
+  },
+  {
+    "slug": "polity-cag",
+    "subject": "prelims-polity",
+    "topic": "Constitutional Bodies",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the Comptroller and Auditor General of India. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Comptroller and Auditor General of India is appointed by the President.",
+      "The Comptroller and Auditor General can be removed from office in the same manner and on the same grounds as a judge of the Supreme Court."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "Article 148 provides that the CAG is appointed by the President by warrant and can be removed only in the manner and on the grounds as a Supreme Court judge, which safeguards independence.",
+    "optionReasoning": {
+      "A": "Statement 2 is also correct.",
+      "B": "Statement 1 is also correct.",
+      "C": "Both statements are correct (Article 148).",
+      "D": "Both statements are correct, so 'neither' is wrong."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Because the CAG is appointed by the executive, it is assumed removal is also at the executive's will; it is not."
+    }
+  },
+  {
+    "slug": "polity-national-emergency-article",
+    "subject": "prelims-polity",
+    "topic": "Emergency Provisions",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "A National Emergency on the ground of war, external aggression or armed rebellion is proclaimed under which Article?",
+    "options": [
+      "Article 352",
+      "Article 356",
+      "Article 360",
+      "Article 365"
+    ],
+    "correctOption": "A",
+    "explanation": "Article 352 empowers the President to proclaim a National Emergency on grounds of war, external aggression or armed rebellion.",
+    "optionReasoning": {
+      "A": "Article 352 is the National Emergency provision.",
+      "B": "Article 356 provides for President's Rule when constitutional machinery fails in a State.",
+      "C": "Article 360 deals with Financial Emergency.",
+      "D": "Article 365 deals with the effect of failure to comply with Union directions."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Article 356 is the more frequently discussed emergency article, but it is State-level."
+    }
+  },
+  {
+    "slug": "polity-concurrent-list",
+    "subject": "prelims-polity",
+    "topic": "Federalism",
+    "format": "single",
+    "difficulty": "hard",
+    "stem": "Which of the following subjects is in the Concurrent List of the Seventh Schedule?",
+    "options": [
+      "Defence of India",
+      "Police",
+      "Forests",
+      "Currency and coinage"
+    ],
+    "correctOption": "C",
+    "explanation": "Forests were moved from the State List to the Concurrent List by the 42nd Amendment (1976). Defence and currency are Union subjects and police is a State subject.",
+    "optionReasoning": {
+      "A": "Defence is in the Union List.",
+      "B": "Police is in the State List.",
+      "C": "Forests are in the Concurrent List.",
+      "D": "Currency, coinage and legal tender are in the Union List."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Police seems like a shared responsibility, but it is a State List subject."
+    }
+  },
+  {
+    "slug": "polity-basic-structure",
+    "subject": "prelims-polity",
+    "topic": "Constitutional Framework",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the basic structure doctrine. Which of the statements given above is/are correct?",
+    "statements": [
+      "The doctrine of the basic structure was laid down by the Supreme Court in Kesavananda Bharati v. State of Kerala (1973).",
+      "According to the doctrine, Parliament has no power to amend the Constitution at all."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "In Kesavananda Bharati (1973) the Supreme Court held that Parliament can amend the Constitution but cannot alter its basic structure. Statement 2 overstates the doctrine.",
+    "optionReasoning": {
+      "A": "Statement 1 is correct; statement 2 is not.",
+      "B": "Statement 2 is incorrect, since amendments are allowed within the basic structure.",
+      "C": "Statement 2 is incorrect, so both cannot be correct.",
+      "D": "Statement 1 is correct, so 'neither' is wrong."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "The doctrine limits amendment power; it does not remove it."
+    }
+  },
+  {
+    "slug": "polity-bills-lapse",
+    "subject": "prelims-polity",
+    "topic": "Parliament",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the lapse of Bills on the dissolution of the Lok Sabha. Which of the statements given above is/are correct?",
+    "statements": [
+      "A Bill originated in the Rajya Sabha and pending there does not lapse on the dissolution of the Lok Sabha.",
+      "A Bill passed by the Lok Sabha and pending in the Rajya Sabha lapses on the dissolution of the Lok Sabha."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "The Rajya Sabha is not dissolved, so a Bill pending there that has not been passed by the Lok Sabha survives. A Bill passed by the Lok Sabha but pending in the Rajya Sabha lapses with dissolution.",
+    "optionReasoning": {
+      "A": "Statement 2 is also correct.",
+      "B": "Statement 1 is also correct.",
+      "C": "Both statements are correct.",
+      "D": "Both statements are correct, so 'neither' is wrong."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "It is assumed that pending Bills in the Rajya Sabha never lapse; a Lok Sabha-passed Bill pending there does lapse."
+    }
+  },
+  {
+    "slug": "polity-constitutional-body",
+    "subject": "prelims-polity",
+    "topic": "Constitutional Bodies",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Which of the following is a constitutional body?",
+    "options": [
+      "NITI Aayog",
+      "Election Commission of India",
+      "National Human Rights Commission",
+      "Central Vigilance Commission"
+    ],
+    "correctOption": "B",
+    "explanation": "The Election Commission is established by Article 324. NITI Aayog was created by a Cabinet resolution, while the NHRC and CVC are statutory bodies.",
+    "optionReasoning": {
+      "A": "NITI Aayog is a non-statutory body set up by an executive resolution.",
+      "B": "The Election Commission derives its existence from Article 324.",
+      "C": "The NHRC is a statutory body under the Protection of Human Rights Act, 1993.",
+      "D": "The CVC is a statutory body under the CVC Act, 2003."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Its quasi-judicial role suggests a constitutional status, but it is statutory."
+    }
+  },
+  {
+    "slug": "history-plassey",
+    "subject": "prelims-history",
+    "topic": "Modern India",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The Battle of Plassey, which established the political power of the English East India Company in Bengal, was fought in which year?",
+    "options": [
+      "1757",
+      "1764",
+      "1857",
+      "1761"
+    ],
+    "correctOption": "A",
+    "explanation": "The Battle of Plassey was fought in 1757 between Robert Clive's forces and Siraj-ud-Daulah, the Nawab of Bengal.",
+    "optionReasoning": {
+      "A": "Plassey was fought in 1757.",
+      "B": "1764 is the year of the Battle of Buxar.",
+      "C": "1857 is the year of the Revolt, a century after Plassey.",
+      "D": "1761 is the year of the Third Battle of Panipat."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Buxar (1764) is a closely related battle that confirmed Company power, so the dates are confused."
+    }
+  },
+  {
+    "slug": "history-maurya-founder",
+    "subject": "prelims-history",
+    "topic": "Ancient India",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Who founded the Maurya Empire?",
+    "options": [
+      "Ashoka",
+      "Bindusara",
+      "Brihadratha",
+      "Chandragupta Maurya"
+    ],
+    "correctOption": "D",
+    "explanation": "Chandragupta Maurya founded the Maurya Empire around 321 BCE with the guidance of Kautilya, after overthrowing the Nandas.",
+    "optionReasoning": {
+      "A": "Ashoka was the third Mauryan ruler, famous for the Kalinga war and his edicts.",
+      "B": "Bindusara was Chandragupta's son and Ashoka's father.",
+      "C": "Brihadratha was the last Mauryan ruler, killed by Pushyamitra Shunga.",
+      "D": "Chandragupta Maurya was the founder."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Ashoka is the best-known Mauryan, so he is often credited with founding the empire."
+    }
+  },
+  {
+    "slug": "history-dandi-march",
+    "subject": "prelims-history",
+    "topic": "Freedom Struggle",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The Dandi March of 1930 led by Mahatma Gandhi was associated with which movement?",
+    "options": [
+      "Civil Disobedience Movement",
+      "Non-Cooperation Movement",
+      "Quit India Movement",
+      "Khilafat Movement"
+    ],
+    "correctOption": "A",
+    "explanation": "The Dandi March (March-April 1930), in which Gandhi broke the salt law, marked the start of the Civil Disobedience Movement.",
+    "optionReasoning": {
+      "A": "The Dandi March began the Civil Disobedience Movement.",
+      "B": "The Non-Cooperation Movement began in 1920-22.",
+      "C": "The Quit India Movement was launched in 1942.",
+      "D": "The Khilafat Movement (1919-24) was linked to the Ottoman Caliphate issue."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Gandhi led several mass movements, and Non-Cooperation is the first one that comes to mind."
+    }
+  },
+  {
+    "slug": "history-arthashastra",
+    "subject": "prelims-history",
+    "topic": "Ancient India",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The ancient treatise on statecraft, the Arthashastra, is attributed to:",
+    "options": [
+      "Kalidasa",
+      "Banabhatta",
+      "Kautilya",
+      "Vishakhadatta"
+    ],
+    "correctOption": "C",
+    "explanation": "The Arthashastra is attributed to Kautilya (also called Chanakya or Vishnugupta), the adviser of Chandragupta Maurya.",
+    "optionReasoning": {
+      "A": "Kalidasa was a Sanskrit poet and dramatist of the Gupta period.",
+      "B": "Banabhatta wrote the Harshacharita, a biography of Harshavardhana.",
+      "C": "Kautilya is the traditional author of the Arthashastra.",
+      "D": "Vishakhadatta wrote the play Mudrarakshasa, which is about Chanakya's politics but is not the Arthashastra."
+    },
+    "misconception": {
+      "option": "D",
+      "text": "Mudrarakshasa features Chanakya, so its author is mistaken for the author of the Arthashastra."
+    }
+  },
+  {
+    "slug": "history-inc-founded",
+    "subject": "prelims-history",
+    "topic": "Freedom Struggle",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The Indian National Congress was founded in which year?",
+    "options": [
+      "1857",
+      "1885",
+      "1905",
+      "1919"
+    ],
+    "correctOption": "B",
+    "explanation": "The Indian National Congress was founded in 1885; its first session was held in Bombay under W. C. Bonnerjee.",
+    "optionReasoning": {
+      "A": "1857 was the year of the Revolt.",
+      "B": "The INC was founded in 1885.",
+      "C": "1905 was the year of the Partition of Bengal.",
+      "D": "1919 saw the Rowlatt Act and the Jallianwala Bagh massacre."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "1857 is the most famous nineteenth-century date, but it marks the Revolt."
+    }
+  },
+  {
+    "slug": "history-quit-india",
+    "subject": "prelims-history",
+    "topic": "Freedom Struggle",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "In which year was the Quit India Movement launched?",
+    "options": [
+      "1930",
+      "1935",
+      "1942",
+      "1946"
+    ],
+    "correctOption": "C",
+    "explanation": "The Quit India Movement was launched on 8 August 1942 at Gandhi's call of 'Do or Die'.",
+    "optionReasoning": {
+      "A": "1930 is the year of the Dandi March and the Civil Disobedience Movement.",
+      "B": "1935 is the year of the Government of India Act.",
+      "C": "The Quit India Movement was launched in 1942.",
+      "D": "1946 is the year of the Cabinet Mission and naval mutiny."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "1930 is the other famous Gandhian mass movement year."
+    }
+  },
+  {
+    "slug": "history-ashoka",
+    "subject": "prelims-history",
+    "topic": "Ancient India",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding Ashoka. Which of the statements given above is/are correct?",
+    "statements": [
+      "Ashoka's conversion to Buddhism is traditionally associated with the aftermath of the Kalinga war.",
+      "Ashoka's inscriptions were written only in the Sanskrit language."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Ashoka's Kalinga war is traditionally linked to his turn to Buddhism and dhamma. His inscriptions are mostly in Prakrit (in the Brahmi and Kharosthi scripts), with Greek and Aramaic in the northwest, not Sanskrit.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Ancient texts are often assumed to be in Sanskrit; Ashoka's edicts used Prakrit."
+    }
+  },
+  {
+    "slug": "history-permanent-settlement",
+    "subject": "prelims-history",
+    "topic": "Modern India",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Permanent Settlement. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Permanent Settlement was introduced in Bengal by Lord Cornwallis.",
+      "Under it, the land revenue demand was fixed permanently with the zamindars."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "The Permanent Settlement (1793) was introduced by Lord Cornwallis in Bengal; the zamindars were recognised as landlords and the revenue they paid to the Company was fixed in perpetuity.",
+    "optionReasoning": {
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is correct.",
+      "C": "Correct: both statements are correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Cornwallis's name is well known, so only the first statement seems certain; the second is also part of the settlement."
+    }
+  },
+  {
+    "slug": "history-partition-bengal",
+    "subject": "prelims-history",
+    "topic": "Modern India",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Which Viceroy was in office when Bengal was partitioned in 1905?",
+    "options": [
+      "Lord Minto",
+      "Lord Hardinge",
+      "Lord Ripon",
+      "Lord Curzon"
+    ],
+    "correctOption": "D",
+    "explanation": "Lord Curzon carried out the Partition of Bengal, which took effect in October 1905. It was annulled in 1911 during Lord Hardinge's time.",
+    "optionReasoning": {
+      "A": "Minto succeeded Curzon in late 1905 and is linked with the 1909 reforms.",
+      "B": "Hardinge announced the annulment of the partition in 1911.",
+      "C": "Ripon was Viceroy in 1880-84 and is known for local self-government.",
+      "D": "Curzon was Viceroy in 1905."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Hardinge is linked with the revocation of the partition, so the two are confused."
+    }
+  },
+  {
+    "slug": "history-revolt-1857",
+    "subject": "prelims-history",
+    "topic": "Modern India",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Revolt of 1857. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Revolt of 1857 began at Meerut.",
+      "After the Revolt, the Government of India Act, 1858 transferred the control of the Company's territories to the British Crown."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "The sepoys at Meerut rose on 10 May 1857. The Government of India Act, 1858 ended Company rule and vested the government of India in the Crown.",
+    "optionReasoning": {
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is correct.",
+      "C": "Correct: both statements are correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Delhi and Kanpur dominate accounts of the Revolt, so statement 1 seems doubtful, but it began at Meerut."
+    }
+  },
+  {
+    "slug": "history-fa-hien",
+    "subject": "prelims-history",
+    "topic": "Ancient India",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "The Chinese Buddhist pilgrim Fa-Hien visited India during the reign of which ruler?",
+    "options": [
+      "Chandragupta Maurya",
+      "Chandragupta II",
+      "Harshavardhana",
+      "Ashoka"
+    ],
+    "correctOption": "B",
+    "explanation": "Fa-Hien (Faxian) travelled in India in the early fifth century CE, during the reign of Chandragupta II of the Gupta dynasty.",
+    "optionReasoning": {
+      "A": "Chandragupta Maurya ruled about seven centuries earlier.",
+      "B": "Fa-Hien visited in the reign of Chandragupta II.",
+      "C": "Harshavardhana was visited by Xuanzang (Hiuen Tsang) in the seventh century.",
+      "D": "Ashoka ruled in the third century BCE."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Another Chinese pilgrim, Xuanzang, visited Harsha's court, and the two pilgrims are confused."
+    }
+  },
+  {
+    "slug": "history-champaran",
+    "subject": "prelims-history",
+    "topic": "Freedom Struggle",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "The Champaran Satyagraha of 1917 was launched in support of:",
+    "options": [
+      "indigo cultivators oppressed by European planters",
+      "salt makers protesting the salt tax",
+      "mill workers demanding higher wages",
+      "peasants protesting against Rowlatt Act"
+    ],
+    "correctOption": "A",
+    "explanation": "In 1917 Gandhi took up the grievances of indigo peasants in Champaran, Bihar, who were forced to grow indigo under the tinkathia system.",
+    "optionReasoning": {
+      "A": "Champaran concerned indigo cultivators.",
+      "B": "The salt tax was the issue in 1930, not 1917.",
+      "C": "The Ahmedabad mill workers' dispute (1918) was about wages.",
+      "D": "The Rowlatt Satyagraha was in 1919."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Both Champaran and Ahmedabad were Gandhi's early local satyagrahas in 1917-18."
+    }
+  },
+  {
+    "slug": "history-ga-1935",
+    "subject": "prelims-history",
+    "topic": "Modern India",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the Government of India Act, 1935. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Government of India Act, 1935 introduced provincial autonomy.",
+      "The All-India Federation envisaged by the Act of 1935 came into operation in 1937."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The 1935 Act gave provinces autonomy, and elections were held in 1937 under it. The proposed All-India Federation required the consent of the princely states and never came into being.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Because provincial elections occurred in 1937, it is assumed the whole scheme including the federation began."
+    }
+  },
+  {
+    "slug": "history-mansabdari",
+    "subject": "prelims-history",
+    "topic": "Medieval India",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the Mansabdari system. Which of the statements given above is/are correct?",
+    "statements": [
+      "Under the Mansabdari system of the Mughals, a mansabdar's rank was expressed by two numbers, zat and sawar.",
+      "The Mansabdari system was introduced by Babur."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The Mansabdari system was organised by Akbar; zat showed personal rank and sawar the number of cavalry. Babur founded the Mughal empire but did not introduce it.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "The founder of the dynasty is often assumed to have started all its institutions."
+    }
+  },
+  {
+    "slug": "history-poona-pact",
+    "subject": "prelims-history",
+    "topic": "Freedom Struggle",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the Poona Pact. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Poona Pact of 1932 was an agreement between Mahatma Gandhi and B. R. Ambedkar.",
+      "It provided for separate electorates for the Depressed Classes."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The Poona Pact followed Gandhi's fast against the Communal Award. It gave up separate electorates and provided reserved seats for the Depressed Classes in joint electorates.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "The Communal Award granted separate electorates; the Poona Pact replaced them."
+    }
+  },
+  {
+    "slug": "geo-largest-state",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which is the largest Indian State by area?",
+    "options": [
+      "Madhya Pradesh",
+      "Maharashtra",
+      "Rajasthan",
+      "Uttar Pradesh"
+    ],
+    "correctOption": "C",
+    "explanation": "Rajasthan is the largest State by area (about 3.42 lakh sq km). Madhya Pradesh is second.",
+    "optionReasoning": {
+      "A": "Madhya Pradesh is the second largest.",
+      "B": "Maharashtra is the third largest.",
+      "C": "Rajasthan is the largest by area.",
+      "D": "Uttar Pradesh is the largest by population, not area."
+    },
+    "misconception": {
+      "option": "D",
+      "text": "Uttar Pradesh is the most populous State, so it is assumed to be the largest in area."
+    }
+  },
+  {
+    "slug": "geo-godavari",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which is the longest river of peninsular India?",
+    "options": [
+      "Krishna",
+      "Godavari",
+      "Narmada",
+      "Kaveri"
+    ],
+    "correctOption": "B",
+    "explanation": "The Godavari, about 1,465 km long, is the longest peninsular river and is often called the Dakshin Ganga.",
+    "optionReasoning": {
+      "A": "The Krishna is the second longest peninsular river.",
+      "B": "The Godavari is the longest peninsular river.",
+      "C": "The Narmada is a west-flowing river, shorter than the Godavari.",
+      "D": "The Kaveri is shorter than both the Godavari and the Krishna."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "The Krishna is the next in size, so the order of the two is confused."
+    }
+  },
+  {
+    "slug": "geo-ganga-source",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The river Ganga is known as the Bhagirathi near its source, which is the:",
+    "options": [
+      "Yamunotri glacier",
+      "Milam glacier",
+      "Siachen glacier",
+      "Gangotri glacier"
+    ],
+    "correctOption": "D",
+    "explanation": "The Bhagirathi rises from the Gangotri glacier in Uttarakhand and joins the Alaknanda at Devprayag to form the Ganga.",
+    "optionReasoning": {
+      "A": "Yamunotri is the source of the Yamuna.",
+      "B": "Milam is a glacier in Kumaon, source of the Gori Ganga.",
+      "C": "Siachen is the source of the Nubra River.",
+      "D": "Gangotri is the source of the Bhagirathi."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Yamunotri is nearby in Uttarakhand and also a Char Dham site, so it is confused with Gangotri."
+    }
+  },
+  {
+    "slug": "geo-longest-coastline",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which State has the longest coastline on the Indian mainland?",
+    "options": [
+      "Gujarat",
+      "Tamil Nadu",
+      "Andhra Pradesh",
+      "Maharashtra"
+    ],
+    "correctOption": "A",
+    "explanation": "Gujarat has the longest mainland coastline and is followed by Andhra Pradesh and Tamil Nadu.",
+    "optionReasoning": {
+      "A": "Gujarat has the longest coastline.",
+      "B": "Tamil Nadu is among the longer ones but is not the longest.",
+      "C": "Andhra Pradesh is second longest.",
+      "D": "Maharashtra has a shorter coast."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Tamil Nadu's coast is popularly associated with the long Coromandel coast."
+    }
+  },
+  {
+    "slug": "geo-standard-meridian",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The Indian Standard Time is based on which longitude?",
+    "options": [
+      "68 degrees 7 minutes E",
+      "82 degrees 30 minutes E",
+      "97 degrees 25 minutes E",
+      "90 degrees E"
+    ],
+    "correctOption": "B",
+    "explanation": "The Standard Meridian of India is 82 degrees 30 minutes E, passing near Mirzapur in Uttar Pradesh; IST is 5 hours 30 minutes ahead of GMT.",
+    "optionReasoning": {
+      "A": "68 degrees 7 minutes E is the westernmost longitude of India.",
+      "B": "IST is based on 82 degrees 30 minutes E.",
+      "C": "97 degrees 25 minutes E is the easternmost longitude of India.",
+      "D": "90 degrees E is not a standard meridian used for IST."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "The extreme longitudes of the country are confused with the standard meridian."
+    }
+  },
+  {
+    "slug": "geo-black-soil",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which soil type is considered most suitable for growing cotton?",
+    "options": [
+      "Alluvial soil",
+      "Red soil",
+      "Black soil",
+      "Laterite soil"
+    ],
+    "correctOption": "C",
+    "explanation": "Black (regur) soil is rich in clay, retains moisture and is formed from basaltic rock in the Deccan, making it ideal for cotton.",
+    "optionReasoning": {
+      "A": "Alluvial soil is best known for rice, wheat and sugarcane.",
+      "B": "Red soil suits millets and pulses.",
+      "C": "Black soil is ideal for cotton.",
+      "D": "Laterite soil suits plantation crops such as cashew."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Alluvial soil is the most widespread and is assumed to fit every crop."
+    }
+  },
+  {
+    "slug": "geo-tropic-of-cancer",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Tropic of Cancer in India. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Tropic of Cancer passes through Madhya Pradesh.",
+      "The Tropic of Cancer passes through Odisha."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The Tropic of Cancer passes through eight States: Gujarat, Rajasthan, Madhya Pradesh, Chhattisgarh, Jharkhand, West Bengal, Tripura and Mizoram. Odisha lies to the south of it.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Odisha is east-central and next to Jharkhand and Chhattisgarh, so it is assumed to be on the line."
+    }
+  },
+  {
+    "slug": "geo-western-ghats-rain",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding rainfall in the Western Ghats and the Deccan. Which of the statements given above is/are correct?",
+    "statements": [
+      "The windward side of the Western Ghats receives heavy rainfall from the southwest monsoon.",
+      "The interior of the Deccan Plateau east of the Western Ghats lies in a rain shadow."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "Moist southwest monsoon winds rise over the Western Ghats and shed heavy rain on the western slopes, leaving the leeward Deccan interior comparatively dry.",
+    "optionReasoning": {
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is correct.",
+      "C": "Correct: both statements are correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Heavy rain on the Ghats leads people to think the whole peninsula is wet."
+    }
+  },
+  {
+    "slug": "geo-narmada",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Which of the following rivers flows westwards through a rift valley and drains into the Arabian Sea?",
+    "options": [
+      "Mahanadi",
+      "Godavari",
+      "Krishna",
+      "Narmada"
+    ],
+    "correctOption": "D",
+    "explanation": "The Narmada, like the Tapi, flows westward through a rift valley and ends in the Gulf of Khambhat in the Arabian Sea.",
+    "optionReasoning": {
+      "A": "The Mahanadi flows east into the Bay of Bengal.",
+      "B": "The Godavari flows east into the Bay of Bengal.",
+      "C": "The Krishna flows east into the Bay of Bengal.",
+      "D": "The Narmada flows west through a rift valley."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "The Godavari is the biggest peninsular river, and many assume the biggest flows to the west."
+    }
+  },
+  {
+    "slug": "geo-shiwalik",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Which is the outermost (southernmost) range of the Himalayas?",
+    "options": [
+      "Himadri",
+      "Shiwalik",
+      "Himachal",
+      "Karakoram"
+    ],
+    "correctOption": "B",
+    "explanation": "The Shiwaliks are the outermost and lowest ranges of the Himalayas; the Himadri is the highest, innermost range and the Himachal (Lesser Himalaya) lies between.",
+    "optionReasoning": {
+      "A": "Himadri is the innermost, highest range.",
+      "B": "Shiwalik is the outermost range.",
+      "C": "Himachal is the middle range.",
+      "D": "The Karakoram is a trans-Himalayan range to the north."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Himachal sounds like the foothills of the Himalayas, but it is the middle range."
+    }
+  },
+  {
+    "slug": "geo-chilika",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Which is the largest coastal lagoon in India?",
+    "options": [
+      "Chilika Lake",
+      "Pulicat Lake",
+      "Vembanad Lake",
+      "Loktak Lake"
+    ],
+    "correctOption": "A",
+    "explanation": "Chilika Lake in Odisha is the largest coastal lagoon in India. Pulicat is the second largest, Vembanad is a backwater lake in Kerala and Loktak is a freshwater lake in Manipur.",
+    "optionReasoning": {
+      "A": "Chilika is the largest coastal lagoon.",
+      "B": "Pulicat is the second largest lagoon.",
+      "C": "Vembanad is a large backwater lake in Kerala, not the largest lagoon.",
+      "D": "Loktak is an inland freshwater lake."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Pulicat is also a major lagoon on the east coast, so the two are confused."
+    }
+  },
+  {
+    "slug": "geo-sundarbans-jamuna",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Ganga-Brahmaputra delta. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Sundarbans delta has been formed by the Ganga and the Brahmaputra.",
+      "In Bangladesh the main channel of the Brahmaputra is known as the Jamuna."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "The Ganga-Brahmaputra delta, the largest in the world, includes the Sundarbans. In Bangladesh the Brahmaputra flows as the Jamuna before joining the Padma.",
+    "optionReasoning": {
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is correct.",
+      "C": "Correct: both statements are correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Jamuna sounds like the Yamuna of India, but in Bangladesh it is the Brahmaputra."
+    }
+  },
+  {
+    "slug": "geo-ocean-currents",
+    "subject": "prelims-geography",
+    "topic": "World Geography",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding ocean currents. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Gulf Stream is a warm ocean current of the North Atlantic.",
+      "The Benguela Current off southwestern Africa is a warm current."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The Gulf Stream carries warm water northeast across the Atlantic. The Benguela Current is a cold current flowing north along the southwest coast of Africa.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Currents near the tropics are often assumed to be warm, but Benguela is cold."
+    }
+  },
+  {
+    "slug": "geo-monsoon-retreat",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the retreat of the monsoon in India. Which of the statements given above is/are correct?",
+    "statements": [
+      "The southwest monsoon begins to withdraw first from northwest India.",
+      "Coastal Tamil Nadu receives much of its annual rainfall in October-December from the retreating monsoon."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "The monsoon withdraws from northwest India around September and the retreating monsoon, or northeast monsoon, brings substantial rain to the Tamil Nadu coast in October-December.",
+    "optionReasoning": {
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is correct.",
+      "C": "Correct: both statements are correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Tamil Nadu is thought of as dry in summer, so its main rainy season is overlooked."
+    }
+  },
+  {
+    "slug": "geo-ten-degree-channel",
+    "subject": "prelims-geography",
+    "topic": "Indian Geography",
+    "format": "single",
+    "difficulty": "hard",
+    "stem": "The Ten Degree Channel separates which two island groups?",
+    "options": [
+      "Lakshadweep and the Maldives",
+      "Minicoy and the rest of Lakshadweep",
+      "Andaman Islands and Nicobar Islands",
+      "India and Sri Lanka"
+    ],
+    "correctOption": "C",
+    "explanation": "The Ten Degree Channel lies along 10 degrees north and separates Little Andaman (Andaman) from Car Nicobar (Nicobar).",
+    "optionReasoning": {
+      "A": "The Eight Degree Channel separates Minicoy from the Maldives.",
+      "B": "The Nine Degree Channel separates Minicoy from the main Lakshadweep islands.",
+      "C": "The Ten Degree Channel separates Andaman and Nicobar.",
+      "D": "The Palk Strait separates India and Sri Lanka."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "The numbered channels are easily confused; the Eight Degree Channel lies near Minicoy and the Maldives."
+    }
+  },
+  {
+    "slug": "eco-note-issue",
+    "subject": "prelims-economy",
+    "topic": "Banking",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "In India, currency notes (other than the one-rupee note) are issued by:",
+    "options": [
+      "The State Bank of India",
+      "The Reserve Bank of India",
+      "The Ministry of Finance",
+      "NABARD"
+    ],
+    "correctOption": "B",
+    "explanation": "Under the RBI Act, the Reserve Bank of India has the sole right to issue bank notes in India. Rupee coins and the one-rupee note are issued by the Government of India.",
+    "optionReasoning": {
+      "A": "The SBI is a commercial bank and does not issue notes.",
+      "B": "The RBI issues currency notes.",
+      "C": "The Ministry of Finance issues coins and one-rupee notes, not the other notes.",
+      "D": "NABARD is a development bank for agriculture and rural development."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "The Government mints coins and issues the one-rupee note, so the Finance Ministry seems to issue all currency."
+    }
+  },
+  {
+    "slug": "eco-gdp",
+    "subject": "prelims-economy",
+    "topic": "National Income",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Gross Domestic Product (GDP) measures:",
+    "options": [
+      "the total income earned by a country's citizens abroad",
+      "the total value of a country's exports in a year",
+      "the government's total revenue in a year",
+      "the total market value of final goods and services produced within a country in a year"
+    ],
+    "correctOption": "D",
+    "explanation": "GDP is the market value of all final goods and services produced within the domestic territory of a country in a period, usually a year.",
+    "optionReasoning": {
+      "A": "Income earned by citizens abroad enters Gross National Product, not GDP.",
+      "B": "Exports are only a component of GDP.",
+      "C": "Government revenue is a fiscal concept, not output.",
+      "D": "This is the definition of GDP."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "GNP and GDP are often confused; the territory of production, not nationality, defines GDP."
+    }
+  },
+  {
+    "slug": "eco-direct-tax",
+    "subject": "prelims-economy",
+    "topic": "Public Finance",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which of the following is a direct tax?",
+    "options": [
+      "Income tax",
+      "Goods and Services Tax",
+      "Customs duty",
+      "Excise duty"
+    ],
+    "correctOption": "A",
+    "explanation": "A direct tax is paid directly by the person on whom it is levied; income tax is the standard example. GST, customs and excise duties are indirect taxes whose burden can be shifted to consumers.",
+    "optionReasoning": {
+      "A": "Income tax is a direct tax.",
+      "B": "GST is an indirect tax.",
+      "C": "Customs duty is an indirect tax on imports.",
+      "D": "Excise duty is an indirect tax on production."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "GST is the tax people deal with most often, so it is thought to be paid directly by them."
+    }
+  },
+  {
+    "slug": "eco-inflation",
+    "subject": "prelims-economy",
+    "topic": "Macroeconomics",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Inflation refers to:",
+    "options": [
+      "a rise in the price of a single commodity",
+      "a fall in the general price level",
+      "a sustained rise in the general price level",
+      "an increase in the output of the economy"
+    ],
+    "correctOption": "C",
+    "explanation": "Inflation is a sustained increase in the general price level over time, which reduces the purchasing power of money.",
+    "optionReasoning": {
+      "A": "A rise in one price is a relative price change, not inflation.",
+      "B": "A fall in the general price level is deflation.",
+      "C": "This describes inflation.",
+      "D": "An increase in output is economic growth."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "A single sharp price rise is reported as inflation in the news, but inflation refers to the general price level."
+    }
+  },
+  {
+    "slug": "eco-repo-rate",
+    "subject": "prelims-economy",
+    "topic": "Banking",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The repo rate is the rate at which:",
+    "options": [
+      "commercial banks lend to the public",
+      "the RBI borrows from commercial banks",
+      "commercial banks pay interest on savings deposits",
+      "the RBI lends short-term funds to commercial banks"
+    ],
+    "correctOption": "D",
+    "explanation": "The repo rate is the rate at which the Reserve Bank of India lends short-term money to banks against government securities. The rate at which it borrows from banks is the reverse repo rate.",
+    "optionReasoning": {
+      "A": "That is a lending rate of banks.",
+      "B": "That is the reverse repo rate.",
+      "C": "That is the deposit rate.",
+      "D": "This is the repo rate."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Repo and reverse repo are mixed up because both involve RBI and banks."
+    }
+  },
+  {
+    "slug": "eco-fiscal-year",
+    "subject": "prelims-economy",
+    "topic": "Public Finance",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The financial (fiscal) year of the Government of India runs from:",
+    "options": [
+      "1 January to 31 December",
+      "1 April to 31 March",
+      "1 July to 30 June",
+      "1 October to 30 September"
+    ],
+    "correctOption": "B",
+    "explanation": "India's financial year runs from 1 April to 31 March; the Union Budget is presented before the year begins.",
+    "optionReasoning": {
+      "A": "That is the calendar year.",
+      "B": "The Indian financial year is 1 April to 31 March.",
+      "C": "1 July to 30 June is used in some other countries, such as Australia.",
+      "D": "1 October to 30 September is used in the United States for federal budgets."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "The calendar year is assumed to be the financial year."
+    }
+  },
+  {
+    "slug": "eco-gst",
+    "subject": "prelims-economy",
+    "topic": "Public Finance",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Goods and Services Tax. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Goods and Services Tax is a destination-based tax on consumption.",
+      "The Goods and Services Tax replaced the income tax."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "GST is a destination-based consumption tax levied on the supply of goods and services, subsuming many indirect taxes. Income tax is a direct tax on income and continues alongside it.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "GST is a big tax reform, so it is thought to have replaced all earlier taxes."
+    }
+  },
+  {
+    "slug": "eco-deficits",
+    "subject": "prelims-economy",
+    "topic": "Public Finance",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding fiscal and revenue deficits. Which of the statements given above is/are correct?",
+    "statements": [
+      "Fiscal deficit is the excess of total expenditure over total receipts excluding borrowings.",
+      "Revenue deficit is the excess of revenue expenditure over revenue receipts."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "These are the standard definitions used in the Union Budget: fiscal deficit equals total expenditure minus total receipts other than borrowings, and revenue deficit equals revenue expenditure minus revenue receipts.",
+    "optionReasoning": {
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is correct.",
+      "C": "Correct: both statements are correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "The two deficits are often treated as one measure."
+    }
+  },
+  {
+    "slug": "eco-crr",
+    "subject": "prelims-economy",
+    "topic": "Banking",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "The Cash Reserve Ratio (CRR) is:",
+    "options": [
+      "the share of a bank's deposits that it must hold in government securities",
+      "the share of a bank's deposits that it must keep with the RBI in cash",
+      "the ratio of a bank's loans to its deposits",
+      "the rate at which the RBI lends to banks"
+    ],
+    "correctOption": "B",
+    "explanation": "CRR is the fraction of a bank's net demand and time liabilities that must be maintained as cash balance with the RBI. The requirement to hold government securities is the SLR.",
+    "optionReasoning": {
+      "A": "This describes the Statutory Liquidity Ratio (SLR).",
+      "B": "This defines the CRR.",
+      "C": "This is the credit-deposit ratio.",
+      "D": "This is the repo rate."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "SLR and CRR are both reserve requirements, and the SLR is held in securities, not as cash with the RBI."
+    }
+  },
+  {
+    "slug": "eco-omo",
+    "subject": "prelims-economy",
+    "topic": "Monetary Policy",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding open market operations. Which of the statements given above is/are correct?",
+    "statements": [
+      "Open market operations involve the buying and selling of government securities by the central bank.",
+      "When the RBI sells government securities in the open market, it increases the liquidity in the banking system."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Open market operations are conducted by buying or selling government securities. A sale of securities by the RBI takes money out of the system, so it reduces liquidity.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Selling is thought of as 'giving' something to banks, but the banks pay money to the RBI."
+    }
+  },
+  {
+    "slug": "eco-msp",
+    "subject": "prelims-economy",
+    "topic": "Agriculture",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Which body recommends the Minimum Support Prices (MSP) of agricultural crops to the Government of India?",
+    "options": [
+      "Commission for Agricultural Costs and Prices",
+      "NABARD",
+      "Food Corporation of India",
+      "NITI Aayog"
+    ],
+    "correctOption": "A",
+    "explanation": "The Commission for Agricultural Costs and Prices (CACP) recommends MSPs; the Government of India announces them after approval.",
+    "optionReasoning": {
+      "A": "The CACP recommends the MSP.",
+      "B": "NABARD provides agricultural credit.",
+      "C": "The FCI procures foodgrains at MSP but does not recommend it.",
+      "D": "NITI Aayog is a policy think tank."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "The FCI procures at MSP, so it is assumed to determine it."
+    }
+  },
+  {
+    "slug": "eco-per-capita",
+    "subject": "prelims-economy",
+    "topic": "National Income",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding per capita income and national income. Which of the statements given above is/are correct?",
+    "statements": [
+      "Per capita income is obtained by dividing national income by the population.",
+      "National income is always equal to GDP at market prices."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Per capita income equals national income divided by population. National income is net national product at factor cost, which differs from GDP at market prices by depreciation, net factor income from abroad, and indirect taxes less subsidies.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "The terms GDP and national income are used loosely as synonyms."
+    }
+  },
+  {
+    "slug": "eco-repo-crr",
+    "subject": "prelims-economy",
+    "topic": "Monetary Policy",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the repo rate and the Cash Reserve Ratio. Which of the statements given above is/are correct?",
+    "statements": [
+      "A reduction in the repo rate generally lowers the banks' cost of borrowing from the RBI.",
+      "An increase in the CRR increases the lendable resources of banks."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "A lower repo rate reduces the cost at which banks borrow from the RBI. A higher CRR forces banks to keep more cash with the RBI, which reduces the funds available for lending.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "A higher reserve ratio is thought to strengthen banks' funds, but the cash is parked with the RBI."
+    }
+  },
+  {
+    "slug": "eco-m1",
+    "subject": "prelims-economy",
+    "topic": "Monetary Policy",
+    "format": "single",
+    "difficulty": "hard",
+    "stem": "In India's money supply measures, M1 consists of:",
+    "options": [
+      "M1 plus post office savings bank deposits",
+      "currency with the public plus all time deposits",
+      "currency with the public, demand deposits with banks and other deposits with the RBI",
+      "notes and coins in circulation only"
+    ],
+    "correctOption": "C",
+    "explanation": "M1 (narrow money) is currency with the public plus demand deposits with banks plus other deposits with the RBI. Post-office savings deposits enter broader measures.",
+    "optionReasoning": {
+      "A": "That corresponds to a broader measure (M2).",
+      "B": "Time deposits are included in broader measures such as M3, not M1.",
+      "C": "This is the definition of M1.",
+      "D": "M1 includes demand deposits too, not just currency."
+    },
+    "misconception": {
+      "option": "D",
+      "text": "Money is commonly equated with notes and coins, but M1 includes demand deposits."
+    }
+  },
+  {
+    "slug": "eco-deflation",
+    "subject": "prelims-economy",
+    "topic": "Macroeconomics",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding deflation and disinflation. Which of the statements given above is/are correct?",
+    "statements": [
+      "Deflation is a fall in the general price level.",
+      "Disinflation means the same thing as deflation."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Deflation is a decline in the general price level. Disinflation is a slowdown in the rate of inflation; prices still rise, only more slowly.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "The prefix 'dis' suggests a decline in prices, but disinflation refers to slower inflation."
+    }
+  },
+  {
+    "slug": "env-ozone-layer",
+    "subject": "prelims-environment",
+    "topic": "Ecology Basics",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The ozone layer that absorbs most of the Sun's harmful ultraviolet radiation is found in the:",
+    "options": [
+      "troposphere",
+      "stratosphere",
+      "mesosphere",
+      "exosphere"
+    ],
+    "correctOption": "B",
+    "explanation": "The ozone layer lies in the stratosphere, roughly 15 to 35 km above the Earth's surface.",
+    "optionReasoning": {
+      "A": "The troposphere is the lowest layer, where weather occurs; ozone there is a pollutant.",
+      "B": "The ozone layer is in the stratosphere.",
+      "C": "The mesosphere lies above the stratosphere and has very little ozone.",
+      "D": "The exosphere is the outermost layer of the atmosphere."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Ground-level ozone is in the troposphere, which leads people to place the protective layer there."
+    }
+  },
+  {
+    "slug": "env-global-warming-gas",
+    "subject": "prelims-environment",
+    "topic": "Climate Change",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which of the following gases is the largest contributor to human-caused global warming?",
+    "options": [
+      "Nitrogen",
+      "Oxygen",
+      "Argon",
+      "Carbon dioxide"
+    ],
+    "correctOption": "D",
+    "explanation": "Carbon dioxide released by burning fossil fuels and by deforestation is the largest contributor to human-caused warming. Nitrogen, oxygen and argon are not greenhouse gases.",
+    "optionReasoning": {
+      "A": "Nitrogen is the most abundant atmospheric gas but not a greenhouse gas.",
+      "B": "Oxygen is not a greenhouse gas.",
+      "C": "Argon is an inert gas and not a greenhouse gas.",
+      "D": "Carbon dioxide is the major anthropogenic greenhouse gas."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Nitrogen is the most abundant gas in the atmosphere, so people assume it is the main cause."
+    }
+  },
+  {
+    "slug": "env-corbett",
+    "subject": "prelims-environment",
+    "topic": "Protected Areas",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Jim Corbett National Park, India's oldest national park, is located in which State?",
+    "options": [
+      "Uttarakhand",
+      "Assam",
+      "Rajasthan",
+      "Karnataka"
+    ],
+    "correctOption": "A",
+    "explanation": "Jim Corbett National Park, established in 1936 as Hailey National Park, is in Uttarakhand.",
+    "optionReasoning": {
+      "A": "Corbett is in Uttarakhand.",
+      "B": "Assam hosts Kaziranga and Manas.",
+      "C": "Rajasthan hosts Ranthambore and Keoladeo.",
+      "D": "Karnataka hosts Bandipur and Nagarhole."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Ranthambore in Rajasthan is a very famous tiger reserve, so it is confused with Corbett."
+    }
+  },
+  {
+    "slug": "env-kaziranga",
+    "subject": "prelims-environment",
+    "topic": "Protected Areas",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Kaziranga National Park is best known for the conservation of:",
+    "options": [
+      "the Asiatic lion",
+      "the snow leopard",
+      "the Indian one-horned rhinoceros",
+      "the Great Indian Bustard"
+    ],
+    "correctOption": "C",
+    "explanation": "Kaziranga in Assam holds the largest population of the Indian one-horned rhinoceros. The Asiatic lion is found in Gir.",
+    "optionReasoning": {
+      "A": "The Asiatic lion lives in Gir National Park, Gujarat.",
+      "B": "The snow leopard lives in the high Himalayas.",
+      "C": "Kaziranga is famous for the one-horned rhinoceros.",
+      "D": "The Great Indian Bustard is found in dry grasslands of Rajasthan and Gujarat."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Gir is a famous Indian wildlife park, so lions are linked wrongly with Kaziranga."
+    }
+  },
+  {
+    "slug": "env-world-environment-day",
+    "subject": "prelims-environment",
+    "topic": "Environmental Governance",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "World Environment Day is observed every year on:",
+    "options": [
+      "22 April",
+      "22 March",
+      "5 June",
+      "16 September"
+    ],
+    "correctOption": "C",
+    "explanation": "World Environment Day is observed on 5 June. Earth Day is on 22 April and World Water Day on 22 March.",
+    "optionReasoning": {
+      "A": "22 April is Earth Day.",
+      "B": "22 March is World Water Day.",
+      "C": "5 June is World Environment Day.",
+      "D": "16 September is the International Day for the Preservation of the Ozone Layer."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Earth Day is the better-known environmental observance."
+    }
+  },
+  {
+    "slug": "env-producers",
+    "subject": "prelims-environment",
+    "topic": "Ecology Basics",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "In an ecosystem, the primary producers are:",
+    "options": [
+      "herbivores",
+      "decomposers",
+      "carnivores",
+      "green plants"
+    ],
+    "correctOption": "D",
+    "explanation": "Green plants and other photosynthetic organisms are the primary producers, since they convert solar energy into chemical energy that supports other trophic levels.",
+    "optionReasoning": {
+      "A": "Herbivores are primary consumers.",
+      "B": "Decomposers break down dead matter.",
+      "C": "Carnivores are secondary or tertiary consumers.",
+      "D": "Green plants are the producers."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Decomposers make nutrients available again, so they are sometimes called producers."
+    }
+  },
+  {
+    "slug": "env-ramsar-cites",
+    "subject": "prelims-environment",
+    "topic": "Environmental Governance",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Ramsar Convention. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Ramsar Convention is concerned with the conservation of wetlands.",
+      "The Ramsar Convention regulates international trade in endangered species."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The Ramsar Convention (1971) is on wetlands of international importance. International trade in endangered species is regulated by CITES.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Both are international conventions on nature, so their subjects are mixed up."
+    }
+  },
+  {
+    "slug": "env-protocols",
+    "subject": "prelims-environment",
+    "topic": "Environmental Governance",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding the Montreal Protocol and the Kyoto Protocol. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Montreal Protocol aims to phase out substances that deplete the ozone layer.",
+      "The Kyoto Protocol set emission reduction targets for greenhouse gases."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "The Montreal Protocol (1987) controls ozone-depleting substances such as CFCs. The Kyoto Protocol (1997) set binding greenhouse gas reduction targets for developed countries.",
+    "optionReasoning": {
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is correct.",
+      "C": "Correct: both statements are correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "The Kyoto Protocol is thought to concern the ozone layer."
+    }
+  },
+  {
+    "slug": "env-hotspot",
+    "subject": "prelims-environment",
+    "topic": "Biodiversity",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Which of the following regions of India is part of a global biodiversity hotspot?",
+    "options": [
+      "Thar Desert",
+      "Western Ghats",
+      "Deccan Plateau interior",
+      "Indo-Gangetic Plain"
+    ],
+    "correctOption": "B",
+    "explanation": "The Western Ghats (with Sri Lanka) is one of the global biodiversity hotspots. India's other hotspots include the Himalaya, Indo-Burma and Sundaland (Nicobar).",
+    "optionReasoning": {
+      "A": "The Thar Desert is not a hotspot.",
+      "B": "The Western Ghats are a global biodiversity hotspot.",
+      "C": "The interior Deccan Plateau is not a hotspot.",
+      "D": "The Indo-Gangetic Plain is largely farmland."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Deserts are rich in specialised species, but the Thar is not a hotspot."
+    }
+  },
+  {
+    "slug": "env-project-tiger",
+    "subject": "prelims-environment",
+    "topic": "Biodiversity",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Project Tiger was launched in India in:",
+    "options": [
+      "1952",
+      "1973",
+      "1980",
+      "1992"
+    ],
+    "correctOption": "B",
+    "explanation": "Project Tiger was launched in April 1973 to protect the tiger and its habitat in specially created tiger reserves.",
+    "optionReasoning": {
+      "A": "1952 is when the Indian Board for Wildlife was set up.",
+      "B": "Project Tiger was launched in 1973.",
+      "C": "1980 is the year of the Forest (Conservation) Act.",
+      "D": "1992 is the year of the Rio Earth Summit."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Conservation laws of the early 1980s are confused with Project Tiger."
+    }
+  },
+  {
+    "slug": "env-acid-rain",
+    "subject": "prelims-environment",
+    "topic": "Pollution",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Acid rain is mainly caused by the atmospheric release of:",
+    "options": [
+      "sulphur dioxide and oxides of nitrogen",
+      "carbon monoxide and methane",
+      "chlorofluorocarbons",
+      "ozone and argon"
+    ],
+    "correctOption": "A",
+    "explanation": "Sulphur dioxide and nitrogen oxides react with water vapour to form sulphuric and nitric acids, which fall as acid rain.",
+    "optionReasoning": {
+      "A": "SO2 and NOx cause acid rain.",
+      "B": "Carbon monoxide and methane do not form strong acids in rain.",
+      "C": "CFCs deplete the ozone layer.",
+      "D": "Ozone and argon are not acid-forming."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "CFCs are a well-known atmospheric pollutant, but they harm the ozone layer rather than make rain acidic."
+    }
+  },
+  {
+    "slug": "env-energy-flow",
+    "subject": "prelims-environment",
+    "topic": "Ecology Basics",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding energy flow in an ecosystem. Which of the statements given above is/are correct?",
+    "statements": [
+      "Energy flows in one direction in an ecosystem, from producers to consumers.",
+      "Roughly ten per cent of the energy at one trophic level is transferred to the next."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "C",
+    "explanation": "Energy enters as sunlight, flows one way along trophic levels and is lost as heat. About 10 per cent is passed on at each step, which is the ten per cent law.",
+    "optionReasoning": {
+      "A": "Wrong: it claims statement 1 is correct and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is correct.",
+      "C": "Correct: both statements are correct.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is correct."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Nutrients cycle but energy does not, so the one-way flow is often forgotten."
+    }
+  },
+  {
+    "slug": "env-wpa-1972",
+    "subject": "prelims-environment",
+    "topic": "Environmental Governance",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding the Wildlife (Protection) Act. Which of the statements given above is/are correct?",
+    "statements": [
+      "The Wildlife (Protection) Act provides for the declaration of national parks and wildlife sanctuaries.",
+      "The Wildlife (Protection) Act was enacted in 1986."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "The Wildlife (Protection) Act was enacted in 1972 and provides for protected areas; the Environment (Protection) Act dates from 1986.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "1986 is the year of the Environment (Protection) Act."
+    }
+  },
+  {
+    "slug": "env-eutrophication",
+    "subject": "prelims-environment",
+    "topic": "Pollution",
+    "format": "single",
+    "difficulty": "hard",
+    "stem": "Eutrophication of a lake is mainly caused by an excess of:",
+    "options": [
+      "heavy metals",
+      "oil spills",
+      "nutrients such as nitrogen and phosphorus",
+      "heat from industrial discharge"
+    ],
+    "correctOption": "C",
+    "explanation": "Excess nitrogen and phosphorus from fertilisers and sewage trigger algal blooms. When the algae die and decompose, dissolved oxygen falls and aquatic life suffers.",
+    "optionReasoning": {
+      "A": "Heavy metals cause toxicity but not algal blooms.",
+      "B": "Oil spills form a film but are not the cause of nutrient enrichment.",
+      "C": "Nutrient enrichment causes eutrophication.",
+      "D": "Heat discharge is thermal pollution."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Heavy metals are a leading water pollutant, so they are blamed for every lake problem."
+    }
+  },
+  {
+    "slug": "env-rhizobium",
+    "subject": "prelims-environment",
+    "topic": "Ecology Basics",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding Rhizobium. Which of the statements given above is/are correct?",
+    "statements": [
+      "Rhizobium bacteria are able to fix atmospheric nitrogen.",
+      "Rhizobium forms root nodules on cereal crops such as wheat."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Rhizobium lives in root nodules of leguminous plants such as pulses and fixes atmospheric nitrogen. Cereals like wheat do not form such nodules.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Nitrogen fixation is thought to benefit all crops equally."
+    }
+  },
+  {
+    "slug": "sci-vitamin-d",
+    "subject": "prelims-science-technology",
+    "topic": "Biology",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which vitamin is synthesised in the human skin on exposure to sunlight?",
+    "options": [
+      "Vitamin A",
+      "Vitamin D",
+      "Vitamin C",
+      "Vitamin K"
+    ],
+    "correctOption": "B",
+    "explanation": "The skin synthesises vitamin D when exposed to ultraviolet-B radiation from the Sun.",
+    "optionReasoning": {
+      "A": "Vitamin A comes from foods such as carrots and liver.",
+      "B": "Vitamin D is synthesised in the skin.",
+      "C": "Vitamin C is obtained from citrus fruits and cannot be made by humans.",
+      "D": "Vitamin K is made by gut bacteria and found in green leafy vegetables."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Vitamin C is the best-known vitamin from fruit and is confused with sunlight."
+    }
+  },
+  {
+    "slug": "sci-red-planet",
+    "subject": "prelims-science-technology",
+    "topic": "Space",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which planet is known as the Red Planet?",
+    "options": [
+      "Venus",
+      "Jupiter",
+      "Mercury",
+      "Mars"
+    ],
+    "correctOption": "D",
+    "explanation": "Mars appears red because of iron oxide on its surface.",
+    "optionReasoning": {
+      "A": "Venus is covered by thick clouds and appears bright white.",
+      "B": "Jupiter is a gas giant with banded clouds.",
+      "C": "Mercury is the planet nearest the Sun.",
+      "D": "Mars is called the Red Planet."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Venus is the brightest planet in the sky and is sometimes associated with colour."
+    }
+  },
+  {
+    "slug": "sci-atmosphere-gas",
+    "subject": "prelims-science-technology",
+    "topic": "Physics and Chemistry",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "Which gas is the most abundant in Earth's atmosphere?",
+    "options": [
+      "Nitrogen",
+      "Oxygen",
+      "Carbon dioxide",
+      "Argon"
+    ],
+    "correctOption": "A",
+    "explanation": "Nitrogen makes up about 78 per cent of dry air; oxygen is about 21 per cent.",
+    "optionReasoning": {
+      "A": "Nitrogen is the most abundant gas.",
+      "B": "Oxygen is the second most abundant gas.",
+      "C": "Carbon dioxide is a trace gas.",
+      "D": "Argon is the third most abundant gas, at about 0.9 per cent."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Oxygen is the gas we depend on, so it is assumed to be the most abundant."
+    }
+  },
+  {
+    "slug": "sci-unit-current",
+    "subject": "prelims-science-technology",
+    "topic": "Physics and Chemistry",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "The SI unit of electric current is:",
+    "options": [
+      "volt",
+      "ohm",
+      "ampere",
+      "watt"
+    ],
+    "correctOption": "C",
+    "explanation": "The ampere is the SI unit of electric current. The volt measures potential difference, the ohm resistance and the watt power.",
+    "optionReasoning": {
+      "A": "The volt is the unit of potential difference.",
+      "B": "The ohm is the unit of resistance.",
+      "C": "The ampere is the unit of electric current.",
+      "D": "The watt is the unit of power."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Volt is the most familiar electrical unit, but it measures potential difference."
+    }
+  },
+  {
+    "slug": "sci-sound-light-vacuum",
+    "subject": "prelims-science-technology",
+    "topic": "Physics and Chemistry",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding sound and light. Which of the statements given above is/are correct?",
+    "statements": [
+      "Sound cannot travel through a vacuum.",
+      "Light cannot travel through a vacuum."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Sound is a mechanical wave and needs a material medium. Light is an electromagnetic wave and travels through a vacuum, as sunlight reaches the Earth.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Both are called waves, so they are assumed to need a medium."
+    }
+  },
+  {
+    "slug": "sci-chandrayaan-mom",
+    "subject": "prelims-science-technology",
+    "topic": "Space",
+    "format": "statements",
+    "difficulty": "medium",
+    "stem": "Consider the following statements regarding India's Moon and Mars missions. Which of the statements given above is/are correct?",
+    "statements": [
+      "Chandrayaan-3 made a soft landing near the lunar south polar region in 2023.",
+      "India's Mars Orbiter Mission made a soft landing on Mars."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Chandrayaan-3's lander touched down on 23 August 2023 in the Moon's south polar region. The Mars Orbiter Mission (2013) placed a spacecraft in orbit around Mars; it did not land.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Entering Mars orbit is mistakenly taken as landing on it."
+    }
+  },
+  {
+    "slug": "sci-antibiotics",
+    "subject": "prelims-science-technology",
+    "topic": "Biology",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Antibiotics are effective in treating infections caused by:",
+    "options": [
+      "viruses",
+      "both viruses and bacteria",
+      "neither bacteria nor viruses",
+      "bacteria"
+    ],
+    "correctOption": "D",
+    "explanation": "Antibiotics act on bacteria; they are not effective against viruses, which are treated with antivirals or prevented with vaccines.",
+    "optionReasoning": {
+      "A": "Antibiotics do not work against viruses.",
+      "B": "They are not effective against viruses.",
+      "C": "They are effective against bacteria.",
+      "D": "Antibiotics treat bacterial infections."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Antibiotics are used for colds and flu in practice, which does not make them effective against viruses."
+    }
+  },
+  {
+    "slug": "sci-dna-sugar",
+    "subject": "prelims-science-technology",
+    "topic": "Biology",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "The sugar present in the DNA molecule is:",
+    "options": [
+      "ribose",
+      "deoxyribose",
+      "glucose",
+      "fructose"
+    ],
+    "correctOption": "B",
+    "explanation": "DNA contains deoxyribose. RNA contains ribose.",
+    "optionReasoning": {
+      "A": "Ribose is the sugar in RNA.",
+      "B": "Deoxyribose is the sugar in DNA.",
+      "C": "Glucose is a simple sugar used for energy.",
+      "D": "Fructose is a fruit sugar."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Ribose and deoxyribose differ by one oxygen atom, and the two nucleic acids are confused."
+    }
+  },
+  {
+    "slug": "sci-optical-fibre",
+    "subject": "prelims-science-technology",
+    "topic": "Physics and Chemistry",
+    "format": "statements",
+    "difficulty": "hard",
+    "stem": "Consider the following statements regarding optical fibres and total internal reflection. Which of the statements given above is/are correct?",
+    "statements": [
+      "Optical fibres transmit light signals by total internal reflection.",
+      "Total internal reflection occurs when light travels from a rarer medium to a denser medium."
+    ],
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correctOption": "A",
+    "explanation": "Total internal reflection occurs when light travels from a denser to a rarer medium at an angle larger than the critical angle. Optical fibres use it to keep light inside the core.",
+    "optionReasoning": {
+      "A": "Correct: statement 1 is correct and statement 2 is incorrect.",
+      "B": "Wrong: it claims statement 1 is incorrect and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "C": "Wrong: it claims statement 1 is correct and statement 2 is correct, but statement 1 is correct and statement 2 is incorrect.",
+      "D": "Wrong: it claims statement 1 is incorrect and statement 2 is incorrect, but statement 1 is correct and statement 2 is incorrect."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Both media are mentioned together, and the direction of travel is reversed."
+    }
+  },
+  {
+    "slug": "sci-isotopes",
+    "subject": "prelims-science-technology",
+    "topic": "Physics and Chemistry",
+    "format": "single",
+    "difficulty": "hard",
+    "stem": "Isotopes of an element have:",
+    "options": [
+      "the same number of protons but different numbers of neutrons",
+      "the same number of neutrons but different numbers of protons",
+      "the same mass number but different atomic numbers",
+      "different numbers of protons and electrons"
+    ],
+    "correctOption": "A",
+    "explanation": "Isotopes are atoms of the same element, which have the same atomic number (protons) but different mass numbers because of different neutron numbers.",
+    "optionReasoning": {
+      "A": "This defines isotopes.",
+      "B": "That describes isotones.",
+      "C": "That describes isobars.",
+      "D": "Atoms with different numbers of protons are different elements."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Isobars also share a property that is easily confused with isotopes."
+    }
+  },
+  {
+    "slug": "csat-train-speed",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "A train 120 metres long crosses a pole in 6 seconds. What is its speed in km/h?",
+    "options": [
+      "60",
+      "72",
+      "80",
+      "90"
+    ],
+    "correctOption": "B",
+    "explanation": "Speed = 120 m / 6 s = 20 m/s. Multiplying by 18/5 converts it to km/h: 20 x 3.6 = 72 km/h.",
+    "optionReasoning": {
+      "A": "60 km/h would take 7.2 seconds to cover 120 m.",
+      "B": "20 m/s equals 72 km/h.",
+      "C": "80 km/h is about 22.2 m/s, which would take about 5.4 seconds.",
+      "D": "90 km/h is 25 m/s, which would take 4.8 seconds."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Dividing 120 by 6 gives 20, and some then multiply by 3 instead of 3.6."
+    }
+  },
+  {
+    "slug": "csat-percentage",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "If 40 per cent of a number is 60, what is the number?",
+    "options": [
+      "120",
+      "150",
+      "180",
+      "240"
+    ],
+    "correctOption": "B",
+    "explanation": "If 40 per cent of x is 60, then x = 60 / 0.4 = 150.",
+    "optionReasoning": {
+      "A": "40 per cent of 120 is 48.",
+      "B": "40 per cent of 150 is 60.",
+      "C": "40 per cent of 180 is 72.",
+      "D": "40 per cent of 240 is 96."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Doubling 60 to get 120 looks natural, but it treats 40 per cent as one half."
+    }
+  },
+  {
+    "slug": "csat-average",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "What is the average of 12, 15, 18, 21 and 24?",
+    "options": [
+      "16",
+      "17",
+      "18",
+      "19"
+    ],
+    "correctOption": "C",
+    "explanation": "The sum is 12 + 15 + 18 + 21 + 24 = 90, and 90 / 5 = 18. The numbers are in arithmetic progression, so the average is the middle term.",
+    "optionReasoning": {
+      "A": "16 would give a sum of 80.",
+      "B": "17 would give a sum of 85.",
+      "C": "The sum is 90, so the average is 18.",
+      "D": "19 would give a sum of 95."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Estimating the average from the lower terms alone gives a value such as 17, but for an arithmetic progression the average is the middle term, 18."
+    }
+  },
+  {
+    "slug": "csat-ratio",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "easy",
+    "stem": "A sum of 360 rupees is divided among three persons in the ratio 2 : 3 : 4. What is the largest share in rupees?",
+    "options": [
+      "120",
+      "140",
+      "160",
+      "180"
+    ],
+    "correctOption": "C",
+    "explanation": "The ratio parts add up to 2 + 3 + 4 = 9, so one part is 360 / 9 = 40 rupees. The largest share is 4 x 40 = 160 rupees.",
+    "optionReasoning": {
+      "A": "120 is the share for the ratio part 3.",
+      "B": "140 does not correspond to any whole number of parts.",
+      "C": "The largest share is 4 x 40 = 160.",
+      "D": "180 would be half of the total, which is more than 4/9 of 360."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "120 is the middle share (3 x 40), which is picked if the ratio parts are mixed up."
+    }
+  },
+  {
+    "slug": "csat-work",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "A can complete a piece of work in 12 days and B can complete it in 18 days. Working together, in how many days will they complete it?",
+    "options": [
+      "6 days",
+      "7.2 days",
+      "7.5 days",
+      "8 days"
+    ],
+    "correctOption": "B",
+    "explanation": "In one day A does 1/12 and B does 1/18 of the work, together 3/36 + 2/36 = 5/36. They finish in 36/5 = 7.2 days.",
+    "optionReasoning": {
+      "A": "6 days would need a combined rate of 1/6, which is more than 5/36.",
+      "B": "The combined rate is 5/36, so the work takes 7.2 days.",
+      "C": "7.5 days would need a rate of 2/15, which is less than 5/36.",
+      "D": "8 days would need a rate of 1/8, which is less than 5/36."
+    },
+    "misconception": {
+      "option": "C",
+      "text": "Averaging the two times gives 15, and half of 15 is 7.5."
+    }
+  },
+  {
+    "slug": "csat-simple-interest",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "What is the simple interest on 5,000 rupees at 8 per cent per annum for 3 years?",
+    "options": [
+      "1,000 rupees",
+      "1,200 rupees",
+      "1,250 rupees",
+      "1,500 rupees"
+    ],
+    "correctOption": "B",
+    "explanation": "Simple interest = principal x rate x time / 100 = 5,000 x 8 x 3 / 100 = 1,200 rupees.",
+    "optionReasoning": {
+      "A": "1,000 rupees would be the interest for 2.5 years.",
+      "B": "5,000 x 8 x 3 / 100 = 1,200.",
+      "C": "1,250 rupees does not match the formula.",
+      "D": "1,500 rupees would need a rate of 10 per cent."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "1,000 is the interest for 2.5 years, and reading the 3 years as 2.5 is an error."
+    }
+  },
+  {
+    "slug": "csat-profit",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "A shopkeeper buys an article for 800 rupees and sells it at a profit of 20 per cent. What is the selling price?",
+    "options": [
+      "920 rupees",
+      "940 rupees",
+      "960 rupees",
+      "980 rupees"
+    ],
+    "correctOption": "C",
+    "explanation": "Profit = 20 per cent of 800 = 160 rupees, so the selling price is 800 + 160 = 960 rupees.",
+    "optionReasoning": {
+      "A": "920 rupees corresponds to a profit of 15 per cent.",
+      "B": "940 rupees corresponds to a profit of 17.5 per cent.",
+      "C": "The selling price is 800 x 1.2 = 960.",
+      "D": "980 rupees corresponds to a profit of 22.5 per cent."
+    },
+    "misconception": {
+      "option": "A",
+      "text": "Adding 120 instead of 160 corresponds to taking 15 per cent of 800 as the profit."
+    }
+  },
+  {
+    "slug": "csat-syllogism",
+    "subject": "prelims-csat",
+    "topic": "Logical Reasoning",
+    "format": "single",
+    "difficulty": "medium",
+    "stem": "Statements: All roses are flowers. Some flowers fade quickly. Conclusions: I. Some roses fade quickly. II. Some flowers are roses. Which of the conclusions follows from the statements?",
+    "options": [
+      "Only conclusion I follows",
+      "Both conclusions I and II follow",
+      "Only conclusion II follows",
+      "Neither conclusion I nor II follows"
+    ],
+    "correctOption": "C",
+    "explanation": "From 'All roses are flowers' we can conclude that some flowers are roses, so II follows. The flowers that fade quickly may not be roses, so I does not follow.",
+    "optionReasoning": {
+      "A": "I does not follow because the fading flowers need not include roses.",
+      "B": "I does not follow, so both cannot follow.",
+      "C": "Only II follows.",
+      "D": "II follows by conversion of the first statement."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "Roses are a subset of flowers, so it is assumed that the fast-fading flowers include roses."
+    }
+  },
+  {
+    "slug": "csat-average-speed",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "hard",
+    "stem": "A man travels 60 km at a speed of 30 km/h and returns along the same route at 20 km/h. What is his average speed for the whole journey?",
+    "options": [
+      "24 km/h",
+      "25 km/h",
+      "26 km/h",
+      "27.5 km/h"
+    ],
+    "correctOption": "A",
+    "explanation": "Time going = 60 / 30 = 2 hours; time returning = 60 / 20 = 3 hours. Total distance 120 km in 5 hours gives 120 / 5 = 24 km/h.",
+    "optionReasoning": {
+      "A": "Total distance 120 km / total time 5 h = 24 km/h.",
+      "B": "25 km/h is the simple mean of 30 and 20, which is wrong when distances are equal.",
+      "C": "26 km/h does not follow from the data.",
+      "D": "27.5 km/h does not follow from the data."
+    },
+    "misconception": {
+      "option": "B",
+      "text": "The simple average of the speeds is 25, but equal distances need the harmonic mean."
+    }
+  },
+  {
+    "slug": "csat-mixture",
+    "subject": "prelims-csat",
+    "topic": "Quantitative Aptitude",
+    "format": "single",
+    "difficulty": "hard",
+    "stem": "A 40-litre mixture of milk and water contains milk and water in the ratio 3 : 1. How much water must be added so that the ratio of milk to water becomes 3 : 2?",
+    "options": [
+      "5 litres",
+      "10 litres",
+      "15 litres",
+      "20 litres"
+    ],
+    "correctOption": "B",
+    "explanation": "The mixture has 30 litres of milk and 10 litres of water. For a ratio of 3 : 2 the water must be 20 litres, so 10 litres have to be added.",
+    "optionReasoning": {
+      "A": "Adding 5 litres gives 30 : 15, which is 2 : 1.",
+      "B": "Adding 10 litres gives 30 : 20, which is 3 : 2.",
+      "C": "Adding 15 litres gives 30 : 25, which is 6 : 5.",
+      "D": "Adding 20 litres gives 30 : 30, which is 1 : 1."
+    },
+    "misconception": {
+      "option": "D",
+      "text": "Doubling the original 10 litres of water to 20 is mistaken for the amount to add."
+    }
+  }
+]
