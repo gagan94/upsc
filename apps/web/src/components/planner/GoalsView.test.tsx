@@ -11,10 +11,12 @@ import { GoalsView } from "./GoalsView";
 
 const POLITY = "11111111-1111-4111-8111-111111111111";
 const HISTORY = "22222222-2222-4222-8222-222222222222";
+// Catalog subject ids differ from the syllabus node ids that goals are keyed by.
 const subjects = [
-  { id: POLITY, title: "Polity" },
-  { id: HISTORY, title: "History" },
+  { id: "cat-polity", syllabusNodeId: POLITY, title: "Polity" },
+  { id: "cat-history", syllabusNodeId: HISTORY, title: "History" },
 ];
+const OTHER = "33333333-3333-4333-8333-333333333333";
 const goals: Goals = { dailyMin: 120, weeklyMin: 600, monthlyMilestone: "Finish Polity", milestoneDate: "2026-10-31", subjectTargets: [{ subjectNodeId: POLITY, weeklyMin: 180 }] };
 const progress: ProgressView = {
   weekStart: "2026-10-12",
@@ -122,6 +124,20 @@ describe("GoalsView", () => {
     );
     expect(await screen.findByText("Targets saved")).toBeInTheDocument();
     await waitFor(() => expect(screen.getByRole("progressbar", { name: "History weekly target" })).toBeInTheDocument());
+  });
+
+  it("keeps saved targets for subjects not listed in the form", async () => {
+    const withOther: Goals = { ...goals, subjectTargets: [{ subjectNodeId: POLITY, weeklyMin: 180 }, { subjectNodeId: OTHER, weeklyMin: 420 }] };
+    apiFetch.mockResolvedValue({ goals: { ...withOther, subjectTargets: [{ subjectNodeId: POLITY, weeklyMin: 200 }, { subjectNodeId: OTHER, weeklyMin: 420 }] } });
+    render(<GoalsView goals={withOther} progress={progress} subjects={subjects} />);
+    await userEvent.click(screen.getByRole("button", { name: "Edit weekly subject targets" }));
+    await setValue(num("Weekly target for Polity (minutes)"), "200");
+    await userEvent.click(screen.getByRole("button", { name: "Save targets" }));
+    expect(apiFetch).toHaveBeenCalledWith(
+      "/planner/goals",
+      expect.objectContaining({ body: JSON.stringify({ subjectTargets: [{ subjectNodeId: POLITY, weeklyMin: 200 }, { subjectNodeId: OTHER, weeklyMin: 420 }] }) }),
+    );
+    expect(await screen.findByText("Targets saved")).toBeInTheDocument();
   });
 
   it("blanking a target removes it; invalid minutes are rejected", async () => {

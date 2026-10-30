@@ -52,7 +52,7 @@ function StartForm({ prefill, onClose, onStart }: { prefill: StartPrefill | null
   useEffect(() => {
     let live = true;
     apiFetch<{ subjects: SubjectSummary[] }>("/learn/subjects")
-      .then((r) => live && setSubjects(r.subjects.map((s) => ({ value: s.id, label: s.title }))))
+      .then((r) => live && setSubjects(r.subjects.map((s) => ({ value: s.syllabusNodeId, label: s.title }))))
       .catch(() => undefined); // the subject is optional
     return () => {
       live = false;

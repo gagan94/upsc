@@ -144,6 +144,31 @@ describe("StudySessionProvider + SessionBar", () => {
       expect(screen.getByRole("dialog", { name: "Recover your session?" })).toBeInTheDocument();
       expect(screen.queryByText(/something went wrong/i)).toBeNull();
     });
+
+    it.each([
+      ["Pause", "pause", "running"],
+      ["Resume", "resume", "paused"],
+    ] as const)("a 409 session_stale on %s opens Recovery, not an error", async (label, kind, status) => {
+      routes["GET /study-sessions/active"] = () => ({ session: session({ status }) });
+      routes["POST /study-sessions/s1/heartbeat"] = () => ({ session: session({ status }) });
+      routes[`POST /study-sessions/s1/${kind}`] = () => new ApiError(409, "session_stale", "stale");
+      await mount();
+      await userEvent.click(btn(label));
+      expect(calls(`POST /study-sessions/s1/${kind}`)).toHaveLength(1);
+      expect(screen.getByRole("dialog", { name: "Recover your session?" })).toBeInTheDocument();
+      expect(screen.queryByText(new RegExp(`Couldn't ${kind}`))).toBeNull();
+    });
+  });
+
+  it("start dialog lists subjects by syllabus node id and sends that as subjectNodeId", async () => {
+    routes["GET /learn/subjects"] = () => ({ subjects: [{ id: "cat-polity", syllabusNodeId: "node-polity", title: "Polity" }] });
+    routes["POST /study-sessions"] = () => ({ session: session() });
+    await mount();
+    await userEvent.click(btn("Study session"));
+    const dlg = screen.getByRole("dialog", { name: "Start study session" });
+    await userEvent.selectOptions(within(dlg).getByLabelText("Subject (optional)"), "Polity");
+    await userEvent.click(within(dlg).getByRole("button", { name: "Start" }));
+    expect(bodyOf(calls("POST /study-sessions")[0])).toEqual({ plannedMin: 25, subjectNodeId: "node-polity" });
   });
 
   describe("heartbeat and timer", () => {

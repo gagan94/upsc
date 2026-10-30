@@ -23,7 +23,7 @@ describe("sessions history page", () => {
       if (path === "/me/profile") return { timezone: "Asia/Kolkata" };
       if (path === "/study-sessions?limit=50")
         return { sessions: [{ id: "a", status: "ended", plannedMin: 25, startedAt: "2026-10-14T04:30:00.000Z", activeSeconds: 1500, pausedSeconds: 0, taskId: null, subjectNodeId: "n1", stale: false, focusRating: 5 }] };
-      if (path === "/learn/subjects") return { subjects: [{ id: "n1", title: "Polity" }] };
+      if (path === "/learn/subjects") return { subjects: [{ id: "cat-1", syllabusNodeId: "n1", title: "Polity" }] };
       throw new Error(path);
     });
     render(await SessionsPage());

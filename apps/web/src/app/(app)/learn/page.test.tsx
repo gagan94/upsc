@@ -12,7 +12,7 @@ vi.mock("next/navigation", () => ({ redirect: (u: string) => redirect(u) }));
 import LearnPage from "./page";
 
 const subject = (i: number) => ({
-  id: `s${i}`, slug: `s-${i}`, title: `Subject ${i}`, gsPaper: "GS I", moduleCount: 1, lessonCount: 1,
+  id: `s${i}`, slug: `s-${i}`, title: `Subject ${i}`, gsPaper: "GS I", syllabusNodeId: `n${i}`, moduleCount: 1, lessonCount: 1,
 });
 
 beforeEach(() => {

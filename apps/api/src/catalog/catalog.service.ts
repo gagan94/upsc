@@ -8,6 +8,8 @@ export interface SubjectSummary {
   slug: string;
   title: string;
   gsPaper: string;
+  /** The catalog.syllabus_nodes id this subject maps to — use it wherever an API expects `subjectNodeId`. */
+  syllabusNodeId: string;
   moduleCount: number;
   lessonCount: number;
 }
@@ -35,7 +37,7 @@ export class CatalogService {
   /** Published subjects with module/lesson counts, in a single aggregate query. */
   async listSubjects(): Promise<SubjectSummary[]> {
     const result = await this.db.execute(sql`
-      SELECT s.id, s.slug, s.title, s.gs_paper AS "gsPaper",
+      SELECT s.id, s.slug, s.title, s.gs_paper AS "gsPaper", s.syllabus_node_id AS "syllabusNodeId",
              COUNT(DISTINCT m.id)::int AS "moduleCount",
              COUNT(DISTINCT l.activity_id)::int AS "lessonCount"
       FROM catalog.subjects s

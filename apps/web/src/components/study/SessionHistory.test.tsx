@@ -19,7 +19,7 @@ const s = (o: Partial<EndedStudySessionView> = {}): EndedStudySessionView => ({
 
 describe("SessionHistory", () => {
   it("lists date, duration, subject and rating", () => {
-    render(<SessionHistory sessions={[s(), s({ id: "b", subjectNodeId: null, focusRating: null, activeSeconds: 600 })]} subjects={[{ id: "n1", title: "Polity" }]} tz="Asia/Kolkata" />);
+    render(<SessionHistory sessions={[s(), s({ id: "b", subjectNodeId: null, focusRating: null, activeSeconds: 600 })]} subjects={[{ syllabusNodeId: "n1", title: "Polity" }]} tz="Asia/Kolkata" />);
     const rows = screen.getAllByRole("row");
     expect(rows).toHaveLength(3);
     const first = within(rows[1]);

@@ -34,6 +34,8 @@ export function GoalsView({ goals: initial, progress: initialProgress, subjects 
   const [targetStatus, setTargetStatus] = useState<Status>(null);
   const [savingTargets, setSavingTargets] = useState(false);
   const [subjectTargets, setSubjectTargets] = useState(initial.subjectTargets);
+  // One target input per syllabus node (targets are keyed by node id, not catalog subject id).
+  const targetSubjects = subjects.filter((s, i) => subjects.findIndex((o) => o.syllabusNodeId === s.syllabusNodeId) === i);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -76,12 +78,15 @@ export function GoalsView({ goals: initial, progress: initialProgress, subjects 
     setTargetStatus(null);
     const errs: Record<string, string> = {};
     const list: { subjectNodeId: string; weeklyMin: number }[] = [];
-    for (const s of subjects) {
-      const v = (targets[s.id] ?? "").trim();
+    for (const s of targetSubjects) {
+      const v = (targets[s.syllabusNodeId] ?? "").trim();
       if (v === "") continue;
-      if (!wholeMinutes(v, MAX_WEEKLY)) errs[s.id] = MINUTES_ERROR(MAX_WEEKLY);
-      else list.push({ subjectNodeId: s.id, weeklyMin: Number(v) });
+      if (!wholeMinutes(v, MAX_WEEKLY)) errs[s.syllabusNodeId] = MINUTES_ERROR(MAX_WEEKLY);
+      else list.push({ subjectNodeId: s.syllabusNodeId, weeklyMin: Number(v) });
     }
+    // PUT replaces the whole list: keep saved targets for subjects this form does not show.
+    const shown = new Set(targetSubjects.map((s) => s.syllabusNodeId));
+    for (const t of subjectTargets) if (!shown.has(t.subjectNodeId)) list.push(t);
     setTargetErrors(errs);
     if (Object.keys(errs).length) return;
     setSavingTargets(true);
@@ -135,17 +140,17 @@ export function GoalsView({ goals: initial, progress: initialProgress, subjects 
           {editingTargets ? (
             <form onSubmit={(e) => void saveTargets(e)} noValidate className="mt-3 flex flex-col gap-3">
               <p className="text-sm text-muted">Leave a subject blank for no target.</p>
-              {subjects.map((s) => (
+              {targetSubjects.map((s) => (
                 <Field
-                  key={s.id}
+                  key={s.syllabusNodeId}
                   label={`Weekly target for ${s.title} (minutes)`}
                   type="number"
                   inputMode="numeric"
                   min={1}
                   max={MAX_WEEKLY}
-                  value={targets[s.id] ?? ""}
-                  onChange={(e) => setTargets((t) => ({ ...t, [s.id]: e.target.value }))}
-                  error={targetErrors[s.id]}
+                  value={targets[s.syllabusNodeId] ?? ""}
+                  onChange={(e) => setTargets((t) => ({ ...t, [s.syllabusNodeId]: e.target.value }))}
+                  error={targetErrors[s.syllabusNodeId]}
                 />
               ))}
               <div className="flex items-center gap-3">
@@ -184,7 +189,7 @@ function mergeTargets(rows: ProgressView["subjects"], targets: Goals["subjectTar
   const out = rows.map((r) => ({ ...r, targetMin: byId.get(r.subjectNodeId) ?? null }));
   for (const t of targets) {
     if (out.some((r) => r.subjectNodeId === t.subjectNodeId)) continue;
-    out.push({ subjectNodeId: t.subjectNodeId, title: subjects.find((s) => s.id === t.subjectNodeId)?.title ?? "", plannedMin: 0, recordedMin: 0, targetMin: t.weeklyMin });
+    out.push({ subjectNodeId: t.subjectNodeId, title: subjects.find((s) => s.syllabusNodeId === t.subjectNodeId)?.title ?? "", plannedMin: 0, recordedMin: 0, targetMin: t.weeklyMin });
   }
   return out;
 }

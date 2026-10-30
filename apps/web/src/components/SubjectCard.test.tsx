@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { SubjectCard } from "./SubjectCard";
 
-const base = { id: "s1", slug: "indian-polity", title: "Indian Polity", gsPaper: "GS II", moduleCount: 4, lessonCount: 6 };
+const base = { id: "s1", slug: "indian-polity", title: "Indian Polity", gsPaper: "GS II", syllabusNodeId: "n1", moduleCount: 4, lessonCount: 6 };
 
 describe("SubjectCard", () => {
   it("renders title, GS paper chip and counts", () => {

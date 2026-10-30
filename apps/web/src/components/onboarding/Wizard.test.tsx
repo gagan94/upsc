@@ -16,8 +16,8 @@ vi.mock("@/lib/api", async (orig) => ({
 import { Wizard } from "./Wizard";
 
 const subjects = [
-  { id: "s1", slug: "polity", title: "Polity", gsPaper: "GS2", moduleCount: 1, lessonCount: 1 },
-  { id: "s2", slug: "history", title: "History", gsPaper: "GS1", moduleCount: 1, lessonCount: 1 },
+  { id: "s1", slug: "polity", title: "Polity", gsPaper: "GS2", syllabusNodeId: "n1", moduleCount: 1, lessonCount: 1 },
+  { id: "s2", slug: "history", title: "History", gsPaper: "GS1", syllabusNodeId: "n2", moduleCount: 1, lessonCount: 1 },
 ];
 const previewTasks = [
   { title: "Read Polity", activityType: "reading", durationMin: 60, scheduledStart: "2026-11-02T12:30:00.000Z" },

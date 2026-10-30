@@ -3,7 +3,7 @@
     "slug": "indian-polity",
     "title": "Indian Polity",
     "gsPaper": "GS II",
-    "syllabusNode": "mains-gs-2",
+    "syllabusNode": "prelims-polity",
     "description": "Constitution, governance and political system of India.",
     "order": 1,
     "modules": [
@@ -113,7 +113,7 @@
     "slug": "history",
     "title": "History",
     "gsPaper": "GS I",
-    "syllabusNode": "mains-gs-1",
+    "syllabusNode": "prelims-history",
     "description": "Ancient, medieval and modern Indian history.",
     "order": 2,
     "modules": [
@@ -167,7 +167,7 @@
     "slug": "geography",
     "title": "Geography",
     "gsPaper": "GS I",
-    "syllabusNode": "mains-gs-1",
+    "syllabusNode": "prelims-geography",
     "description": "Physical, human and Indian geography.",
     "order": 3,
     "modules": [
@@ -190,7 +190,7 @@
     "slug": "economy",
     "title": "Economy",
     "gsPaper": "GS III",
-    "syllabusNode": "mains-gs-3",
+    "syllabusNode": "prelims-economy",
     "description": "Indian economy and economic development.",
     "order": 4,
     "modules": [
@@ -213,7 +213,7 @@
     "slug": "environment",
     "title": "Environment",
     "gsPaper": "GS III",
-    "syllabusNode": "mains-gs-3",
+    "syllabusNode": "prelims-environment",
     "description": "Ecology, biodiversity and climate change.",
     "order": 5,
     "modules": [
@@ -236,7 +236,7 @@
     "slug": "science-technology",
     "title": "Science & Technology",
     "gsPaper": "GS III",
-    "syllabusNode": "mains-gs-3",
+    "syllabusNode": "prelims-science-technology",
     "description": "Science, technology and their applications.",
     "order": 6,
     "modules": [

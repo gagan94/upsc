@@ -94,7 +94,7 @@ describe("ProfileForm", () => {
 
 describe("PreparationForm", () => {
   const initial = { targetYear: 2027 as const, stage: "preparing" as const, attempt: null, focus: { papers: "prelims" as const, subjects: [] } };
-  const subjects = [{ id: "1", slug: "polity", title: "Polity", gsPaper: "GS2", moduleCount: 1, lessonCount: 1 }];
+  const subjects = [{ id: "1", slug: "polity", title: "Polity", gsPaper: "GS2", syllabusNodeId: "n1", moduleCount: 1, lessonCount: 1 }];
   it("PUTs the full profile", async () => {
     apiFetch.mockResolvedValue({});
     render(<PreparationForm initial={initial} subjects={subjects} />);

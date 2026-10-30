@@ -12,6 +12,8 @@ export interface SubjectSummary {
   slug: string;
   title: string;
   gsPaper: string;
+  /** Syllabus node this subject maps to: the value planner/study APIs expect as `subjectNodeId` (not `id`). */
+  syllabusNodeId: string;
   moduleCount: number;
   lessonCount: number;
 }

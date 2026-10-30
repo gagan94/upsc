@@ -94,7 +94,7 @@ export function usePlannerMutations({
       update: (t: TaskView, patch: TaskFields) => {
         const next: TaskView = { ...t, ...(patch as Partial<TaskView>) };
         if (patch.subjectNodeId !== undefined) {
-          next.subjectTitle = subjects.find((s) => s.id === patch.subjectNodeId)?.title ?? null;
+          next.subjectTitle = subjects.find((s) => s.syllabusNodeId === patch.subjectNodeId)?.title ?? null;
         }
         return optimistic(t, next, () =>
           apiFetch<{ task: TaskView }>(`/planner/tasks/${t.id}`, { method: "PATCH", body: JSON.stringify(patch) }).then((r) => r.task),

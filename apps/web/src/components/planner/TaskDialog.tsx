@@ -25,8 +25,13 @@ const PRIORITY_LABELS: Record<TaskPriority, string> = { low: "Low", normal: "Nor
 const PRESETS = [15, 30, 45, 60, 90, 120];
 export const DEFAULT_TIME = "09:00";
 
+/**
+ * A catalog subject as listed by GET /learn/subjects. `id` is the catalog subject id;
+ * `syllabusNodeId` is what every planner/study API expects as `subjectNodeId`.
+ */
 export interface SubjectOption {
   id: string;
+  syllabusNodeId: string;
   title: string;
 }
 /** Fields sent to the API: all of NewTask on create, only the changed ones on edit. */
@@ -89,6 +94,10 @@ function TaskForm({
     ...PRESETS.map((m) => ({ value: String(m), label: `${m} min` })),
   ];
   if (duration && !PRESETS.includes(Number(duration))) durationOptions.push({ value: duration, label: `${duration} min` });
+  const subjectOptions = [{ value: "", label: "No subject" }, ...subjects.map((s) => ({ value: s.syllabusNodeId, label: s.title }))];
+  if (task?.subjectNodeId && !subjects.some((s) => s.syllabusNodeId === task.subjectNodeId)) {
+    subjectOptions.push({ value: task.subjectNodeId, label: task.subjectTitle ?? "Current subject" });
+  }
 
   function build(): TaskFields {
     const t = title.trim();
@@ -151,7 +160,7 @@ function TaskForm({
         label="Subject"
         value={subject}
         onChange={(e) => setSubject(e.target.value)}
-        options={[{ value: "", label: "No subject" }, ...subjects.map((s) => ({ value: s.id, label: s.title }))]}
+        options={subjectOptions}
       />
       <Select
         label="Activity type"

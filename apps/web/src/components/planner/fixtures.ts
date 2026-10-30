@@ -28,4 +28,5 @@ export const today = (o: Partial<TodayView> = {}): TodayView => ({
   ...o,
 });
 
-export const subjects = [{ id: "11111111-1111-4111-8111-111111111111", title: "Polity" }];
+/** `id` is the catalog subject id; `syllabusNodeId` is the id planner APIs take as `subjectNodeId` (deliberately different). */
+export const subjects = [{ id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", syllabusNodeId: "11111111-1111-4111-8111-111111111111", title: "Polity" }];

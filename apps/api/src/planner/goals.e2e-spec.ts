@@ -5,7 +5,7 @@ import { createTestApp } from '../../test/app';
 import { signTestToken, TEST_JWT_SECRET, TEST_SUPABASE_URL } from '../../test/tokens';
 import type { Db } from '../db/db.module';
 import { newId } from '../db/ids';
-import { examDates, studyPreferences, studySessions, syllabusNodes, users } from '../db/schema';
+import { examDates, studyPreferences, studySessions, subjects, syllabusNodes, users } from '../db/schema';
 
 jest.setTimeout(30000);
 
@@ -97,6 +97,18 @@ describe('planner goals, progress and exam dates', () => {
     // partial update merges over the current goals, and is still checked
     const partial = await call('put', '/planner/goals', 'u-goalbad', { weeklyMin: 100 });
     expect(partial.status).toBe(400);
+  });
+
+  it('PUT rejects a catalog subject id (not a syllabus node) in subjectTargets and stores nothing', async () => {
+    const catalogSubjectId = newId();
+    await db.insert(subjects).values({
+      id: catalogSubjectId, syllabusNodeId: subjA, slug: 'goals-catalog-polity', title: 'Polity', description: 'd', gsPaper: 'GS II', order: 1, status: 'published',
+    });
+    const r = await call('put', '/planner/goals', 'u-goalcat', { dailyMin: 60, weeklyMin: 300, subjectTargets: [{ subjectNodeId: catalogSubjectId, weeklyMin: 60 }] });
+    expect([r.status, r.body.error.code]).toEqual([400, 'validation_failed']);
+    expect((await call('get', '/planner/goals', 'u-goalcat')).body.goals.subjectTargets).toEqual([]);
+    const ok = await call('put', '/planner/goals', 'u-goalcat', { dailyMin: 60, weeklyMin: 300, subjectTargets: [{ subjectNodeId: subjA, weeklyMin: 60 }] });
+    expect(ok.status).toBe(200);
   });
 
   describe('weekly progress', () => {

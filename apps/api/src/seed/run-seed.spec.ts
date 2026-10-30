@@ -14,6 +14,7 @@ import {
   questions,
   sessions,
   studySessions,
+  subjects,
   syllabusNodes,
   tasks,
   users,
@@ -126,6 +127,26 @@ describe('runSeed', () => {
       ['prelims-economy', 'prelims-environment', 'prelims-geography', 'prelims-history', 'prelims-polity', 'prelims-science-technology'],
     );
     for (const k of kids) expect(k).toMatchObject({ level: 3, examStage: 'prelims', paper: 'GS Paper I', status: 'published' });
+  });
+
+  it('points each catalog subject at its own Prelims syllabus node (one node per subject)', async () => {
+    const nodes = await db.select().from(syllabusNodes);
+    const slugOf = new Map(nodes.map((n) => [n.id, n.slug]));
+    const subs = await db.select().from(subjects);
+    const map = Object.fromEntries(subs.map((s) => [s.slug, slugOf.get(s.syllabusNodeId)]));
+    expect(map).toEqual({
+      'indian-polity': 'prelims-polity',
+      history: 'prelims-history',
+      geography: 'prelims-geography',
+      economy: 'prelims-economy',
+      environment: 'prelims-environment',
+      'science-technology': 'prelims-science-technology',
+      ethics: 'mains-gs-4',
+      csat: 'prelims-csat',
+    });
+    expect(new Set(subs.map((s) => s.syllabusNodeId)).size).toBe(subs.length);
+    // Display field is unchanged.
+    expect(subs.find((s) => s.slug === 'indian-polity')?.gsPaper).toBe('GS II');
   });
 
   it('seeds 100 platform-sample questions across the 7 practice nodes', async () => {

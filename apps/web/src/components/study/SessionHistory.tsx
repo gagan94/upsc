@@ -9,7 +9,8 @@ export function SessionHistory({
   tz,
 }: {
   sessions: EndedStudySessionView[];
-  subjects: { id: string; title: string }[];
+  /** Subjects from GET /learn/subjects; sessions reference them by `syllabusNodeId`. */
+  subjects: { syllabusNodeId: string; title: string }[];
   tz: string;
 }) {
   if (sessions.length === 0) {
@@ -20,7 +21,7 @@ export function SessionHistory({
       </div>
     );
   }
-  const title = (id: string | null) => (id ? (subjects.find((s) => s.id === id)?.title ?? "—") : "—");
+  const title = (id: string | null) => (id ? (subjects.find((s) => s.syllabusNodeId === id)?.title ?? "—") : "—");
   return (
     <div className="overflow-x-auto rounded-card border border-border bg-surface">
       <table className="w-full min-w-[420px] text-left text-sm">
