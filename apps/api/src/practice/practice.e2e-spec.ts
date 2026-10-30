@@ -5,14 +5,25 @@ import { createTestApp } from '../../test/app';
 import { signTestToken, TEST_JWT_SECRET, TEST_SUPABASE_URL } from '../../test/tokens';
 import type { Db } from '../db/db.module';
 import { newId } from '../db/ids';
-import { entitlementOverrides, sessionQuestions, sessions, subjects, syllabusNodes, users } from '../db/schema';
+import { entitlementOverrides, sessionQuestions, sessions, syllabusNodes, users } from '../db/schema';
 import type { SeedContext } from '../seed/run-seed';
 import { seedBilling } from '../seed/seed-billing';
 import { QuestionsService } from './questions.service';
+import { TIME_MS_CAP } from './sessions.service';
 
 jest.setTimeout(60000);
 
 const LEAKY = /correctOption|explanation|optionReasoning|misconception/;
+// Distinctive fixture values: none may appear in a test-mode body before submit.
+const EXPLANATION = 'EXPL-SECRET-7f3a because of the reason.';
+const REASONING = { A: 'RSN-SECRET-A', B: 'RSN-SECRET-B', C: 'RSN-SECRET-C', D: 'RSN-SECRET-D' };
+const MISCONCEPTION = 'MISC-SECRET-looks plausible';
+const SECRET_VALUES = /EXPL-SECRET|RSN-SECRET|MISC-SECRET/;
+const noLeak = (body: unknown) => {
+  const json = JSON.stringify(body);
+  expect(json).not.toMatch(LEAKY);
+  expect(json).not.toMatch(SECRET_VALUES);
+};
 const KEYS = ['A', 'B', 'C', 'D'] as const;
 
 describe('practice sessions', () => {
@@ -24,6 +35,7 @@ describe('practice sessions', () => {
   let polity: string; // 12 published platform questions
   let history: string; // 2 verified PYQs, 2 unverified PYQs, 1 draft
   let empty: string; // nothing published
+  let draftOnly: string; // only a draft question
   const verifiedPyqs: string[] = [];
   const polityIds: string[] = [];
 
@@ -52,10 +64,10 @@ describe('practice sessions', () => {
   const userId = async (sub: string) => (await db.select().from(users).where(eq(users.authSubject, sub)))[0].id;
   const expire = (id: string) => db.execute(sql`update practice.sessions set ends_at = now() - interval '1 second' where id = ${id}::uuid`);
 
-  const node = async (slug: string, title: string) => {
+  // Practice subjects are syllabus nodes (exact match on questions.subject_node_id).
+  const node = async (slug: string, title: string, paper = 'GS Paper I') => {
     const id = newId();
-    await db.insert(syllabusNodes).values({ id, path: slug, level: 1, examStage: 'prelims', paper: 'gs1', title, slug, status: 'published' });
-    await db.insert(subjects).values({ id: newId(), syllabusNodeId: id, slug: `s-${slug}`, title, gsPaper: 'GS I', status: 'published' });
+    await db.insert(syllabusNodes).values({ id, path: slug, level: 3, examStage: 'prelims', paper, title, slug, status: 'published' });
     return id;
   };
   let n = 0;
@@ -66,9 +78,9 @@ describe('practice sessions', () => {
       stem: `Practice question ${n}?`,
       options: KEYS.map((key) => ({ key, text: `option ${key}` })),
       correctOption: KEYS[n % 4],
-      explanation: 'Because of the reason.',
-      optionReasoning: { A: 'ra', B: 'rb', C: 'rc', D: 'rd' },
-      misconception: { option: 'B', text: 'Looks plausible' },
+      explanation: EXPLANATION,
+      optionReasoning: REASONING,
+      misconception: { option: 'B', text: MISCONCEPTION },
       difficulty: 'medium',
       subjectNodeId,
       gsPaper: 'GS1',
@@ -88,8 +100,10 @@ describe('practice sessions', () => {
     await call('get', '/practice/subjects', 'p-editor');
     editorId = await userId('p-editor');
     polity = await node('p-polity', 'Polity');
-    history = await node('p-history', 'History');
+    history = await node('p-history', 'History', 'GS Paper I (History)');
     empty = await node('p-empty', 'Empty');
+    draftOnly = await node('p-draft', 'Draft only');
+    await question(draftOnly, {}, false);
     for (let i = 0; i < 12; i++) polityIds.push(await question(polity));
     for (let i = 0; i < 2; i++) {
       const id = await question(history, { sourceType: 'pyq', pyqYear: 2019, pyqPaper: 'GS I' });
@@ -106,13 +120,30 @@ describe('practice sessions', () => {
     expect((await call('post', '/practice/sessions', undefined, cfg())).status).toBe(401);
   });
 
-  it('lists subjects by syllabus node with published and verified-PYQ counts', async () => {
+  it('lists syllabus nodes with published questions, each with its own title, paper and counts', async () => {
     const r = await call('get', '/practice/subjects', 'p-u1');
     expect(r.status).toBe(200);
-    const byId = new Map((r.body.subjects as { id: string }[]).map((s) => [s.id, s]));
-    expect(byId.get(polity)).toEqual({ id: polity, title: 'Polity', gsPaper: 'GS I', publishedCount: 12, pyqVerifiedCount: 0 });
-    expect(byId.get(history)).toMatchObject({ publishedCount: 4, pyqVerifiedCount: 2 });
-    expect(byId.get(empty)).toMatchObject({ publishedCount: 0, pyqVerifiedCount: 0 });
+    const list = r.body.subjects as { id: string; title: string }[];
+    const byId = new Map(list.map((s) => [s.id, s]));
+    expect(byId.get(polity)).toEqual({ id: polity, title: 'Polity', gsPaper: 'GS Paper I', publishedCount: 12, pyqVerifiedCount: 0 });
+    expect(byId.get(history)).toEqual({ id: history, title: 'History', gsPaper: 'GS Paper I (History)', publishedCount: 4, pyqVerifiedCount: 2 });
+    expect(new Set(list.map((s) => s.id)).size).toBe(list.length); // one entry per node
+    expect(byId.has(empty)).toBe(false);
+    expect(byId.has(draftOnly)).toBe(false); // drafts do not count
+  });
+
+  it('two questions on two different nodes give two entries with their own titles', async () => {
+    const economy = await node('p-economy', 'Economy');
+    const environment = await node('p-environment', 'Environment');
+    await question(economy);
+    await question(environment);
+    const r = await call('get', '/practice/subjects', 'p-u1');
+    const mine = (r.body.subjects as { id: string }[]).filter((s) => s.id === economy || s.id === environment);
+    expect(mine).toEqual(expect.arrayContaining([
+      { id: economy, title: 'Economy', gsPaper: 'GS Paper I', publishedCount: 1, pyqVerifiedCount: 0 },
+      { id: environment, title: 'Environment', gsPaper: 'GS Paper I', publishedCount: 1, pyqVerifiedCount: 0 },
+    ]));
+    expect(mine).toHaveLength(2);
   });
 
   it('reports availability against the request', async () => {
@@ -177,19 +208,20 @@ describe('practice sessions', () => {
 
   it('test mode never sends keys, explanations, reasoning or misconceptions before submit', async () => {
     const created = await call('post', '/practice/sessions', 'p-u1', cfg());
-    expect(JSON.stringify(created.body)).not.toMatch(LEAKY);
+    noLeak(created.body);
     const id = created.body.session.id;
     const keys = await keyOf(id);
     const put1 = await answer('p-u1', id, 1, { selected: keys.get(1), confidence: 'sure', timeMsDelta: 4000 });
     expect(put1.status).toBe(200);
     expect(put1.body).toEqual({ saved: true });
+    noLeak(put1.body);
     const put2 = await answer('p-u1', id, 2, { selected: wrong(keys.get(2) as string), flagged: true });
-    expect(JSON.stringify(put2.body)).not.toMatch(LEAKY);
+    noLeak(put2.body);
     // Test mode lets an answer change until submit.
     expect((await answer('p-u1', id, 2, { selected: keys.get(2) })).status).toBe(200);
     const got = await call('get', `/practice/sessions/${id}`, 'p-u1');
     expect(got.status).toBe(200);
-    expect(JSON.stringify(got.body)).not.toMatch(LEAKY);
+    noLeak(got.body);
     expect(got.body.questions[0]).toEqual({
       ordinal: 1,
       questionId: expect.any(String),
@@ -214,13 +246,13 @@ describe('practice sessions', () => {
     const k1 = keys.get(1) as string;
     const r = await answer('p-u1', id, 1, { selected: wrong(k1) });
     expect(r.status).toBe(200);
-    expect(r.body).toEqual({ saved: true, feedback: { correctOption: k1, correct: false, explanation: 'Because of the reason.' } });
+    expect(r.body).toEqual({ saved: true, feedback: { correctOption: k1, correct: false, explanation: EXPLANATION } });
     // flag-only writes on an unanswered question carry no feedback
     const flagOnly = await answer('p-u1', id, 2, { flagged: true });
     expect(flagOnly.body).toEqual({ saved: true });
     const got = await call('get', `/practice/sessions/${id}`, 'p-u1');
-    expect(got.body.questions[0].feedback).toEqual({ correctOption: k1, correct: false, explanation: 'Because of the reason.' });
-    expect(JSON.stringify(got.body.questions.slice(1))).not.toMatch(LEAKY);
+    expect(got.body.questions[0].feedback).toEqual({ correctOption: k1, correct: false, explanation: EXPLANATION });
+    noLeak(got.body.questions.slice(1));
     const again = await answer('p-u1', id, 1, { selected: k1 });
     expect(again.status).toBe(409);
     expect(again.body.error.code).toBe('already_answered');
@@ -241,6 +273,20 @@ describe('practice sessions', () => {
     for (const ord of ['0', '6', 'x', '1.5']) {
       expect((await answer('p-u1', s.session.id, ord as unknown as number, { flagged: true })).status).toBe(404);
     }
+  });
+
+  it('time_ms is capped so repeated large deltas can never overflow', async () => {
+    const s = await create('p-u1', { count: 5 });
+    const id = s.session.id;
+    // Start just under the cap (as if ~24 h of deltas had accumulated), then keep adding the maximum delta.
+    await db.execute(sql`update practice.session_questions set time_ms = 86000000 where session_id = ${id}::uuid and ordinal = 1`);
+    for (let i = 0; i < 5; i++) {
+      const r = await answer('p-u1', id, 1, { timeMsDelta: 600_000 });
+      expect(r.status).toBe(200);
+    }
+    const [sq] = await db.select().from(sessionQuestions).where(eq(sessionQuestions.sessionId, id)).orderBy(sessionQuestions.ordinal);
+    expect(sq.timeMs).toBe(TIME_MS_CAP);
+    expect(TIME_MS_CAP).toBe(86_400_000);
   });
 
   it('remaining time is derived from ends_at on the database clock', async () => {

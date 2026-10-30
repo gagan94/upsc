@@ -3,7 +3,7 @@ import { and, asc, eq, inArray, or, sql, SQL } from 'drizzle-orm';
 import { AppError } from '../common/errors';
 import { DB, Db } from '../db/db.module';
 import { newId } from '../db/ids';
-import { questions, questionVersions, sessionQuestions, sessions, subjects, syllabusNodes } from '../db/schema';
+import { questions, questionVersions, sessionQuestions, sessions, syllabusNodes } from '../db/schema';
 import type { OptionKey, QuestionOption, SessionConfig, SessionSummary } from '../db/schema/practice';
 import { CONFIDENCE_LEVELS } from '../db/schema/practice';
 import { bookmarkedQuestionIds } from './bookmarks-seam';
@@ -70,6 +70,8 @@ export interface ResultsView {
 }
 
 export const WEAK_ACCURACY = 0.6;
+/** Upper bound for a question's accumulated time (24 h), well inside int4. */
+export const TIME_MS_CAP = 86_400_000;
 
 const notFound = () => new AppError(404, 'not_found', 'Practice session not found');
 
@@ -109,24 +111,21 @@ export function nextActionFor(accuracy: number, incorrect: number, byTopic: Sess
 export class SessionsService {
   constructor(@Inject(DB) private readonly db: Db) {}
 
+  /** Practice subjects are syllabus nodes with at least one published question (exact match on subject_node_id). */
   async subjects(): Promise<{ id: string; title: string; gsPaper: string; publishedCount: number; pyqVerifiedCount: number }[]> {
-    // Several catalogue subjects may share one syllabus node; they are one practice subject keyed by that node.
     const rows = await this.db
       .select({
         id: syllabusNodes.id,
-        title: sql<string>`string_agg(${subjects.title}, ', ' order by ${subjects.order}, ${subjects.title})`,
-        gsPaper: sql<string>`(array_agg(${subjects.gsPaper} order by ${subjects.order}, ${subjects.title}))[1]`,
-        publishedCount: sql<number>`(select count(*)::int from practice.questions q
-          where q.status = 'published' and q.subject_node_id = ${syllabusNodes.id})`,
-        pyqVerifiedCount: sql<number>`(select count(*)::int from practice.questions q
-          where q.status = 'published' and q.source_type = 'pyq' and q.verification_status = 'verified'
-            and q.subject_node_id = ${syllabusNodes.id})`,
+        title: syllabusNodes.title,
+        gsPaper: syllabusNodes.paper,
+        publishedCount: sql<number>`count(*)::int`,
+        pyqVerifiedCount: sql<number>`(count(*) filter (where ${questions.sourceType} = 'pyq' and ${questions.verificationStatus} = 'verified'))::int`,
       })
-      .from(subjects)
-      .innerJoin(syllabusNodes, eq(syllabusNodes.id, subjects.syllabusNodeId))
-      .where(eq(subjects.status, 'published'))
+      .from(questions)
+      .innerJoin(syllabusNodes, eq(syllabusNodes.id, questions.subjectNodeId))
+      .where(eq(questions.status, 'published'))
       .groupBy(syllabusNodes.id)
-      .orderBy(sql`min(${subjects.order})`, asc(syllabusNodes.id));
+      .orderBy(asc(syllabusNodes.path), asc(syllabusNodes.order), asc(syllabusNodes.title), asc(syllabusNodes.id));
     return rows.map((r) => ({ ...r, publishedCount: Number(r.publishedCount), pyqVerifiedCount: Number(r.pyqVerifiedCount) }));
   }
 
@@ -224,7 +223,9 @@ export class SessionsService {
       }
       if (input.flagged !== undefined) set.flagged = input.flagged;
       if (input.confidence !== undefined) set.confidence = input.confidence;
-      if (input.timeMsDelta) set.timeMs = sql`${sessionQuestions.timeMs} + ${input.timeMsDelta}`;
+      if (input.timeMsDelta) {
+        set.timeMs = sql`least(${sessionQuestions.timeMs}::bigint + ${input.timeMsDelta}, ${TIME_MS_CAP})::int`;
+      }
       if (Object.keys(set).length) {
         await tx
           .update(sessionQuestions)
