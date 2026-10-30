@@ -424,14 +424,29 @@ export interface QuestionReview {
   reasoningText: string | null;
 }
 
-/** GET /practice/mistakes and /practice/bookmarks items */
-export interface CollectionItem {
+/** GET /practice/mistakes -> { items }. The API does not expose the subject node id, only its title. */
+export interface MistakeItem {
+  questionId: string;
+  /** truncated server-side (~140 chars) */
+  stem: string;
+  subjectTitle: string;
+  reason: "incorrect" | "guessed";
+  timesWrong: number;
+  lastSeen: string;
+}
+export interface MistakesResponse {
+  items: MistakeItem[];
+}
+
+/** GET /practice/bookmarks -> { items } */
+export interface BookmarkItem {
   questionId: string;
   stem: string;
   subjectTitle: string;
-  reason: string;
-  timesWrong: number;
-  lastSeen: string;
+  createdAt: string;
+}
+export interface BookmarksResponse {
+  items: BookmarkItem[];
 }
 
 export interface AttemptSummary {
