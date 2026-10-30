@@ -123,7 +123,7 @@
     "correctOption": "B",
     "explanation": "Article 84 requires a candidate for the Lok Sabha to be at least 25 years old (30 for the Rajya Sabha).",
     "optionReasoning": {
-      "A": "21 was the voting age before the 61st Amendment (1989); it is not the age for Lok Sabha candidature.",
+      "A": "21 was the voting age before the 61st Amendment Act, 1988 (in force from 1989); it is not the age for Lok Sabha candidature.",
       "B": "25 years is the minimum age under Article 84.",
       "C": "30 years is the minimum age for the Rajya Sabha and the Legislative Council.",
       "D": "35 years is the minimum age for the President and Vice-President."
@@ -1588,7 +1588,7 @@
     },
     "misconception": {
       "option": "A",
-      "text": "The two deficits are often treated as one measure."
+      "text": "The two deficits are often treated as one measure, so the separate definition of the revenue deficit in statement 2 is wrongly doubted."
     }
   },
   {
@@ -2329,7 +2329,7 @@
       "D": "Correct: neither statement is correct."
     },
     "misconception": {
-      "option": "A",
+      "option": "C",
       "text": "Sound and light are both called waves, so sound is assumed to cross a vacuum like light, and light to need a medium like sound."
     }
   },
