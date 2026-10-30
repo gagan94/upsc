@@ -3,9 +3,7 @@
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { Tabs, tabId, tabPanelId } from "@/components/ui/Tabs";
-
-export const PLANNER_VIEWS = ["today", "week", "month", "backlog", "goals"] as const;
-export type PlannerViewId = (typeof PLANNER_VIEWS)[number];
+import type { PlannerViewId } from "@/lib/planner-views";
 
 const TABS = [
   { id: "today", label: "Today" },

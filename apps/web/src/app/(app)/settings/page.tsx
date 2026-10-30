@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SETTINGS_SECTIONS } from "@/components/settings/SettingsNav";
+import { SETTINGS_SECTIONS } from "@/lib/settings-sections";
 
 const LATER = [
   { label: "Notifications", note: "Choose which reminders and updates you receive." },

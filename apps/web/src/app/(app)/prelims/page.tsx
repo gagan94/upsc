@@ -1,6 +1,8 @@
-import { AttemptsList, ATTEMPTS_PAGE_SIZE } from "@/components/practice/AttemptsList";
+import { AttemptsList } from "@/components/practice/AttemptsList";
+import { ATTEMPTS_PAGE_SIZE } from "@/lib/attempts";
 import { BookmarksList } from "@/components/practice/BookmarksList";
-import { HUB_TABS, HubTabs, type HubTabId } from "@/components/practice/HubTabs";
+import { HubTabs } from "@/components/practice/HubTabs";
+import { isHubTab, type HubTabId } from "@/lib/hub-tabs";
 import { MistakesList } from "@/components/practice/MistakesList";
 import { PyqPanel } from "@/components/practice/PyqPanel";
 import { RecentSets } from "@/components/practice/RecentSets";
@@ -21,7 +23,7 @@ type Data =
 
 export default async function PrelimsPage({ searchParams }: { searchParams: Promise<{ tab?: string; subject?: string; resolved?: string }> }) {
   const sp = await searchParams;
-  const tab: HubTabId = (HUB_TABS as readonly string[]).includes(sp.tab ?? "") ? (sp.tab as HubTabId) : "practice";
+  const tab: HubTabId = isHubTab(sp.tab) ? sp.tab : "practice";
   const subject = sp.subject && UUID.test(sp.subject) ? sp.subject : "";
   const includeResolved = sp.resolved === "1";
 
