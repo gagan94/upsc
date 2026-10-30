@@ -38,6 +38,10 @@ Single source of truth for product decisions made with the owner, and for calls 
 | A3 | Entitlements are data (plan -> feature keys + quotas), checked in one place. | Plan tiers are undecided (D12). |
 | A4 | Platform fee on paid mentor sessions is a configurable percentage, default to be set by owner. | Not discussed. |
 | A5 | Roles: `student`, `mentor`, `moderator`, `content_editor`, `admin`. A user can be student and mentor. | Figma shows a "Mentor workspace" next to the student view and a moderation queue. |
+| A6 | Phase 1: practice subjects are Prelims GS-I syllabus child nodes (level 3: Indian Polity, History, Geography, Economy, Environment, Science & Technology; CSAT keeps its own node); a question belongs to one node. | Catalog subjects overlap Mains nodes and would have merged subjects in the builder (ruling R13). |
+| A7 | Phase 1: the starter plan is rule-based (no AI); recurring tasks are out of scope. | AI planning is Phase 3. |
+| A8 | Phase 1: marking default for GS Paper I is +2 correct / −0.66 wrong / 0 skipped, stored per session so it can change; learning mode shows accuracy only. | Owner said "defaults"; configurable by design. |
+| A9 | Phase 1: all seeded questions are labelled "Sample question" (never PYQs); exam-date countdowns are labelled "Illustrative"; "How others answered" needs ≥ 100 first attempts. | Honesty about content that is not yet real. |
 
 ## Open decisions (need the owner; not blocking spec drafts)
 
