@@ -1,4 +1,4 @@
-import { serverApi } from "@/lib/server-api";
+import { adminOnlyApi } from "@/lib/admin-api";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +16,7 @@ interface Plan {
 }
 
 export default async function PlansPage() {
-  const { plans } = await serverApi<{ plans: Plan[] }>("/admin/plans");
+  const { plans } = await adminOnlyApi<{ plans: Plan[] }>("/admin/plans");
   return (
     <div>
       <h1 className="text-2xl font-bold">Plans &amp; entitlements</h1>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 const cards = [
+  { href: "/admin/questions", title: "Questions", body: "Author, import, publish and verify Prelims questions." },
   { href: "/admin/users", title: "Users", body: "Browse accounts, roles and status." },
   { href: "/admin/plans", title: "Plans & entitlements", body: "See what each plan includes." },
 ];

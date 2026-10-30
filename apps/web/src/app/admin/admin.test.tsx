@@ -83,7 +83,16 @@ describe("admin layout", () => {
     expect(screen.getByRole("link", { name: "Log out" })).toHaveAttribute("href", "/auth/signout");
   });
 
-  it("renders chrome and nav with exactly two live links for admins", async () => {
+  it("admits content editors and shows only the question sections", async () => {
+    serverApi.mockResolvedValue({ user: { ...admin, roles: ["content_editor"] } });
+    render(await AdminLayout({ children: <p>child</p> }));
+    expect(redirect).not.toHaveBeenCalled();
+    const nav = within(screen.getByRole("navigation", { name: "Admin" }));
+    expect(nav.getAllByRole("link").map((l) => l.textContent)).toEqual(["Questions", "Question reports"]);
+    expect(document.querySelectorAll('[aria-disabled="true"]')).toHaveLength(0);
+  });
+
+  it("renders chrome and nav with four live links for admins", async () => {
     serverApi.mockResolvedValue({ user: admin });
     render(await AdminLayout({ children: <p>child</p> }));
     expect(screen.getByText("AI UPSC · Admin")).toBeInTheDocument();
@@ -92,11 +101,11 @@ describe("admin layout", () => {
     expect(screen.getByText("child")).toBeInTheDocument();
     const nav = within(screen.getByRole("navigation", { name: "Admin" }));
     const links = nav.getAllByRole("link");
-    expect(links.map((l) => l.textContent)).toEqual(["Users", "Plans & entitlements"]);
-    expect(links[0]).toHaveAttribute("aria-current", "page");
-    expect(document.querySelectorAll('[aria-disabled="true"]')).toHaveLength(13);
-    expect(ADMIN_SECTIONS).toHaveLength(15);
-    expect(screen.getAllByText("Coming in a later phase")).toHaveLength(13);
+    expect(links.map((l) => l.textContent)).toEqual(["Questions", "Question reports", "Users", "Plans & entitlements"]);
+    expect(links[2]).toHaveAttribute("aria-current", "page");
+    expect(document.querySelectorAll('[aria-disabled="true"]')).toHaveLength(12);
+    expect(ADMIN_SECTIONS).toHaveLength(16);
+    expect(screen.getAllByText("Coming in a later phase")).toHaveLength(12);
   });
 });
 
@@ -151,6 +160,14 @@ describe("users page", () => {
     fireEvent.click(screen.getByRole("button", { name: "Load more" }));
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(screen.getByRole("button", { name: "Load more" })).toBeEnabled();
+  });
+});
+
+describe("admin-only pages", () => {
+  it("send a content editor (API 403) to the question bank", async () => {
+    serverApi.mockRejectedValue(new ApiError(403, "forbidden", "no"));
+    await expect(UsersPage()).rejects.toThrow(`${REDIRECT}:/admin/questions`);
+    await expect(PlansPage()).rejects.toThrow(`${REDIRECT}:/admin/questions`);
   });
 });
 

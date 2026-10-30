@@ -7,13 +7,18 @@ export interface AdminSection {
   label: string;
   /** Present only for sections that are live in this phase. */
   href?: string;
+  /** Roles that see this entry; defaults to admin only. */
+  roles?: string[];
 }
+
+const EDITOR_ROLES = ["admin", "content_editor"];
 
 /** v1 admin sections (spec 18 §3). Only entries with an href are live. */
 export const ADMIN_SECTIONS: AdminSection[] = [
   { label: "Dashboard" },
   { label: "Content" },
-  { label: "Questions" },
+  { label: "Questions", href: "/admin/questions", roles: EDITOR_ROLES },
+  { label: "Question reports", href: "/admin/question-reports", roles: EDITOR_ROLES },
   { label: "News & sources" },
   { label: "Verification" },
   { label: "Resources & Acts" },
@@ -28,12 +33,13 @@ export const ADMIN_SECTIONS: AdminSection[] = [
   { label: "Audit log" },
 ];
 
-export function AdminNav() {
+/** `roles` filters the entries; omitted means an admin. */
+export function AdminNav({ roles = ["admin"] }: { roles?: string[] }) {
   const pathname = usePathname();
   return (
     <nav aria-label="Admin" className="flex h-full flex-col gap-1 overflow-y-auto p-4">
       <ul className="flex flex-col gap-1">
-        {ADMIN_SECTIONS.map((s) => {
+        {ADMIN_SECTIONS.filter((s) => (s.roles ?? ["admin"]).some((r) => roles.includes(r))).map((s) => {
           if (s.href) {
             const active = pathname === s.href || pathname.startsWith(`${s.href}/`);
             return (
