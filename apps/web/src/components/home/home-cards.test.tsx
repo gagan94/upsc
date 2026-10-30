@@ -41,6 +41,11 @@ describe("CountdownCard", () => {
     render(<CountdownCard countdown={[cd()]} />);
     expect(screen.queryByText(/Illustrative/)).not.toBeInTheDocument();
   });
+  it("says Today for 0 days and 1 day for 1", () => {
+    render(<CountdownCard countdown={[cd({ daysLeft: 0 }), cd({ exam: "mains", daysLeft: 1 })]} />);
+    expect(screen.getByText(/Prelims: Today/)).toBeInTheDocument();
+    expect(screen.getByText(/Mains: 1 day(?!s)/)).toBeInTheDocument();
+  });
   it("renders nothing without dates", () => {
     const { container } = render(<CountdownCard countdown={[]} />);
     expect(container).toBeEmptyDOMElement();
@@ -53,6 +58,15 @@ describe("TodaysPlanCard", () => {
     expect(screen.getByText("Task 1")).toBeInTheDocument();
     expect(screen.getByText(/1 of 4 complete/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open plan" })).toHaveAttribute("href", "/planner");
+  });
+  it("uses neutral copy when open tasks are empty but not all are done", () => {
+    render(<TodaysPlanCard plan={{ done: 1, total: 3, tasks: [] }} />);
+    expect(screen.getByText("No open tasks left for today")).toBeInTheDocument();
+    expect(screen.queryByText(/All of today/)).not.toBeInTheDocument();
+  });
+  it("says all done only when done equals total", () => {
+    render(<TodaysPlanCard plan={{ done: 2, total: 2, tasks: [] }} />);
+    expect(screen.getByText("All of today's tasks are done.")).toBeInTheDocument();
   });
   it("shows the empty-plan CTA when there are no tasks today", () => {
     render(<TodaysPlanCard plan={{ done: 0, total: 0, tasks: [] }} />);
@@ -76,6 +90,7 @@ describe("PracticeCard", () => {
     );
     expect(screen.getByText("Polity set")).toBeInTheDocument();
     expect(screen.getByText("60%")).toBeInTheDocument();
+    expect(screen.getByText("No accuracy yet")).toBeInTheDocument();
     expect(screen.getByText("7")).toBeInTheDocument();
     expect(screen.getByText("2")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Start practice" })).toHaveAttribute("href", "/prelims/new");
@@ -98,6 +113,9 @@ describe("WeekCard", () => {
   });
   it("handles no goal", () => {
     render(<WeekCard week={{ recordedMin: 0, goalMin: 0, tasksDone: 0, tasksTotal: 0, streakDays: 0 }} />);
-    expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "0");
+    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(screen.queryByText(/%/)).not.toBeInTheDocument();
+    expect(screen.getByText("0m studied")).toBeInTheDocument();
+    expect(screen.getByText(/No streak yet/)).toBeInTheDocument();
   });
 });

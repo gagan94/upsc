@@ -19,7 +19,14 @@ export function PracticeCard({ practice, tz }: { practice: HomeView["practice"];
                 <span className="block">{s.title}</span>
                 <span className="text-[11px] text-muted">{shortDate(s.submittedAt, tz)}</span>
               </span>
-              <span className="font-semibold">{s.accuracy === null ? "—" : `${Math.round(s.accuracy * 100)}%`}</span>
+              <span className="font-semibold">{s.accuracy === null ? (
+                  <>
+                    <span aria-hidden="true">—</span>
+                    <span className="sr-only">No accuracy yet</span>
+                  </>
+                ) : (
+                  `${Math.round(s.accuracy * 100)}%`
+                )}</span>
             </li>
           ))}
         </ul>

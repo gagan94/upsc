@@ -12,11 +12,14 @@ export function WeekCard({ week }: { week: HomeView["week"] }) {
           ? `${formatMinutes(week.recordedMin)} of ${formatMinutes(week.goalMin)} goal`
           : `${formatMinutes(week.recordedMin)} studied`}
       </p>
-      <div className="mt-2">
-        <ProgressBar percent={percent} label="Weekly study goal" />
-      </div>
+      {week.goalMin > 0 ? (
+        <div className="mt-2">
+          <ProgressBar percent={percent} label="Weekly study goal" />
+        </div>
+      ) : null}
       <p className="mt-2 text-[11px] text-muted">
-        {percent}% · {week.tasksDone} of {week.tasksTotal} tasks · {week.streakDays}-day streak
+        {week.goalMin > 0 ? `${percent}% · ` : ""}
+        {week.tasksDone} of {week.tasksTotal} tasks · {week.streakDays > 0 ? `${week.streakDays}-day streak` : "No streak yet"}
       </p>
     </HomeCard>
   );

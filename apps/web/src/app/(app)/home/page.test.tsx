@@ -67,6 +67,8 @@ describe("HomePage", () => {
     render(await HomePage());
     expect(screen.getByRole("alert")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /retry|try again/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Log out" })).toBeInTheDocument();
+    expect(screen.queryAllByRole("main")).toHaveLength(0);
   });
 
   it("redirects to login on 401", async () => {

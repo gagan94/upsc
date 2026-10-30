@@ -28,7 +28,7 @@ export function TodaysPlanCard({ plan }: { plan: HomeView["plan"] }) {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-muted">All of today&apos;s tasks are done.</p>
+            <p className="text-sm text-muted">{plan.done === plan.total ? "All of today's tasks are done." : "No open tasks left for today"}</p>
           )}
           <p className="mt-3 text-[11px] text-muted">
             {plan.done} of {plan.total} complete ·{" "}

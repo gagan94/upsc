@@ -26,7 +26,7 @@ export default async function HomePage() {
     else if (!(e instanceof ApiError)) throw e;
   }
   if (unauthenticated) redirect("/login");
-  if (data === null) return <ErrorPanel title="We couldn't load your home" />;
+  if (data === null) return <ErrorPanel embedded title="We couldn't load your home" />;
 
   const { home, tz } = data;
   return (
