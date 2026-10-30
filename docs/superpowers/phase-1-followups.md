@@ -88,3 +88,14 @@ Written 2026-10-30 at the end of the Phase 1 build (branch `phase-1-build`). Sou
 - Replace `rejectUnauthorized:false` for Neon once verified; add indexes noted in Phase 0 follow-ups.
 - Add a syllabus-node list for editors with ordering and pagination; add a real Phase 1 CI job (deferred by D19) running the API/web suites and `node --check` on the e2e script.
 - Decide O1 (free vs paid tiers) before enforcing more than `practice.session` and `study.session`.
+
+## E. Final review fix wave (ruling R23)
+The final whole-branch review found F1–F8. Fixed on `phase-1-build`, each with tests:
+- **F1 fixed** — subjects end to end use syllabus-node ids: `seed-data/subjects.json` points each catalog subject at its own Prelims level-3 node (Polity/History/Geography/Economy/Environment/Sci-Tech; CSAT → `prelims-csat`, Ethics → `mains-gs-4`; the `gsPaper` display field is unchanged), `GET /learn/subjects` returns `syllabusNodeId`, and TaskDialog, StartSessionDialog, GoalsView, usePlannerMutations and SessionHistory use it as the option value and lookup key. `PUT /planner/goals` rejects non-node ids (400). GoalsView keeps saved targets for subjects the form does not list. A re-seed converges the live catalog (upsert of `subjects.syllabus_node_id`). Tasks/goals already stored with a Mains node id keep it (the Mains node still exists, so nothing breaks; they show the Mains title).
+- **F2 fixed** — re-seeding nulls `study_sessions.task_id` for the student's sessions that point at seeded tasks before deleting them (same transaction); the sessions survive.
+- **F3 fixed** — `scripts/deploy.sh` runs tests → migrate → **seed** → Render → Vercel → smoke (`[n/6]`); requires `SUPABASE_SERVICE_ROLE_KEY` (deploying machine only) and stops up front if `NODE_ENV=production`; `scripts/test/deploy.test.sh` checks the dry run. Note: this supersedes "keep the seed out of production" in D for the demo environment; the seed's own `NODE_ENV=production` guard remains.
+- **F4 fixed** — pause/resume reject a stale session with 409 `session_stale` (row untouched), like heartbeat; `recover` is the way back. The web provider already opened Recovery on that error (test added).
+- **F5 accepted** — the smoke test adds one practice set per deploy (documented under Known limits in `docs/demo/phase-1.md`).
+- **F6 fixed** — the 33 statements stems now read "Consider the statements below regarding X. Which of them is/are correct?" (slugs unchanged; re-seed updates in place).
+- **F7 fixed** — password login checks `GET /me/onboarding` like sign-up: `not_started` → `/onboarding`; other statuses or a failed lookup keep the safe `return_to`. All three entry points (sign-up, password login, Google OAuth callback) now apply the same rule.
+- **F8 fixed** — `dateISO` is imported from `common/validation` in the study-sessions controller.
