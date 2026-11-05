@@ -5,6 +5,9 @@ services:
     name: upsc-api
     runtime: docker
     plan: free
+    # Keep in the same region as the Neon database (AWS ap-southeast-1) and the Vercel functions
+    # (apps/web/vercel.json): every query is a round trip, and Oregon <-> Singapore costs ~180 ms each.
+    region: singapore
     dockerfilePath: apps/api/Dockerfile
     dockerContext: .
     healthCheckPath: /api/v1/health

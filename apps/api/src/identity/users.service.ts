@@ -36,6 +36,22 @@ export class UsersService {
     const email = claims.email.trim().toLowerCase();
     const name = claims.name?.trim() || email.split('@')[0];
 
+    // Fast path: this runs on every authenticated request, and BEGIN/COMMIT around a lone
+    // SELECT are two extra database round trips. Only open a transaction when something must be written.
+    const [existing] = await this.db
+      .select()
+      .from(users)
+      .where(and(eq(users.authProvider, PROVIDER), eq(users.authSubject, claims.sub)))
+      .limit(1);
+    if (
+      existing &&
+      existing.email === email &&
+      existing.lastLoginAt &&
+      Date.now() - existing.lastLoginAt.getTime() <= LOGIN_TOUCH_MS
+    ) {
+      return view(existing);
+    }
+
     return this.db.transaction(async (tx) => {
       const find = async () =>
         (
